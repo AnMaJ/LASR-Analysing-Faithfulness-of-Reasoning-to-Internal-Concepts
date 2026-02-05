@@ -19,3 +19,5 @@ def load_model_and_tokenizer(model_name: str, use_4bit: bool = False):
     
     return model, tokenizer
 
+
+load_model_and_tokenizer("google/gemma-3-4b-it")

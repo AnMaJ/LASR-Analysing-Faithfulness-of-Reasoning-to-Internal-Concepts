@@ -1,13 +1,14 @@
 import argparse
 from loading_model import load_model_and_tokenizer
 from loading_dataset import ReasoningDataset
-from sae import get_tok_k_features_from_sae
+from sae import get_top_k_features_from_sae
+from utils import save_run_config
 
 def main():
     parser = argparse.ArgumentParser(description="Analyze faithfulness of reasoning to internal concepts.")
     
     parser.add_argument(
-        '--datset-name',
+        '--dataset-name',
         type=str,
         required=True,
         help='Name of the dataset to use.',
@@ -57,13 +58,13 @@ def main():
     
     parser.add_argument(
         '--l0-sparsity',
-        type=float,
-        default=0.1,
+        type=str,
+        default="medium",
         help='L0 sparsity parameter used during SAE training.'
     )
     
     args = parser.parse_args()
-    
+    save_run_config(args, f"{args.output_path}/run_config.txt")
     model, tokenizer = load_model_and_tokenizer(args.model_name_or_path)    
     # implementing for only a sample of the dataset for now
     dataset = ReasoningDataset(name=args.dataset_name, path=args.dataset_path)

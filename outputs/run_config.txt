@@ -1,0 +1,8 @@
+dataset_name: ECQA
+dataset_path: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/datasets/ecqa/data/validation-00000-of-00001.parquet
+output_path: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs
+model_name_or_path: google/gemma-3-4b-it
+sae_store_path: google/gemma-scope-2-4b-pt
+target_layer: 22
+sae_width: 256k
+l0_sparsity: medium
