@@ -1,0 +1,27 @@
+[project]
+name = "lasr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "accelerate>=1.12.0",
+    "dotenv>=0.9.9",
+    "huggingface-hub>=1.4.1",
+    "pandas>=3.0.0",
+    "plotly>=6.5.2",
+    "safetensors>=0.7.0",
+    "scikit-learn>=1.8.0",
+    "torch>=2.10.0",
+    "tqdm>=4.67.3",
+    "transformers>=5.1.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.10.0,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.2.0",
+]
