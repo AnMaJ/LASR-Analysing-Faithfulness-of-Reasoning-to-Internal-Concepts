@@ -8,8 +8,14 @@ from lasr.sae import JumpReLUSAE
 def _gather_acts_hook(
     mod, inputs, outputs, cache: dict, key: str, use_input: bool
 ):
-    acts = inputs[0].squeeze(0) if use_input else outputs[0]
-    cache[key] = acts
+    if use_input:
+        acts = inputs[0].squeeze(0)
+    else:
+        acts = outputs[0] if isinstance(outputs, tuple) else outputs
+    # Ensure 3-D (batch, seq, d_model) even if the layer squeezed the batch dim
+    if acts.ndim == 2:
+        acts = acts.unsqueeze(0)
+    cache[key] = acts.detach()
     return outputs
 
 

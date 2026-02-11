@@ -30,7 +30,7 @@ def extract_prediction(text: str, prompt_style: PromptStyle) -> str | None:
         return None
 
     # Try the "Label:" prefix first (works for both styles).
-    label = re.search(r"<label>(.*)</label>", text, re.IGNORECASE)
+    label = re.search(r".*<label>(.*)</label>", text, re.IGNORECASE | re.DOTALL)
     if label:
         prediction = _clean_token(label.group(1))
         if prediction in VALID_LABELS:

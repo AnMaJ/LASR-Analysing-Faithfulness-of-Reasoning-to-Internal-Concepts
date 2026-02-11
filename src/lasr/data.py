@@ -102,12 +102,15 @@ def build_prompts(
                 "few_shot_examples must be provided when few_shot=True"
             )
         examples_block = few_shot_examples + "\n"
-        prompt = instruction.format(premise=df["Sentence1"], hypothesis=df["Sentence2"], examples_block=examples_block)
-    else:
-        prompt = instruction.format(premise=df["Sentence1"], hypothesis=df["Sentence2"])
+
+    def _format_row(row):
+        kwargs = {"premise": row["Sentence1"], "hypothesis": row["Sentence2"]}
+        if "{examples_block}" in instruction:
+            kwargs["examples_block"] = examples_block
+        return instruction.format(**kwargs)
 
     return (
         "<start_of_turn>user "
-        + prompt
+        + df.apply(_format_row, axis=1)
         + "\n<end_of_turn>model"
     )
