@@ -1,0 +1,10 @@
+Evaluated 977 / 985 rows (8 failed to parse)
+               precision    recall  f1-score   support
+
+contradiction       0.47      0.68      0.56       331
+   entailment       0.52      0.44      0.48       328
+      neutral       0.37      0.26      0.31       318
+
+     accuracy                           0.46       977
+    macro avg       0.46      0.46      0.45       977
+ weighted avg       0.46      0.46      0.45       977

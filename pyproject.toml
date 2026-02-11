@@ -8,6 +8,7 @@ dependencies = [
     "accelerate>=1.12.0",
     "dotenv>=0.9.9",
     "huggingface-hub>=1.4.1",
+    "nbformat>=5.10.4",
     "pandas>=3.0.0",
     "plotly>=6.5.2",
     "safetensors>=0.7.0",
