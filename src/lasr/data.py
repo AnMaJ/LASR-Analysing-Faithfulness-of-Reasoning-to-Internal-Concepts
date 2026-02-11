@@ -22,19 +22,19 @@ def build_few_shot_examples(df: pd.DataFrame, prompt_style: PromptStyle) -> str:
     if prompt_style == PromptStyle.CHAIN_OF_THOUGHT:
         unique_samples["formatted_input"] = unique_samples.apply(
             lambda x: (
-                f"A: {x['Sentence1']}\n"
-                f"B: {x['Sentence2']}\n"
-                f"{x['Explanation_1']}\n"
-                f"Label: {x['gold_label']}"
+                f"Premise: {x['Sentence1']}\n"
+                f"Hypothesis: {x['Sentence2']}\n"
+                f"<reasoning>{x['Explanation_1']}</reasoning>\n"
+                f"<label>{x['gold_label']}</label>"
             ),
             axis=1,
         )
     else:
         unique_samples["formatted_input"] = unique_samples.apply(
             lambda x: (
-                f"A: {x['Sentence1']}\n"
-                f"B: {x['Sentence2']}\n"
-                f"Label: {x['gold_label']}"
+                f"Premise: {x['Sentence1']}\n"
+                f"Hypothesis: {x['Sentence2']}\n"
+                f"<label>{x['gold_label']}</label>"
             ),
             axis=1,
         )
@@ -47,13 +47,33 @@ def build_few_shot_examples(df: pd.DataFrame, prompt_style: PromptStyle) -> str:
 
 _INSTRUCTIONS = {
     PromptStyle.ONE_WORD: (
-        "Determine if statement B is an entailment, contradiction or neutral "
-        "with respect to statement A. Answer with a single word: entailment, "
-        "contradiction, or neutral.\n"
+        """Classify the relationship between the following Premise and Hypothesis.
+        Premise: {premise}
+        Hypothesis: {hypothesis}
+        
+        Instructions:
+        - Step 1: Analyze the relationship step-by-step.
+        - Step 2: Output your analysis inside <reasoning> tags.
+        - Step 3: Output the final classification (entailment, neutral, or contradiction) inside <label> tags.
+        
+        Format:
+        <reasoning>[Your analysis here]</reasoning>
+        <label>[label]</label>
+        """
     ),
     PromptStyle.CHAIN_OF_THOUGHT: (
-        "Determine if statement B is an entailment, contradiction or neutral. "
-        "Reason step by step and finally provide a one-word answer as 'Label: (entailment, contradiction, neutral).'\n"
+        """Task: Determine the logical relationship between a Premise and a Hypothesis. 
+        Options: entailment, contradiction, neutral.
+        
+        Rules:
+        1. You MUST provide your reasoning inside <reasoning> tags.
+        2. You MUST provide the final label inside <label> tags.
+        3. The reasoning must come BEFORE the label.
+
+        {examples_block}
+        Premise: {premise}
+        Hypothesis: {hypothesis}
+        """
     ),
 }
 
@@ -82,11 +102,12 @@ def build_prompts(
                 "few_shot_examples must be provided when few_shot=True"
             )
         examples_block = few_shot_examples + "\n"
+        prompt = instruction.format(premise=df["Sentence1"], hypothesis=df["Sentence2"], examples_block=examples_block)
+    else:
+        prompt = instruction.format(premise=df["Sentence1"], hypothesis=df["Sentence2"])
+
     return (
         "<start_of_turn>user "
-        + instruction
-        + examples_block
-        + "A: " + df["Sentence1"]
-        + "\nB: " + df["Sentence2"]
+        + prompt
         + "\n<end_of_turn>model"
     )

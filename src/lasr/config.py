@@ -28,3 +28,11 @@ class InferenceConfig:
     batch_size: int = 8
     max_new_tokens: int = 256
     downsample_rate: int = 10
+
+
+@dataclass
+class SAEConfig:
+    layer: int = 22
+    width: str = "262k"
+    l0: str = "medium"
+    repo_id: str = "google/gemma-scope-2-4b-pt"

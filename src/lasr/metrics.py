@@ -30,19 +30,11 @@ def extract_prediction(text: str, prompt_style: PromptStyle) -> str | None:
         return None
 
     # Try the "Label:" prefix first (works for both styles).
-    matches = re.findall(r"Label[:\s]\s*(\S+)", text, re.IGNORECASE)
-    if matches:
-        prediction = _clean_token(matches[-1])
+    label = re.search(r"<label>(.*)</label>", text, re.IGNORECASE)
+    if label:
+        prediction = _clean_token(label.group(1))
         if prediction in VALID_LABELS:
             return prediction
-
-    # For ONE_WORD, fall back to the last word in the output.
-    if prompt_style == PromptStyle.ONE_WORD:
-        words = text.split()
-        if words:
-            prediction = _clean_token(words[-1])
-            if prediction in VALID_LABELS:
-                return prediction
 
     return None
 
