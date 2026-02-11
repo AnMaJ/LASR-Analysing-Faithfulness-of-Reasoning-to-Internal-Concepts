@@ -2,6 +2,12 @@ from src.data_classes import NeuronpediaFeature
 import requests
 from IPython.display import IFrame, display
 
+# Class used to interact with Neuonpedia API (https://www.neuronpedia.org/)
+# Main functionalities are:
+# 1) Initialization with model and SAE identifiers
+# 2) Fetching feature information (description, activation density, max activation, examples)
+# 3) Returning dashboard URLs for features (to manually check the dashboard if needed)
+
 class NeuronpediaClient:
     """Client for interacting with the Neuronpedia API."""
 
