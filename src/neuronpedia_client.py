@@ -28,6 +28,9 @@ class NeuronpediaClient:
         """Fetch feature information from Neuronpedia.
 
         API endpoint: GET /api/feature/{modelId}/{layer}/{index}
+
+        Args:
+            feature_idx: index of the feature we want to get information about
         """
         url = f"{self.BASE_URL}/feature/{self.model_id}/{self.sae_id}/{feature_idx}"
 
