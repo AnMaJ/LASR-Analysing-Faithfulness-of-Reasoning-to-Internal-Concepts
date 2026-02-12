@@ -82,3 +82,56 @@ def get_neuronpedia_labels(
         if i < len(feature_indices) - 1:
             time.sleep(delay)
     return labels
+
+
+def get_neuronpedia_feature_data(
+    model_id: str, sae_id: str, feature_index: int
+) -> dict:
+    """Fetch rich feature metadata from Neuronpedia.
+
+    Returns a dict with keys: ``description``, ``frac_nonzero``,
+    ``max_act_approx``, ``url``, ``embed_url``.
+    """
+    base = "https://neuronpedia.org"
+    url = f"{base}/{model_id}/{sae_id}/{feature_index}"
+    embed_url = f"{url}?embed=true"
+    result: dict = {
+        "description": None,
+        "frac_nonzero": None,
+        "max_act_approx": None,
+        "url": url,
+        "embed_url": embed_url,
+    }
+    api_url = f"https://www.neuronpedia.org/api/feature/{model_id}/{sae_id}/{feature_index}"
+    try:
+        resp = requests.get(api_url, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        explanations = data.get("explanations")
+        if explanations and len(explanations) > 0:
+            result["description"] = explanations[0].get("description")
+        if "frac_nonzero" in data:
+            result["frac_nonzero"] = data["frac_nonzero"]
+        if "maxActApprox" in data:
+            result["max_act_approx"] = data["maxActApprox"]
+    except (requests.RequestException, ValueError, KeyError):
+        pass
+    return result
+
+
+def get_neuronpedia_features_data(
+    model_id: str,
+    sae_id: str,
+    feature_indices: list[int],
+    delay: float = 0.1,
+) -> dict[int, dict]:
+    """Fetch rich feature metadata for multiple features with rate limiting.
+
+    Returns ``{feature_index: data_dict}``.
+    """
+    results: dict[int, dict] = {}
+    for i, idx in enumerate(feature_indices):
+        results[idx] = get_neuronpedia_feature_data(model_id, sae_id, idx)
+        if i < len(feature_indices) - 1:
+            time.sleep(delay)
+    return results
