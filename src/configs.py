@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Dict, List, Optional
 
 import torch
 
@@ -36,3 +37,14 @@ class SAEConfig:
     width: str = "262k"
     l0: str = "medium"
     repo_id: str = "google/gemma-scope-2-4b-pt"
+
+
+@dataclass
+class NeuronpediaFeature:
+    """Container for feature information from Neuronpedia."""
+    feature_idx: int
+    description: Optional[str] = None
+    frac_nonzero: Optional[float] = None  # Activation density
+    max_act_approx: Optional[float] = None  # Max activation value
+    max_activating_examples: Optional[List[Dict]] = None
+    error: Optional[str] = None

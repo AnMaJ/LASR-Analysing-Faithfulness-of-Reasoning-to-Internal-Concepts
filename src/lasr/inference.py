@@ -4,7 +4,7 @@ import torch
 from tqdm.auto import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from lasr.config import InferenceConfig, ModelConfig
+from configs import InferenceConfig, ModelConfig
 
 
 def load_model(config: ModelConfig):

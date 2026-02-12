@@ -3,7 +3,7 @@ import torch.nn as nn
 from huggingface_hub import hf_hub_download
 from safetensors.torch import load_file
 
-from lasr.config import SAEConfig
+from configs import SAEConfig
 
 
 class JumpReLUSAE(nn.Module):

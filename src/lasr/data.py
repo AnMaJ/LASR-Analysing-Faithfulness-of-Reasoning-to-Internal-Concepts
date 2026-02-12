@@ -1,6 +1,6 @@
 import pandas as pd
 
-from lasr.config import PromptStyle
+from configs import PromptStyle
 
 
 def load_esnli(url: str) -> pd.DataFrame:

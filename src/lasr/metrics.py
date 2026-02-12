@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas as pd
 from sklearn.metrics import classification_report
 
-from lasr.config import PromptStyle
+from configs import PromptStyle
 
 VALID_LABELS = {"entailment", "contradiction", "neutral"}
 

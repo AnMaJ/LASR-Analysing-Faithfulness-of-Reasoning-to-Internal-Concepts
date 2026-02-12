@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 import numpy as np
 import torch
 
-from lasr.neuronpedia import get_neuronpedia_feature_data
+from neuronpedia_client import NeuronpediaClient
 
 
 @dataclass
@@ -40,7 +40,8 @@ class Feature:
         -------
         self, for chaining.
         """
-        data = get_neuronpedia_feature_data(model_id, sae_id, self.feature_idx)
+        client = NeuronpediaClient(model_id, sae_id)
+        data = client.get_feature_data(self.feature_idx)
         self.label = data["description"]
         self.url = data["url"]
         self.embed_url = data["embed_url"]
