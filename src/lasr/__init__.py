@@ -1,6 +1,7 @@
 from lasr.activations import encode_activations, gather_residual_activations
 from lasr.aggregation import l0_sparsity, reconstruction_metrics, top_k_features, top_k_features_per_token
 from lasr.config import SAEConfig
+from lasr.denoising import DenoisingConfig, DenoisingMethod, denoise
 from lasr.feature import Feature, create_features
 from lasr.neuronpedia import (
     build_sae_id,
@@ -14,6 +15,9 @@ from lasr.sae import JumpReLUSAE, load_sae
 
 __all__ = [
     "SAEConfig",
+    "DenoisingConfig",
+    "DenoisingMethod",
+    "denoise",
     "Feature",
     "create_features",
     "JumpReLUSAE",
