@@ -13,6 +13,23 @@ def top_k_features(
     return top_activations, top_feature_indices
 
 
+def top_k_features_per_token(
+    sae_acts: torch.Tensor, k: int = 5
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return the top-*k* feature activations for each token independently.
+
+    Parameters
+    ----------
+    sae_acts:
+        Tensor of shape ``(1, n_tokens, n_features)``.
+
+    Returns ``(top_values, top_indices)`` each of shape ``(n_tokens, k)``.
+    """
+    acts = sae_acts.squeeze(0)  # (n_tokens, n_features)
+    top_values, top_indices = acts.topk(k, dim=-1)
+    return top_values, top_indices
+
+
 def reconstruction_metrics(
     reconstruction: torch.Tensor, original: torch.Tensor
 ) -> dict[str, torch.Tensor]:

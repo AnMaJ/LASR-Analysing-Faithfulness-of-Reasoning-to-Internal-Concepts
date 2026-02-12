@@ -263,3 +263,91 @@ def plot_feature_activation_heatmap(
         height=height,
     )
     return fig
+
+
+def plot_per_token_topk_heatmap(
+    top_values: np.ndarray,
+    top_indices: np.ndarray,
+    tokens: list[str],
+    labels: dict[int, str | None] | None = None,
+    title: str = "Per-Token Top-K SAE Feature Activations",
+) -> go.Figure:
+    """Heatmap showing the top-K SAE feature activations per token.
+
+    Parameters
+    ----------
+    top_values:
+        2-D array of shape ``(n_tokens, k)`` – activation values.
+    top_indices:
+        2-D array of shape ``(n_tokens, k)`` – feature indices.
+    tokens:
+        Token strings for the y-axis.
+    labels:
+        Optional ``{feature_index: concept_label}`` mapping from Neuronpedia.
+    title:
+        Figure title.
+    """
+    if hasattr(top_values, "detach"):
+        top_values = top_values.detach().cpu().numpy()
+    if hasattr(top_indices, "detach"):
+        top_indices = top_indices.detach().cpu().numpy()
+
+    top_values = np.asarray(top_values, dtype=float)
+    top_indices = np.asarray(top_indices, dtype=int)
+
+    n_tokens, k = top_values.shape
+    if labels is None:
+        labels = {}
+
+    x_labels = [f"#{r + 1}" for r in range(k)]
+
+    # Build hover text: activation, feature label, feature number.
+    hover: list[list[str]] = []
+    for ti in range(n_tokens):
+        row_hover: list[str] = []
+        for ri in range(k):
+            feat_idx = int(top_indices[ti, ri])
+            feat_label = labels.get(feat_idx) or "N/A"
+            row_hover.append(
+                f"Token: {tokens[ti]}<br>"
+                f"Activation: {top_values[ti, ri]:.4f}<br>"
+                f"Feature: {feat_idx}<br>"
+                f"Label: {feat_label}"
+            )
+        hover.append(row_hover)
+
+    # Diverging colorscale: red (negative) → white (zero) → blue (positive).
+    abs_max = max(float(np.abs(top_values).max()), 1e-6)
+    colorscale = [
+        [0.0, "rgb(178,24,43)"],
+        [0.5, "rgb(255,255,255)"],
+        [1.0, "rgb(33,102,172)"],
+    ]
+
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=top_values,
+            x=x_labels,
+            y=tokens,
+            zmin=-abs_max,
+            zmax=abs_max,
+            colorscale=colorscale,
+            hoverinfo="text",
+            text=hover,
+            colorbar=dict(title="Activation"),
+        )
+    )
+
+    # Small square cells – 20px per cell.
+    cell_size = 20
+    width = max(400, k * cell_size + 200)
+    height = max(400, n_tokens * cell_size + 150)
+
+    fig.update_layout(
+        title=title,
+        xaxis=dict(title="Feature Rank", type="category", side="top"),
+        yaxis=dict(title="Token", autorange="reversed", type="category"),
+        width=width,
+        height=height,
+    )
+    return fig
