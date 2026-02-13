@@ -2,7 +2,7 @@ import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from src.data_classes import ModelConfig
+from src.configs import ModelConfig
 
 
 class GemmaModel:
