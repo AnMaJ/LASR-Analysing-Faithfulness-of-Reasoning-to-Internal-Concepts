@@ -47,4 +47,6 @@ class NeuronpediaFeature:
     frac_nonzero: Optional[float] = None  # Activation density
     max_act_approx: Optional[float] = None  # Max activation value
     max_activating_examples: Optional[List[Dict]] = None
+    url: Optional[str] = None
+    embed_url: Optional[str] = None
     error: Optional[str] = None

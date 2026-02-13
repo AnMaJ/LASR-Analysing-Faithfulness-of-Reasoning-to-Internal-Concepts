@@ -41,12 +41,12 @@ class Feature:
         self, for chaining.
         """
         client = NeuronpediaClient(model_id, sae_id)
-        data = client.get_feature_data(self.feature_idx)
-        self.label = data["description"]
-        self.url = data["url"]
-        self.embed_url = data["embed_url"]
-        self.frac_nonzero = data["frac_nonzero"]
-        self.max_act_approx = data["max_act_approx"]
+        feature = client.get_feature(self.feature_idx)
+        self.label = feature.description
+        self.url = feature.url
+        self.embed_url = feature.embed_url
+        self.frac_nonzero = feature.frac_nonzero
+        self.max_act_approx = feature.max_act_approx
         return self
 
     def max_activation(self) -> float:
