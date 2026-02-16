@@ -1,4 +1,6 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
+from functools import partial
+
 import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -29,7 +31,7 @@ class GemmaModel:
         )
         self.model.eval()
 
-    def generate(self, prompt: Union[str, List[Dict]], max_new_tokens: int = 256) -> str:
+    def generate(self, prompt: Union[str, List[Dict]], max_new_tokens: int = 256) -> Tuple[str, torch.Tensor]:
         """Generate a response for the given *prompt*.
 
         Args:
@@ -54,8 +56,10 @@ class GemmaModel:
                 max_new_tokens=max_new_tokens,
             )
         # Strip the prompt tokens from the output
-        generated_ids = output_ids[0, inputs["input_ids"].shape[1]:]
-        return self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+        prompt_len = inputs["input_ids"].shape[1]
+        generated_ids = output_ids[0, prompt_len:]
+
+        return prompt, self.tokenizer.decode(generated_ids, skip_special_tokens=True), generated_ids
 
     def generate_batch(
         self,
@@ -98,3 +102,37 @@ class GemmaModel:
 
         print(f"Generated {len(decoded_outputs)} outputs")
         return decoded_outputs
+
+    @staticmethod
+    def _gather_acts_hook(
+        mod, inputs, outputs, cache: dict, key: str, use_input: bool
+    ):
+        if use_input:
+            acts = inputs[0].squeeze(0)
+        else:
+            acts = outputs[0] if isinstance(outputs, tuple) else outputs
+        # Ensure 3-D (batch, seq, d_model) even if the layer squeezed the batch dim
+        if acts.ndim == 2:
+            acts = acts.unsqueeze(0)
+        cache[key] = acts.detach()
+        return outputs
+
+
+    def gather_residual_activations(
+        self, target_layer: int, inputs: torch.Tensor
+    ) -> torch.Tensor:
+        """Run a forward pass and capture the residual stream output at *target_layer*."""
+        cache: dict[str, torch.Tensor] = {}
+
+        handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
+            partial(self._gather_acts_hook, cache=cache, key="resid_post", use_input=False)
+        )
+
+        if inputs.ndim == 1:
+            inputs = inputs.unsqueeze(0)
+        try:
+            self.model.forward(input_ids=inputs)
+        finally:
+            handle.remove()
+
+        return cache["resid_post"]

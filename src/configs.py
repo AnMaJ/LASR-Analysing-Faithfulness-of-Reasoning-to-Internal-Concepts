@@ -69,9 +69,9 @@ class InferenceConfig:
 
 @dataclass
 class SAEConfig:
-    repo_id: str = "google/gemma-scope-2-27b-it"
+    repo_id: str = "google/gemma-scope-2-4b-it"
     sae_type: str = "resid_post"  # resid_post, mlp_out, attn_out
-    layer: int = 40
+    layer: int = 22
     width: str = "65k"  # 16k, 65k, 262k, 1m
     l0: str = "medium"
 

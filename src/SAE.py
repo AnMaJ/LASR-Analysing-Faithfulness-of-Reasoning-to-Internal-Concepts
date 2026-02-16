@@ -71,3 +71,12 @@ class JumpReLUSAE(nn.Module):
         sae = sae.to(device=device, dtype=torch.float32)
 
         return sae
+    
+    def encode_activations(
+        self, activations: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Encode *activations* through the SAE and return (sae_acts, reconstruction)."""
+        activations = activations.to(torch.float32)
+        sae_acts = self.encode(activations)
+        reconstruction = self.decode(sae_acts)
+        return sae_acts, reconstruction
