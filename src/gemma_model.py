@@ -25,7 +25,7 @@ class GemmaModel:
         self.model = AutoModelForCausalLM.from_pretrained(
             config.model_name,
             device_map=config.device,
-            torch_dtype=torch.float16,
+            dtype=torch.bfloat16,
         )
         self.model.eval()
 
@@ -47,7 +47,7 @@ class GemmaModel:
                 add_generation_prompt=True
             )
 
-        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
+        inputs = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(self.model.device)
         with torch.no_grad():
             output_ids = self.model.generate(
                 **inputs,
