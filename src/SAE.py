@@ -3,6 +3,8 @@ import torch.nn as nn
 from huggingface_hub import hf_hub_download
 from safetensors.torch import load_file
 
+from src.configs import SAEConfig
+
 class JumpReLUSAE(nn.Module):
     """JumpReLU Sparse Autoencoder for Gemma Scope 2.
 
@@ -50,11 +52,16 @@ class JumpReLUSAE(nn.Module):
         return recon
     
     @classmethod
-    def from_pretrained(cls, repo_id: str, sae_path: str, device: str = "cpu") -> "JumpReLUSAE":
-        """Download weights from Hugging Face and return an initialized SAE."""
+    def from_pretrained(cls, config: SAEConfig, device: str = "cpu") -> "JumpReLUSAE":
+        """Download weights from Hugging Face and return an initialized SAE.
+
+        Args:
+            config: SAEConfig with repo_id, sae_type, layer, width, and l0.
+            device: Device to load the SAE onto.
+        """
         path_to_params = hf_hub_download(
-            repo_id=repo_id,
-            filename=sae_path,
+            repo_id=config.repo_id,
+            filename=config.sae_path,
         )
         params = load_file(path_to_params)
         d_model, d_sae = params["w_enc"].shape

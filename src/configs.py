@@ -69,10 +69,16 @@ class InferenceConfig:
 
 @dataclass
 class SAEConfig:
-    layer: int = 22
-    width: str = "262k"
+    repo_id: str = "google/gemma-scope-2-27b-it"
+    sae_type: str = "resid_post"  # resid_post, mlp_out, attn_out
+    layer: int = 40
+    width: str = "65k"  # 16k, 65k, 262k, 1m
     l0: str = "medium"
-    repo_id: str = "google/gemma-scope-2-4b-pt"
+
+    @property
+    def sae_path(self) -> str:
+        """Construct the SAE path for HuggingFace download."""
+        return f"{self.sae_type}/layer_{self.layer}_width_{self.width}_l0_{self.l0}/params.safetensors"
 
 
 @dataclass
