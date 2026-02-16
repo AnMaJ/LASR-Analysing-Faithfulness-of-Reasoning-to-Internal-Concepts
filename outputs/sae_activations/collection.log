@@ -1,0 +1,562 @@
+2026-02-13 00:35:42 | INFO     | ================================================================================
+2026-02-13 00:35:42 | INFO     | SAE Activation Collection Pipeline
+2026-02-13 00:35:42 | INFO     | Started at: 2026-02-13T00:35:42.167766
+2026-02-13 00:35:42 | INFO     | ================================================================================
+2026-02-13 00:35:42 | INFO     | Config: model=google/gemma-3-4b-it, sae_width=16k, sae_l0=small, num_samples=100, num_layers=34
+2026-02-13 00:35:42 | WARNING  | HF_TOKEN not set. Upload will fail unless already authenticated.
+2026-02-13 00:35:42 | INFO     | ================================================================================
+2026-02-13 00:35:42 | INFO     | STEP 1: Loading ECQA dataset
+2026-02-13 00:35:42 | INFO     | ================================================================================
+2026-02-13 00:35:42 | INFO     | Selected 100 sample indices: [23, 31, 44, 51, 56, 59, 70, 86, 88, 96]... (showing first 10)
+2026-02-13 00:35:42 | INFO     | ================================================================================
+2026-02-13 00:35:42 | INFO     | STEP 2: Loading Gemma 3 4B IT model
+2026-02-13 00:35:42 | INFO     | ================================================================================
+2026-02-13 00:37:13 | INFO     | Model loaded successfully.
+2026-02-13 00:37:13 | INFO     | Model architecture: Gemma3ForConditionalGeneration (language_model), num_layers=34
+2026-02-13 00:37:13 | INFO     | ================================================================================
+2026-02-13 00:37:13 | INFO     | STEP 3: Generating text for all samples
+2026-02-13 00:37:13 | INFO     | ================================================================================
+2026-02-13 00:37:35 | INFO     |   Sample 1/100 (idx=23): prompt_len=93, gen_len=281, total=374
+2026-02-13 00:37:44 | INFO     |   Sample 2/100 (idx=31): prompt_len=98, gen_len=286, total=384
+2026-02-13 00:37:53 | INFO     |   Sample 3/100 (idx=44): prompt_len=118, gen_len=258, total=376
+2026-02-13 00:38:01 | INFO     |   Sample 4/100 (idx=51): prompt_len=105, gen_len=269, total=374
+2026-02-13 00:38:09 | INFO     |   Sample 5/100 (idx=56): prompt_len=95, gen_len=239, total=334
+2026-02-13 00:38:18 | INFO     |   Sample 6/100 (idx=59): prompt_len=99, gen_len=299, total=398
+2026-02-13 00:38:25 | INFO     |   Sample 7/100 (idx=70): prompt_len=92, gen_len=212, total=304
+2026-02-13 00:38:31 | INFO     |   Sample 8/100 (idx=86): prompt_len=107, gen_len=207, total=314
+2026-02-13 00:38:37 | INFO     |   Sample 9/100 (idx=88): prompt_len=91, gen_len=187, total=278
+2026-02-13 00:38:46 | INFO     |   Sample 10/100 (idx=96): prompt_len=93, gen_len=275, total=368
+2026-02-13 00:38:46 | INFO     |   --- Generated 10/100 samples ---
+2026-02-13 00:38:52 | INFO     |   Sample 11/100 (idx=101): prompt_len=101, gen_len=200, total=301
+2026-02-13 00:38:59 | INFO     |   Sample 12/100 (idx=107): prompt_len=93, gen_len=199, total=292
+2026-02-13 00:39:06 | INFO     |   Sample 13/100 (idx=109): prompt_len=95, gen_len=234, total=329
+2026-02-13 00:39:16 | INFO     |   Sample 14/100 (idx=113): prompt_len=94, gen_len=300, total=394
+2026-02-13 00:39:21 | INFO     |   Sample 15/100 (idx=139): prompt_len=92, gen_len=184, total=276
+2026-02-13 00:39:30 | INFO     |   Sample 16/100 (idx=141): prompt_len=89, gen_len=263, total=352
+2026-02-13 00:39:37 | INFO     |   Sample 17/100 (idx=158): prompt_len=93, gen_len=224, total=317
+2026-02-13 00:39:43 | INFO     |   Sample 18/100 (idx=174): prompt_len=117, gen_len=207, total=324
+2026-02-13 00:39:52 | INFO     |   Sample 19/100 (idx=192): prompt_len=87, gen_len=263, total=350
+2026-02-13 00:39:58 | INFO     |   Sample 20/100 (idx=210): prompt_len=94, gen_len=197, total=291
+2026-02-13 00:39:58 | INFO     |   --- Generated 20/100 samples ---
+2026-02-13 00:40:05 | INFO     |   Sample 21/100 (idx=220): prompt_len=101, gen_len=209, total=310
+2026-02-13 00:40:13 | INFO     |   Sample 22/100 (idx=237): prompt_len=90, gen_len=259, total=349
+2026-02-13 00:40:22 | INFO     |   Sample 23/100 (idx=243): prompt_len=94, gen_len=300, total=394
+2026-02-13 00:40:31 | INFO     |   Sample 24/100 (idx=244): prompt_len=93, gen_len=284, total=377
+2026-02-13 00:40:39 | INFO     |   Sample 25/100 (idx=260): prompt_len=96, gen_len=226, total=322
+2026-02-13 00:40:45 | INFO     |   Sample 26/100 (idx=265): prompt_len=103, gen_len=186, total=289
+2026-02-13 00:40:52 | INFO     |   Sample 27/100 (idx=270): prompt_len=87, gen_len=224, total=311
+2026-02-13 00:41:01 | INFO     |   Sample 28/100 (idx=273): prompt_len=117, gen_len=300, total=417
+2026-02-13 00:41:09 | INFO     |   Sample 29/100 (idx=280): prompt_len=96, gen_len=231, total=327
+2026-02-13 00:41:15 | INFO     |   Sample 30/100 (idx=289): prompt_len=90, gen_len=214, total=304
+2026-02-13 00:41:15 | INFO     |   --- Generated 30/100 samples ---
+2026-02-13 00:41:24 | INFO     |   Sample 31/100 (idx=290): prompt_len=104, gen_len=287, total=391
+2026-02-13 00:41:32 | INFO     |   Sample 32/100 (idx=292): prompt_len=97, gen_len=238, total=335
+2026-02-13 00:41:38 | INFO     |   Sample 33/100 (idx=306): prompt_len=90, gen_len=190, total=280
+2026-02-13 00:41:47 | INFO     |   Sample 34/100 (idx=307): prompt_len=99, gen_len=274, total=373
+2026-02-13 00:41:55 | INFO     |   Sample 35/100 (idx=308): prompt_len=100, gen_len=276, total=376
+2026-02-13 00:42:03 | INFO     |   Sample 36/100 (idx=323): prompt_len=94, gen_len=226, total=320
+2026-02-13 00:42:09 | INFO     |   Sample 37/100 (idx=333): prompt_len=91, gen_len=208, total=299
+2026-02-13 00:42:17 | INFO     |   Sample 38/100 (idx=388): prompt_len=100, gen_len=235, total=335
+2026-02-13 00:42:26 | INFO     |   Sample 39/100 (idx=411): prompt_len=91, gen_len=278, total=369
+2026-02-13 00:42:31 | INFO     |   Sample 40/100 (idx=413): prompt_len=93, gen_len=186, total=279
+2026-02-13 00:42:31 | INFO     |   --- Generated 40/100 samples ---
+2026-02-13 00:42:39 | INFO     |   Sample 41/100 (idx=420): prompt_len=97, gen_len=229, total=326
+2026-02-13 00:42:43 | INFO     |   Sample 42/100 (idx=425): prompt_len=94, gen_len=147, total=241
+2026-02-13 00:42:50 | INFO     |   Sample 43/100 (idx=440): prompt_len=105, gen_len=202, total=307
+2026-02-13 00:42:58 | INFO     |   Sample 44/100 (idx=448): prompt_len=104, gen_len=254, total=358
+2026-02-13 00:43:03 | INFO     |   Sample 45/100 (idx=479): prompt_len=94, gen_len=172, total=266
+2026-02-13 00:43:12 | INFO     |   Sample 46/100 (idx=481): prompt_len=100, gen_len=286, total=386
+2026-02-13 00:43:20 | INFO     |   Sample 47/100 (idx=490): prompt_len=96, gen_len=246, total=342
+2026-02-13 00:43:27 | INFO     |   Sample 48/100 (idx=497): prompt_len=100, gen_len=218, total=318
+2026-02-13 00:43:37 | INFO     |   Sample 49/100 (idx=507): prompt_len=96, gen_len=300, total=396
+2026-02-13 00:43:42 | INFO     |   Sample 50/100 (idx=513): prompt_len=108, gen_len=175, total=283
+2026-02-13 00:43:42 | INFO     |   --- Generated 50/100 samples ---
+2026-02-13 00:43:48 | INFO     |   Sample 51/100 (idx=516): prompt_len=103, gen_len=198, total=301
+2026-02-13 00:43:57 | INFO     |   Sample 52/100 (idx=523): prompt_len=100, gen_len=262, total=362
+2026-02-13 00:44:06 | INFO     |   Sample 53/100 (idx=542): prompt_len=91, gen_len=300, total=391
+2026-02-13 00:44:16 | INFO     |   Sample 54/100 (idx=548): prompt_len=99, gen_len=300, total=399
+2026-02-13 00:44:23 | INFO     |   Sample 55/100 (idx=558): prompt_len=98, gen_len=216, total=314
+2026-02-13 00:44:32 | INFO     |   Sample 56/100 (idx=596): prompt_len=92, gen_len=300, total=392
+2026-02-13 00:44:40 | INFO     |   Sample 57/100 (idx=598): prompt_len=93, gen_len=234, total=327
+2026-02-13 00:44:49 | INFO     |   Sample 58/100 (idx=611): prompt_len=98, gen_len=285, total=383
+2026-02-13 00:44:56 | INFO     |   Sample 59/100 (idx=656): prompt_len=98, gen_len=223, total=321
+2026-02-13 00:45:02 | INFO     |   Sample 60/100 (idx=667): prompt_len=103, gen_len=197, total=300
+2026-02-13 00:45:02 | INFO     |   --- Generated 60/100 samples ---
+2026-02-13 00:45:08 | INFO     |   Sample 61/100 (idx=689): prompt_len=103, gen_len=187, total=290
+2026-02-13 00:45:15 | INFO     |   Sample 62/100 (idx=692): prompt_len=92, gen_len=234, total=326
+2026-02-13 00:45:23 | INFO     |   Sample 63/100 (idx=694): prompt_len=104, gen_len=257, total=361
+2026-02-13 00:45:30 | INFO     |   Sample 64/100 (idx=701): prompt_len=104, gen_len=194, total=298
+2026-02-13 00:45:35 | INFO     |   Sample 65/100 (idx=708): prompt_len=94, gen_len=164, total=258
+2026-02-13 00:45:43 | INFO     |   Sample 66/100 (idx=711): prompt_len=92, gen_len=253, total=345
+2026-02-13 00:45:49 | INFO     |   Sample 67/100 (idx=715): prompt_len=89, gen_len=183, total=272
+2026-02-13 00:45:57 | INFO     |   Sample 68/100 (idx=726): prompt_len=94, gen_len=266, total=360
+2026-02-13 00:46:03 | INFO     |   Sample 69/100 (idx=731): prompt_len=91, gen_len=197, total=288
+2026-02-13 00:46:07 | INFO     |   Sample 70/100 (idx=745): prompt_len=102, gen_len=120, total=222
+2026-02-13 00:46:07 | INFO     |   --- Generated 70/100 samples ---
+2026-02-13 00:46:13 | INFO     |   Sample 71/100 (idx=754): prompt_len=93, gen_len=183, total=276
+2026-02-13 00:46:23 | INFO     |   Sample 72/100 (idx=760): prompt_len=97, gen_len=300, total=397
+2026-02-13 00:46:29 | INFO     |   Sample 73/100 (idx=761): prompt_len=101, gen_len=194, total=295
+2026-02-13 00:46:37 | INFO     |   Sample 74/100 (idx=789): prompt_len=102, gen_len=257, total=359
+2026-02-13 00:46:46 | INFO     |   Sample 75/100 (idx=832): prompt_len=88, gen_len=276, total=364
+2026-02-13 00:46:53 | INFO     |   Sample 76/100 (idx=834): prompt_len=122, gen_len=246, total=368
+2026-02-13 00:47:03 | INFO     |   Sample 77/100 (idx=847): prompt_len=101, gen_len=294, total=395
+2026-02-13 00:47:09 | INFO     |   Sample 78/100 (idx=850): prompt_len=95, gen_len=184, total=279
+2026-02-13 00:47:15 | INFO     |   Sample 79/100 (idx=884): prompt_len=89, gen_len=189, total=278
+2026-02-13 00:47:22 | INFO     |   Sample 80/100 (idx=895): prompt_len=99, gen_len=229, total=328
+2026-02-13 00:47:22 | INFO     |   --- Generated 80/100 samples ---
+2026-02-13 00:47:30 | INFO     |   Sample 81/100 (idx=926): prompt_len=91, gen_len=257, total=348
+2026-02-13 00:47:38 | INFO     |   Sample 82/100 (idx=940): prompt_len=96, gen_len=249, total=345
+2026-02-13 00:47:48 | INFO     |   Sample 83/100 (idx=947): prompt_len=90, gen_len=300, total=390
+2026-02-13 00:47:53 | INFO     |   Sample 84/100 (idx=951): prompt_len=99, gen_len=165, total=264
+2026-02-13 00:48:00 | INFO     |   Sample 85/100 (idx=952): prompt_len=106, gen_len=236, total=342
+2026-02-13 00:48:06 | INFO     |   Sample 86/100 (idx=954): prompt_len=99, gen_len=188, total=287
+2026-02-13 00:48:13 | INFO     |   Sample 87/100 (idx=966): prompt_len=107, gen_len=195, total=302
+2026-02-13 00:48:20 | INFO     |   Sample 88/100 (idx=997): prompt_len=94, gen_len=224, total=318
+2026-02-13 00:48:29 | INFO     |   Sample 89/100 (idx=1000): prompt_len=104, gen_len=300, total=404
+2026-02-13 00:48:36 | INFO     |   Sample 90/100 (idx=1005): prompt_len=95, gen_len=208, total=303
+2026-02-13 00:48:36 | INFO     |   --- Generated 90/100 samples ---
+2026-02-13 00:48:44 | INFO     |   Sample 91/100 (idx=1008): prompt_len=95, gen_len=253, total=348
+2026-02-13 00:48:53 | INFO     |   Sample 92/100 (idx=1010): prompt_len=100, gen_len=277, total=377
+2026-02-13 00:49:02 | INFO     |   Sample 93/100 (idx=1011): prompt_len=99, gen_len=300, total=399
+2026-02-13 00:49:12 | INFO     |   Sample 94/100 (idx=1012): prompt_len=116, gen_len=300, total=416
+2026-02-13 00:49:18 | INFO     |   Sample 95/100 (idx=1022): prompt_len=99, gen_len=193, total=292
+2026-02-13 00:49:25 | INFO     |   Sample 96/100 (idx=1033): prompt_len=103, gen_len=212, total=315
+2026-02-13 00:49:34 | INFO     |   Sample 97/100 (idx=1042): prompt_len=105, gen_len=300, total=405
+2026-02-13 00:49:40 | INFO     |   Sample 98/100 (idx=1043): prompt_len=90, gen_len=184, total=274
+2026-02-13 00:49:48 | INFO     |   Sample 99/100 (idx=1058): prompt_len=100, gen_len=247, total=347
+2026-02-13 00:49:56 | INFO     |   Sample 100/100 (idx=1084): prompt_len=93, gen_len=240, total=333
+2026-02-13 00:49:56 | INFO     |   --- Generated 100/100 samples ---
+2026-02-13 00:49:56 | INFO     | Metadata saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/metadata.json
+2026-02-13 00:49:56 | INFO     | Generated texts saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/generated_texts.json
+2026-02-13 00:49:56 | INFO     | ================================================================================
+2026-02-13 00:49:56 | INFO     | STEP 4: Collecting SAE activations across all layers
+2026-02-13 00:49:56 | INFO     | ================================================================================
+2026-02-13 00:49:56 | INFO     | 
+============================================================
+2026-02-13 00:49:56 | INFO     | Processing Layer 0/33
+2026-02-13 00:49:56 | INFO     | ============================================================
+2026-02-13 00:49:56 | INFO     |   Downloading SAE for layer 0: resid_post_all/layer_0_width_16k_l0_small/params.safetensors
+2026-02-13 00:50:02 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:50:07 | INFO     |   Layer 0 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:08 | INFO     |   Layer 0 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:50:09 | INFO     |   Layer 0 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:10 | INFO     |   Layer 0 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:50:11 | INFO     |   Layer 0 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:50:11 | INFO     |   Layer 0 complete. Time: 15.4s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_0
+2026-02-13 00:50:11 | INFO     | 
+============================================================
+2026-02-13 00:50:11 | INFO     | Processing Layer 1/33
+2026-02-13 00:50:11 | INFO     | ============================================================
+2026-02-13 00:50:11 | INFO     |   Downloading SAE for layer 1: resid_post_all/layer_1_width_16k_l0_small/params.safetensors
+2026-02-13 00:50:16 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:50:17 | INFO     |   Layer 1 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:17 | INFO     |   Layer 1 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:50:18 | INFO     |   Layer 1 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:19 | INFO     |   Layer 1 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:50:20 | INFO     |   Layer 1 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:50:20 | INFO     |   Layer 1 complete. Time: 9.3s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_1
+2026-02-13 00:50:20 | INFO     | 
+============================================================
+2026-02-13 00:50:20 | INFO     | Processing Layer 2/33
+2026-02-13 00:50:20 | INFO     | ============================================================
+2026-02-13 00:50:20 | INFO     |   Downloading SAE for layer 2: resid_post_all/layer_2_width_16k_l0_small/params.safetensors
+2026-02-13 00:50:25 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:50:26 | INFO     |   Layer 2 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:27 | INFO     |   Layer 2 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:50:27 | INFO     |   Layer 2 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:28 | INFO     |   Layer 2 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:50:29 | INFO     |   Layer 2 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:50:29 | INFO     |   Layer 2 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_2
+2026-02-13 00:50:29 | INFO     | 
+============================================================
+2026-02-13 00:50:29 | INFO     | Processing Layer 3/33
+2026-02-13 00:50:29 | INFO     | ============================================================
+2026-02-13 00:50:29 | INFO     |   Downloading SAE for layer 3: resid_post_all/layer_3_width_16k_l0_small/params.safetensors
+2026-02-13 00:50:34 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:50:35 | INFO     |   Layer 3 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:36 | INFO     |   Layer 3 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:50:37 | INFO     |   Layer 3 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:38 | INFO     |   Layer 3 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:50:39 | INFO     |   Layer 3 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:50:39 | INFO     |   Layer 3 complete. Time: 9.6s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_3
+2026-02-13 00:50:39 | INFO     | 
+============================================================
+2026-02-13 00:50:39 | INFO     | Processing Layer 4/33
+2026-02-13 00:50:39 | INFO     | ============================================================
+2026-02-13 00:50:39 | INFO     |   Downloading SAE for layer 4: resid_post_all/layer_4_width_16k_l0_small/params.safetensors
+2026-02-13 00:50:43 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:50:44 | INFO     |   Layer 4 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:45 | INFO     |   Layer 4 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:50:46 | INFO     |   Layer 4 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:47 | INFO     |   Layer 4 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:50:48 | INFO     |   Layer 4 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:50:48 | INFO     |   Layer 4 complete. Time: 9.0s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_4
+2026-02-13 00:50:48 | INFO     | 
+============================================================
+2026-02-13 00:50:48 | INFO     | Processing Layer 5/33
+2026-02-13 00:50:48 | INFO     | ============================================================
+2026-02-13 00:50:48 | INFO     |   Downloading SAE for layer 5: resid_post_all/layer_5_width_16k_l0_small/params.safetensors
+2026-02-13 00:50:52 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:50:53 | INFO     |   Layer 5 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:54 | INFO     |   Layer 5 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:50:55 | INFO     |   Layer 5 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:50:56 | INFO     |   Layer 5 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:50:57 | INFO     |   Layer 5 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:50:57 | INFO     |   Layer 5 complete. Time: 8.8s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_5
+2026-02-13 00:50:57 | INFO     | 
+============================================================
+2026-02-13 00:50:57 | INFO     | Processing Layer 6/33
+2026-02-13 00:50:57 | INFO     | ============================================================
+2026-02-13 00:50:57 | INFO     |   Downloading SAE for layer 6: resid_post_all/layer_6_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:02 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:03 | INFO     |   Layer 6 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:04 | INFO     |   Layer 6 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:51:05 | INFO     |   Layer 6 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:06 | INFO     |   Layer 6 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:51:07 | INFO     |   Layer 6 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:51:07 | INFO     |   Layer 6 complete. Time: 10.3s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_6
+2026-02-13 00:51:07 | INFO     | 
+============================================================
+2026-02-13 00:51:07 | INFO     | Processing Layer 7/33
+2026-02-13 00:51:07 | INFO     | ============================================================
+2026-02-13 00:51:07 | INFO     |   Downloading SAE for layer 7: resid_post_all/layer_7_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:12 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:13 | INFO     |   Layer 7 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:14 | INFO     |   Layer 7 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:51:14 | INFO     |   Layer 7 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:15 | INFO     |   Layer 7 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:51:16 | INFO     |   Layer 7 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:51:16 | INFO     |   Layer 7 complete. Time: 9.3s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_7
+2026-02-13 00:51:16 | INFO     | 
+============================================================
+2026-02-13 00:51:16 | INFO     | Processing Layer 8/33
+2026-02-13 00:51:16 | INFO     | ============================================================
+2026-02-13 00:51:16 | INFO     |   Downloading SAE for layer 8: resid_post_all/layer_8_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:21 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:22 | INFO     |   Layer 8 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:23 | INFO     |   Layer 8 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:51:24 | INFO     |   Layer 8 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:25 | INFO     |   Layer 8 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:51:26 | INFO     |   Layer 8 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:51:26 | INFO     |   Layer 8 complete. Time: 9.4s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_8
+2026-02-13 00:51:26 | INFO     | 
+============================================================
+2026-02-13 00:51:26 | INFO     | Processing Layer 9/33
+2026-02-13 00:51:26 | INFO     | ============================================================
+2026-02-13 00:51:26 | INFO     |   Downloading SAE for layer 9: resid_post_all/layer_9_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:31 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:32 | INFO     |   Layer 9 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:32 | INFO     |   Layer 9 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:51:33 | INFO     |   Layer 9 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:34 | INFO     |   Layer 9 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:51:35 | INFO     |   Layer 9 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:51:35 | INFO     |   Layer 9 complete. Time: 9.4s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_9
+2026-02-13 00:51:35 | INFO     | 
+============================================================
+2026-02-13 00:51:35 | INFO     | Processing Layer 10/33
+2026-02-13 00:51:35 | INFO     | ============================================================
+2026-02-13 00:51:35 | INFO     |   Downloading SAE for layer 10: resid_post_all/layer_10_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:40 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:41 | INFO     |   Layer 10 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:42 | INFO     |   Layer 10 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:51:42 | INFO     |   Layer 10 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:43 | INFO     |   Layer 10 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:51:44 | INFO     |   Layer 10 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:51:44 | INFO     |   Layer 10 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_10
+2026-02-13 00:51:44 | INFO     | 
+============================================================
+2026-02-13 00:51:44 | INFO     | Processing Layer 11/33
+2026-02-13 00:51:44 | INFO     | ============================================================
+2026-02-13 00:51:44 | INFO     |   Downloading SAE for layer 11: resid_post_all/layer_11_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:49 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:50 | INFO     |   Layer 11 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:51 | INFO     |   Layer 11 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:51:52 | INFO     |   Layer 11 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:51:52 | INFO     |   Layer 11 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:51:53 | INFO     |   Layer 11 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:51:54 | INFO     |   Layer 11 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_11
+2026-02-13 00:51:54 | INFO     | 
+============================================================
+2026-02-13 00:51:54 | INFO     | Processing Layer 12/33
+2026-02-13 00:51:54 | INFO     | ============================================================
+2026-02-13 00:51:54 | INFO     |   Downloading SAE for layer 12: resid_post_all/layer_12_width_16k_l0_small/params.safetensors
+2026-02-13 00:51:58 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:51:59 | INFO     |   Layer 12 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:00 | INFO     |   Layer 12 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:01 | INFO     |   Layer 12 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:02 | INFO     |   Layer 12 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:02 | INFO     |   Layer 12 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:52:03 | INFO     |   Layer 12 complete. Time: 9.1s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_12
+2026-02-13 00:52:03 | INFO     | 
+============================================================
+2026-02-13 00:52:03 | INFO     | Processing Layer 13/33
+2026-02-13 00:52:03 | INFO     | ============================================================
+2026-02-13 00:52:03 | INFO     |   Downloading SAE for layer 13: resid_post_all/layer_13_width_16k_l0_small/params.safetensors
+2026-02-13 00:52:07 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:52:08 | INFO     |   Layer 13 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:09 | INFO     |   Layer 13 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:10 | INFO     |   Layer 13 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:11 | INFO     |   Layer 13 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:12 | INFO     |   Layer 13 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:52:12 | INFO     |   Layer 13 complete. Time: 9.3s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_13
+2026-02-13 00:52:12 | INFO     | 
+============================================================
+2026-02-13 00:52:12 | INFO     | Processing Layer 14/33
+2026-02-13 00:52:12 | INFO     | ============================================================
+2026-02-13 00:52:12 | INFO     |   Downloading SAE for layer 14: resid_post_all/layer_14_width_16k_l0_small/params.safetensors
+2026-02-13 00:52:17 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:52:17 | INFO     |   Layer 14 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:18 | INFO     |   Layer 14 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:19 | INFO     |   Layer 14 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:20 | INFO     |   Layer 14 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:21 | INFO     |   Layer 14 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:52:21 | INFO     |   Layer 14 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_14
+2026-02-13 00:52:21 | INFO     | 
+============================================================
+2026-02-13 00:52:21 | INFO     | Processing Layer 15/33
+2026-02-13 00:52:21 | INFO     | ============================================================
+2026-02-13 00:52:21 | INFO     |   Downloading SAE for layer 15: resid_post_all/layer_15_width_16k_l0_small/params.safetensors
+2026-02-13 00:52:26 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:52:27 | INFO     |   Layer 15 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:27 | INFO     |   Layer 15 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:28 | INFO     |   Layer 15 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:29 | INFO     |   Layer 15 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:30 | INFO     |   Layer 15 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:52:30 | INFO     |   Layer 15 complete. Time: 9.1s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_15
+2026-02-13 00:52:30 | INFO     | 
+============================================================
+2026-02-13 00:52:30 | INFO     | Processing Layer 16/33
+2026-02-13 00:52:30 | INFO     | ============================================================
+2026-02-13 00:52:30 | INFO     |   Downloading SAE for layer 16: resid_post_all/layer_16_width_16k_l0_small/params.safetensors
+2026-02-13 00:52:35 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:52:36 | INFO     |   Layer 16 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:36 | INFO     |   Layer 16 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:37 | INFO     |   Layer 16 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:38 | INFO     |   Layer 16 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:39 | INFO     |   Layer 16 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:52:39 | INFO     |   Layer 16 complete. Time: 9.0s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_16
+2026-02-13 00:52:39 | INFO     | 
+============================================================
+2026-02-13 00:52:39 | INFO     | Processing Layer 17/33
+2026-02-13 00:52:39 | INFO     | ============================================================
+2026-02-13 00:52:39 | INFO     |   Downloading SAE for layer 17: resid_post_all/layer_17_width_16k_l0_small/params.safetensors
+2026-02-13 00:52:44 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:52:45 | INFO     |   Layer 17 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:46 | INFO     |   Layer 17 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:47 | INFO     |   Layer 17 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:48 | INFO     |   Layer 17 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:49 | INFO     |   Layer 17 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:52:49 | INFO     |   Layer 17 complete. Time: 9.5s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_17
+2026-02-13 00:52:49 | INFO     | 
+============================================================
+2026-02-13 00:52:49 | INFO     | Processing Layer 18/33
+2026-02-13 00:52:49 | INFO     | ============================================================
+2026-02-13 00:52:49 | INFO     |   Downloading SAE for layer 18: resid_post_all/layer_18_width_16k_l0_small/params.safetensors
+2026-02-13 00:52:55 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:52:56 | INFO     |   Layer 18 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:57 | INFO     |   Layer 18 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:52:58 | INFO     |   Layer 18 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:52:59 | INFO     |   Layer 18 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:52:59 | INFO     |   Layer 18 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:00 | INFO     |   Layer 18 complete. Time: 10.8s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_18
+2026-02-13 00:53:00 | INFO     | 
+============================================================
+2026-02-13 00:53:00 | INFO     | Processing Layer 19/33
+2026-02-13 00:53:00 | INFO     | ============================================================
+2026-02-13 00:53:00 | INFO     |   Downloading SAE for layer 19: resid_post_all/layer_19_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:04 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:53:05 | INFO     |   Layer 19 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:06 | INFO     |   Layer 19 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:53:07 | INFO     |   Layer 19 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:08 | INFO     |   Layer 19 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:53:09 | INFO     |   Layer 19 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:09 | INFO     |   Layer 19 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_19
+2026-02-13 00:53:09 | INFO     | 
+============================================================
+2026-02-13 00:53:09 | INFO     | Processing Layer 20/33
+2026-02-13 00:53:09 | INFO     | ============================================================
+2026-02-13 00:53:09 | INFO     |   Downloading SAE for layer 20: resid_post_all/layer_20_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:13 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:53:14 | INFO     |   Layer 20 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:15 | INFO     |   Layer 20 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:53:16 | INFO     |   Layer 20 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:17 | INFO     |   Layer 20 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:53:18 | INFO     |   Layer 20 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:18 | INFO     |   Layer 20 complete. Time: 9.0s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_20
+2026-02-13 00:53:18 | INFO     | 
+============================================================
+2026-02-13 00:53:18 | INFO     | Processing Layer 21/33
+2026-02-13 00:53:18 | INFO     | ============================================================
+2026-02-13 00:53:18 | INFO     |   Downloading SAE for layer 21: resid_post_all/layer_21_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:22 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:53:23 | INFO     |   Layer 21 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:24 | INFO     |   Layer 21 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:53:25 | INFO     |   Layer 21 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:26 | INFO     |   Layer 21 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:53:27 | INFO     |   Layer 21 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:27 | INFO     |   Layer 21 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_21
+2026-02-13 00:53:27 | INFO     | 
+============================================================
+2026-02-13 00:53:27 | INFO     | Processing Layer 22/33
+2026-02-13 00:53:27 | INFO     | ============================================================
+2026-02-13 00:53:27 | INFO     |   Downloading SAE for layer 22: resid_post_all/layer_22_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:31 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:53:32 | INFO     |   Layer 22 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:33 | INFO     |   Layer 22 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:53:34 | INFO     |   Layer 22 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:35 | INFO     |   Layer 22 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:53:36 | INFO     |   Layer 22 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:36 | INFO     |   Layer 22 complete. Time: 9.1s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_22
+2026-02-13 00:53:36 | INFO     | 
+============================================================
+2026-02-13 00:53:36 | INFO     | Processing Layer 23/33
+2026-02-13 00:53:36 | INFO     | ============================================================
+2026-02-13 00:53:36 | INFO     |   Downloading SAE for layer 23: resid_post_all/layer_23_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:41 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:53:41 | INFO     |   Layer 23 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:42 | INFO     |   Layer 23 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:53:43 | INFO     |   Layer 23 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:44 | INFO     |   Layer 23 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:53:45 | INFO     |   Layer 23 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:45 | INFO     |   Layer 23 complete. Time: 9.0s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_23
+2026-02-13 00:53:45 | INFO     | 
+============================================================
+2026-02-13 00:53:45 | INFO     | Processing Layer 24/33
+2026-02-13 00:53:45 | INFO     | ============================================================
+2026-02-13 00:53:45 | INFO     |   Downloading SAE for layer 24: resid_post_all/layer_24_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:50 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:53:51 | INFO     |   Layer 24 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:52 | INFO     |   Layer 24 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:53:53 | INFO     |   Layer 24 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:53:53 | INFO     |   Layer 24 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:53:54 | INFO     |   Layer 24 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:53:55 | INFO     |   Layer 24 complete. Time: 9.4s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_24
+2026-02-13 00:53:55 | INFO     | 
+============================================================
+2026-02-13 00:53:55 | INFO     | Processing Layer 25/33
+2026-02-13 00:53:55 | INFO     | ============================================================
+2026-02-13 00:53:55 | INFO     |   Downloading SAE for layer 25: resid_post_all/layer_25_width_16k_l0_small/params.safetensors
+2026-02-13 00:53:59 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:54:00 | INFO     |   Layer 25 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:01 | INFO     |   Layer 25 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:54:02 | INFO     |   Layer 25 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:03 | INFO     |   Layer 25 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:54:03 | INFO     |   Layer 25 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:54:04 | INFO     |   Layer 25 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_25
+2026-02-13 00:54:04 | INFO     | 
+============================================================
+2026-02-13 00:54:04 | INFO     | Processing Layer 26/33
+2026-02-13 00:54:04 | INFO     | ============================================================
+2026-02-13 00:54:04 | INFO     |   Downloading SAE for layer 26: resid_post_all/layer_26_width_16k_l0_small/params.safetensors
+2026-02-13 00:54:08 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:54:09 | INFO     |   Layer 26 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:10 | INFO     |   Layer 26 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:54:11 | INFO     |   Layer 26 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:11 | INFO     |   Layer 26 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:54:12 | INFO     |   Layer 26 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:54:12 | INFO     |   Layer 26 complete. Time: 8.7s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_26
+2026-02-13 00:54:12 | INFO     | 
+============================================================
+2026-02-13 00:54:12 | INFO     | Processing Layer 27/33
+2026-02-13 00:54:12 | INFO     | ============================================================
+2026-02-13 00:54:12 | INFO     |   Downloading SAE for layer 27: resid_post_all/layer_27_width_16k_l0_small/params.safetensors
+2026-02-13 00:54:17 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:54:18 | INFO     |   Layer 27 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:18 | INFO     |   Layer 27 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:54:19 | INFO     |   Layer 27 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:20 | INFO     |   Layer 27 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:54:21 | INFO     |   Layer 27 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:54:21 | INFO     |   Layer 27 complete. Time: 8.8s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_27
+2026-02-13 00:54:21 | INFO     | 
+============================================================
+2026-02-13 00:54:21 | INFO     | Processing Layer 28/33
+2026-02-13 00:54:21 | INFO     | ============================================================
+2026-02-13 00:54:21 | INFO     |   Downloading SAE for layer 28: resid_post_all/layer_28_width_16k_l0_small/params.safetensors
+2026-02-13 00:54:26 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:54:27 | INFO     |   Layer 28 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:28 | INFO     |   Layer 28 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:54:29 | INFO     |   Layer 28 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:29 | INFO     |   Layer 28 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:54:30 | INFO     |   Layer 28 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:54:31 | INFO     |   Layer 28 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_28
+2026-02-13 00:54:31 | INFO     | 
+============================================================
+2026-02-13 00:54:31 | INFO     | Processing Layer 29/33
+2026-02-13 00:54:31 | INFO     | ============================================================
+2026-02-13 00:54:31 | INFO     |   Downloading SAE for layer 29: resid_post_all/layer_29_width_16k_l0_small/params.safetensors
+2026-02-13 00:54:56 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:54:57 | INFO     |   Layer 29 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:58 | INFO     |   Layer 29 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:54:58 | INFO     |   Layer 29 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:54:59 | INFO     |   Layer 29 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:55:00 | INFO     |   Layer 29 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:55:01 | INFO     |   Layer 29 complete. Time: 30.0s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_29
+2026-02-13 00:55:01 | INFO     | 
+============================================================
+2026-02-13 00:55:01 | INFO     | Processing Layer 30/33
+2026-02-13 00:55:01 | INFO     | ============================================================
+2026-02-13 00:55:01 | INFO     |   Downloading SAE for layer 30: resid_post_all/layer_30_width_16k_l0_small/params.safetensors
+2026-02-13 00:55:05 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:55:06 | INFO     |   Layer 30 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:07 | INFO     |   Layer 30 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:55:08 | INFO     |   Layer 30 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:09 | INFO     |   Layer 30 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:55:10 | INFO     |   Layer 30 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:55:10 | INFO     |   Layer 30 complete. Time: 9.6s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_30
+2026-02-13 00:55:10 | INFO     | 
+============================================================
+2026-02-13 00:55:10 | INFO     | Processing Layer 31/33
+2026-02-13 00:55:10 | INFO     | ============================================================
+2026-02-13 00:55:10 | INFO     |   Downloading SAE for layer 31: resid_post_all/layer_31_width_16k_l0_small/params.safetensors
+2026-02-13 00:55:15 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:55:16 | INFO     |   Layer 31 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:16 | INFO     |   Layer 31 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:55:17 | INFO     |   Layer 31 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:18 | INFO     |   Layer 31 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:55:19 | INFO     |   Layer 31 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:55:19 | INFO     |   Layer 31 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_31
+2026-02-13 00:55:19 | INFO     | 
+============================================================
+2026-02-13 00:55:19 | INFO     | Processing Layer 32/33
+2026-02-13 00:55:19 | INFO     | ============================================================
+2026-02-13 00:55:19 | INFO     |   Downloading SAE for layer 32: resid_post_all/layer_32_width_16k_l0_small/params.safetensors
+2026-02-13 00:55:24 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:55:25 | INFO     |   Layer 32 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:26 | INFO     |   Layer 32 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:55:27 | INFO     |   Layer 32 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:27 | INFO     |   Layer 32 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:55:28 | INFO     |   Layer 32 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:55:29 | INFO     |   Layer 32 complete. Time: 9.3s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_32
+2026-02-13 00:55:29 | INFO     | 
+============================================================
+2026-02-13 00:55:29 | INFO     | Processing Layer 33/33
+2026-02-13 00:55:29 | INFO     | ============================================================
+2026-02-13 00:55:29 | INFO     |   Downloading SAE for layer 33: resid_post_all/layer_33_width_16k_l0_small/params.safetensors
+2026-02-13 00:55:33 | INFO     |   SAE loaded: d_model=2560, d_sae=16384
+2026-02-13 00:55:34 | INFO     |   Layer 33 - Sample 20/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:35 | INFO     |   Layer 33 - Sample 40/100 (gen_len=186, time=0.0s)
+2026-02-13 00:55:36 | INFO     |   Layer 33 - Sample 60/100 (gen_len=197, time=0.0s)
+2026-02-13 00:55:37 | INFO     |   Layer 33 - Sample 80/100 (gen_len=229, time=0.0s)
+2026-02-13 00:55:38 | INFO     |   Layer 33 - Sample 100/100 (gen_len=240, time=0.0s)
+2026-02-13 00:55:38 | INFO     |   Layer 33 complete. Time: 9.2s. Saved to /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/sae_activations/layer_33
+2026-02-13 00:55:38 | INFO     | 
+================================================================================
+2026-02-13 00:55:38 | INFO     | STEP 5: All layers processed. Collection complete!
+2026-02-13 00:55:38 | INFO     | ================================================================================
+2026-02-13 00:55:38 | INFO     | 
+Total collection time: 1196.2s (19.9 min)
+2026-02-13 00:55:38 | INFO     | README.md generated.
+2026-02-13 00:55:38 | INFO     | Uploading results to HuggingFace repo: YOUR_USERNAME/gemma3-4b-sae-activations-ecqa
+2026-02-13 00:55:38 | WARNING  |   Repo creation note: (Request ID: Root=1-698e768a-1dd467560fd8ecc23283464a;0d238c8a-0bae-4b75-9aa0-c4543faacafa)
+
+403 Forbidden: You don't have the rights to create a dataset under the namespace "YOUR_USERNAME".
+Cannot access content at: https://huggingface.co/api/repos/create.
+Make sure your token has the correct permissions.
+2026-02-13 00:55:46 | ERROR    | Upload failed: 404 Client Error. (Request ID: Root=1-698e7692-0f38e2de776b85b660e28a95;e34f5148-9c92-4733-ab23-06dcb37f7d84)
+
+Repository Not Found for url: https://huggingface.co/api/datasets/YOUR_USERNAME/gemma3-4b-sae-activations-ecqa/preupload/main.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated. For more details, see https://huggingface.co/docs/huggingface_hub/authentication
+Note: Creating a commit assumes that the repo already exists on the Huggingface Hub. Please use `create_repo` if it's not the case.
+2026-02-13 00:55:46 | INFO     | Files are saved locally. You can upload manually.
+2026-02-13 00:55:46 | INFO     | Pipeline complete!

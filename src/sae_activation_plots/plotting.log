@@ -1,0 +1,62 @@
+2026-02-13 01:34:33 | INFO     | ================================================================================
+2026-02-13 01:34:33 | INFO     | SAE Activation Statistics Plotter
+2026-02-13 01:34:33 | INFO     | Started at: 2026-02-13T01:34:33.697816
+2026-02-13 01:34:33 | INFO     | Demo mode: False
+2026-02-13 01:34:33 | INFO     | ================================================================================
+2026-02-13 01:34:33 | INFO     | Loaded metadata: 34 layers, 100 samples
+2026-02-13 01:34:33 | INFO     | 
+============================================================
+2026-02-13 01:34:33 | INFO     | Processing aggregation method: Top-k Mean (k=10) (topk_mean)
+2026-02-13 01:34:33 | INFO     | ============================================================
+2026-02-13 01:34:37 | INFO     |   Layer 4: nonzero_frac=0.434, global_mean=2.143005, global_var=81.243523
+2026-02-13 01:34:40 | INFO     |   Layer 9: nonzero_frac=0.407, global_mean=3.930599, global_var=228.571182
+2026-02-13 01:34:44 | INFO     |   Layer 14: nonzero_frac=0.407, global_mean=6.195524, global_var=388.115082
+2026-02-13 01:34:47 | INFO     |   Layer 19: nonzero_frac=0.414, global_mean=15.983256, global_var=2958.573486
+2026-02-13 01:34:51 | INFO     |   Layer 24: nonzero_frac=0.498, global_mean=31.754169, global_var=12643.838867
+2026-02-13 01:34:54 | INFO     |   Layer 29: nonzero_frac=0.501, global_mean=47.900352, global_var=33626.523438
+2026-02-13 01:34:57 | INFO     |   Layer 33: nonzero_frac=0.475, global_mean=55.765274, global_var=40459.945312
+2026-02-13 01:34:57 | INFO     |   Generating all-layers histogram grids for topk_mean...
+2026-02-13 01:35:03 | INFO     |   Histogram grid plots saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_mean_mean.png, /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_mean_variance.png
+2026-02-13 01:35:03 | INFO     |   Generating all-layers feature-index grids for topk_mean...
+2026-02-13 01:35:07 | INFO     |   Feature-index grid plots saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_mean_feature_mean.png, /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_mean_feature_variance.png
+2026-02-13 01:35:07 | INFO     | 
+============================================================
+2026-02-13 01:35:07 | INFO     | Processing aggregation method: Max Activation (max)
+2026-02-13 01:35:07 | INFO     | ============================================================
+2026-02-13 01:35:11 | INFO     |   Layer 4: nonzero_frac=0.434, global_mean=9.159124, global_var=980.651550
+2026-02-13 01:35:14 | INFO     |   Layer 9: nonzero_frac=0.407, global_mean=14.550570, global_var=2286.219482
+2026-02-13 01:35:18 | INFO     |   Layer 14: nonzero_frac=0.407, global_mean=20.713924, global_var=3171.535400
+2026-02-13 01:35:21 | INFO     |   Layer 19: nonzero_frac=0.414, global_mean=55.312912, global_var=20370.652344
+2026-02-13 01:35:24 | INFO     |   Layer 24: nonzero_frac=0.498, global_mean=112.014549, global_var=88815.406250
+2026-02-13 01:35:28 | INFO     |   Layer 29: nonzero_frac=0.501, global_mean=168.391571, global_var=209649.578125
+2026-02-13 01:35:31 | INFO     |   Layer 33: nonzero_frac=0.475, global_mean=188.821228, global_var=259750.718750
+2026-02-13 01:35:31 | INFO     |   Generating all-layers histogram grids for max...
+2026-02-13 01:35:36 | INFO     |   Histogram grid plots saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_max_mean.png, /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_max_variance.png
+2026-02-13 01:35:36 | INFO     |   Generating all-layers feature-index grids for max...
+2026-02-13 01:35:41 | INFO     |   Feature-index grid plots saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_max_feature_mean.png, /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_max_feature_variance.png
+2026-02-13 01:35:41 | INFO     | 
+============================================================
+2026-02-13 01:35:41 | INFO     | Processing aggregation method: Top-k Sum (k=10) (topk_sum)
+2026-02-13 01:35:41 | INFO     | ============================================================
+2026-02-13 01:35:45 | INFO     |   Layer 4: nonzero_frac=0.434, global_mean=21.430054, global_var=8124.352539
+2026-02-13 01:35:48 | INFO     |   Layer 9: nonzero_frac=0.407, global_mean=39.305988, global_var=22857.119141
+2026-02-13 01:35:51 | INFO     |   Layer 14: nonzero_frac=0.407, global_mean=61.955231, global_var=38811.503906
+2026-02-13 01:35:55 | INFO     |   Layer 19: nonzero_frac=0.414, global_mean=159.832550, global_var=295857.343750
+2026-02-13 01:35:58 | INFO     |   Layer 24: nonzero_frac=0.498, global_mean=317.541687, global_var=1264383.875000
+2026-02-13 01:36:02 | INFO     |   Layer 29: nonzero_frac=0.501, global_mean=479.003540, global_var=3362652.500000
+2026-02-13 01:36:04 | INFO     |   Layer 33: nonzero_frac=0.475, global_mean=557.652649, global_var=4045994.000000
+2026-02-13 01:36:04 | INFO     |   Generating all-layers histogram grids for topk_sum...
+2026-02-13 01:36:10 | INFO     |   Histogram grid plots saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_sum_mean.png, /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_sum_variance.png
+2026-02-13 01:36:10 | INFO     |   Generating all-layers feature-index grids for topk_sum...
+2026-02-13 01:36:15 | INFO     |   Feature-index grid plots saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_sum_feature_mean.png, /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/grid_all_layers_topk_sum_feature_variance.png
+2026-02-13 01:36:15 | INFO     | 
+Generating across-layer trend plots...
+2026-02-13 01:36:16 | INFO     |   Trend plot saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/across_layer_trends.png
+2026-02-13 01:36:16 | INFO     |   Summary CSV saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/activation_statistics_summary.csv
+2026-02-13 01:36:16 | INFO     |   Summary JSON saved: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter/activation_statistics_summary.json
+2026-02-13 01:36:16 | INFO     | 
+Total plots generated: 217
+2026-02-13 01:36:16 | INFO     | All outputs in: /vol/bitbucket/m24/Concept_Neuron_Localisation_my_idea/Investigating_concept_neurons/LASR-Analysing-Faithfulness-of-Reasoning-to-Internal-Concepts/outputs/plots_scatter
+2026-02-13 01:36:16 | INFO     | 
+Plotting complete in 103.0s
+2026-02-13 01:36:16 | INFO     | Done!
