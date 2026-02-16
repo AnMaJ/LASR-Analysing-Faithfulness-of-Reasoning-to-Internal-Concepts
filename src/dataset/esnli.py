@@ -21,7 +21,7 @@ class ESNLI_Dataset(BaseDataset):
             "with respect to statement A. Answer with a single word: entailment, "
             "contradiction, or neutral.\n"
         ), # Useless?
-        PromptStyle.ONE_WORD_TAGS: {
+        PromptStyle.ONE_WORD_TAGS: (
             """Classify the relationship between the following Premise and Hypothesis.
             Premise: {premise}
             Hypothesis: {hypothesis}
@@ -35,7 +35,7 @@ class ESNLI_Dataset(BaseDataset):
             <reasoning>[Your analysis here]</reasoning>
             <label>[label]</label>
             """
-        },
+        ),
         PromptStyle.CHAIN_OF_THOUGHT_NO_TAGS: (
             "Determine if statement B is an entailment, contradiction or neutral. "
             "Reason step by step and finally provide a one-word answer.\n"

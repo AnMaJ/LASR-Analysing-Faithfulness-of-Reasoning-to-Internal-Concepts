@@ -30,7 +30,7 @@ class BaseDataset(ABC, Dataset):
         hf_kwargs = config.hf_data_config or {}
 
         # Load data directly from HF.
-        self.data = self.load_dataset(config.path, **hf_kwargs)
+        self.data = self.load_dataset(config.path, hf_kwargs)
 
     def load_dataset(self, path: str, hf_kwargs: Dict):
         """

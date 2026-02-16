@@ -1,3 +1,4 @@
+from typing import Dict, List, Union
 import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -28,16 +29,24 @@ class GemmaModel:
         )
         self.model.eval()
 
-    def generate(self, prompt: str, max_new_tokens: int = 256) -> str:
+    def generate(self, prompt: Union[str, List[Dict]], max_new_tokens: int = 256) -> str:
         """Generate a response for the given *prompt*.
 
         Args:
-            prompt: The input text to send to the model.
+            prompt: The input text to send to the model (it can be with the chat template)
             max_new_tokens: Maximum number of tokens to generate.
 
         Returns:
             The model's generated text (excluding the original prompt).
         """
+        # Handle chat template
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(
+                prompt, 
+                tokenize=False, 
+                add_generation_prompt=True
+            )
+
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
         with torch.no_grad():
             output_ids = self.model.generate(
