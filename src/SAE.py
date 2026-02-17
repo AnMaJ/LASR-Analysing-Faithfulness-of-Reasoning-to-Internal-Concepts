@@ -3,6 +3,8 @@ import torch.nn as nn
 from huggingface_hub import hf_hub_download
 from safetensors.torch import load_file
 
+from src.configs import SAEConfig
+
 class JumpReLUSAE(nn.Module):
     """JumpReLU Sparse Autoencoder for Gemma Scope 2.
 
@@ -50,11 +52,17 @@ class JumpReLUSAE(nn.Module):
         return recon
     
     @classmethod
-    def from_pretrained(cls, repo_id: str, sae_path: str, device: str = "cpu") -> "JumpReLUSAE":
-        """Download weights from Hugging Face and return an initialized SAE."""
+    def from_pretrained(cls, config: SAEConfig, device: str = "cpu") -> "JumpReLUSAE":
+        """Download weights from Hugging Face and return an initialized SAE.
+
+        Args:
+            config: SAEConfig with repo_id, sae_type, layer, width, and l0.
+            device: Device to load the SAE onto.
+        """
+        print(f"Load SAE {config.sae_path} from {config.repo_id}")
         path_to_params = hf_hub_download(
-            repo_id=repo_id,
-            filename=sae_path,
+            repo_id=config.repo_id,
+            filename=config.sae_path,
         )
         params = load_file(path_to_params)
         d_model, d_sae = params["w_enc"].shape
@@ -64,3 +72,36 @@ class JumpReLUSAE(nn.Module):
         sae = sae.to(device=device, dtype=torch.float32)
 
         return sae
+    
+    def encode_activations(
+        self, activations: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Encode *activations* through the SAE and return (sae_acts, reconstruction).
+
+        Like :meth:`forward` but always returns both the sparse features and
+        the reconstruction.
+        """
+        sae_acts = self.encode(activations)
+        reconstruction = self.forward(activations)
+        return sae_acts, reconstruction
+
+    def get_reconstruction_stats(self, activations: torch.Tensor):
+        """Compute reconstruction quality for a single prompt.
+
+        Args:
+            activations: Tensor of shape ``(n_tokens, d_model)``.
+
+        Returns:
+            Dict with ``fvu`` (fraction of variance unexplained) and
+            ``l0`` (average number of active features per token).
+        """
+        recon = self.forward(activations)
+        reconstruction_mse = torch.mean((recon[1:] - activations[1:].float()) ** 2)
+        target_variance = activations[1:].float().var()
+
+        fvu = reconstruction_mse / target_variance
+
+        return {
+            "fvu": fvu.item(),
+            "l0": (self.encode(activations) > 0).float().sum(dim=-1).mean().item(),
+        }
