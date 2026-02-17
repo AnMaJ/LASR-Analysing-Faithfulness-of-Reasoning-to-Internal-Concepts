@@ -7,7 +7,7 @@ import time
 import requests
 from IPython.display import IFrame, display
 
-from configs import NeuronpediaFeature, SAEConfig
+from src.configs import NeuronpediaFeature, SAEConfig
 
 
 def build_sae_id(config: SAEConfig) -> str:

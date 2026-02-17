@@ -59,6 +59,7 @@ class JumpReLUSAE(nn.Module):
             config: SAEConfig with repo_id, sae_type, layer, width, and l0.
             device: Device to load the SAE onto.
         """
+        print(f"Load SAE {config.sae_path} from {config.repo_id}")
         path_to_params = hf_hub_download(
             repo_id=config.repo_id,
             filename=config.sae_path,
@@ -75,8 +76,32 @@ class JumpReLUSAE(nn.Module):
     def encode_activations(
         self, activations: torch.Tensor
     ) -> tuple[torch.Tensor, torch.Tensor]:
-        """Encode *activations* through the SAE and return (sae_acts, reconstruction)."""
-        activations = activations.to(torch.float32)
+        """Encode *activations* through the SAE and return (sae_acts, reconstruction).
+
+        Like :meth:`forward` but always returns both the sparse features and
+        the reconstruction.
+        """
         sae_acts = self.encode(activations)
-        reconstruction = self.decode(sae_acts)
+        reconstruction = self.forward(activations)
         return sae_acts, reconstruction
+
+    def get_reconstruction_stats(self, activations: torch.Tensor):
+        """Compute reconstruction quality for a single prompt.
+
+        Args:
+            activations: Tensor of shape ``(n_tokens, d_model)``.
+
+        Returns:
+            Dict with ``fvu`` (fraction of variance unexplained) and
+            ``l0`` (average number of active features per token).
+        """
+        recon = self.forward(activations)
+        reconstruction_mse = torch.mean((recon[1:] - activations[1:].float()) ** 2)
+        target_variance = activations[1:].float().var()
+
+        fvu = reconstruction_mse / target_variance
+
+        return {
+            "fvu": fvu.item(),
+            "l0": (self.encode(activations) > 0).float().sum(dim=-1).mean().item(),
+        }

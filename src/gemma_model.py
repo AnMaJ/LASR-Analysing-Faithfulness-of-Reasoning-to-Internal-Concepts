@@ -1,4 +1,4 @@
-from typing import Dict, List, Union, Tuple
+from typing import Dict, List, Tuple, Union
 from functools import partial
 
 import torch
@@ -11,27 +11,22 @@ from src.configs import ModelConfig
 class GemmaModel:
     """Wrapper around a Gemma causal-LM for easy loading and generation."""
 
-    def __init__(self, config: ModelConfig | None = None):
+    def __init__(self, config: ModelConfig):
         """Load the model and tokenizer specified by *config*.
 
         Args:
-            config: A ``ModelConfig`` instance. Uses the defaults
-                (``google/gemma-3-4b-it`` on the best available device)
-                when ``None``.
+            config: A ``ModelConfig`` instance.
         """
-        if config is None:
-            config = ModelConfig()
         self.config = config
 
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
         self.model = AutoModelForCausalLM.from_pretrained(
             config.model_name,
             device_map=config.device,
-            dtype=torch.bfloat16,
         )
         self.model.eval()
 
-    def generate(self, prompt: Union[str, List[Dict]], max_new_tokens: int = 256) -> Tuple[str, torch.Tensor]:
+    def generate(self, prompt: Union[str, List[Dict]], max_new_tokens: int = 256) -> Tuple[str, torch.Tensor, int]:
         """Generate a response for the given *prompt*.
 
         Args:
@@ -39,99 +34,120 @@ class GemmaModel:
             max_new_tokens: Maximum number of tokens to generate.
 
         Returns:
-            The model's generated text (excluding the original prompt).
+            A tuple of (decoded_text, full_output_ids, prompt_length_in_tokens).
         """
+        # TODO in case it is needed, make it usable for batch of prompt
         # Handle chat template
         if isinstance(prompt, list):
             prompt = self.tokenizer.apply_chat_template(
-                prompt, 
-                tokenize=False, 
+                prompt,
+                tokenize=False,
                 add_generation_prompt=True
             )
 
         inputs = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=True).to(self.model.device)
+        prompt_len = inputs["input_ids"].shape[1]
         with torch.no_grad():
             output_ids = self.model.generate(
                 **inputs,
                 max_new_tokens=max_new_tokens,
             )
-        # Strip the prompt tokens from the output
-        prompt_len = inputs["input_ids"].shape[1]
-        generated_ids = output_ids[0, prompt_len:]
 
-        return prompt, self.tokenizer.decode(generated_ids, skip_special_tokens=True), generated_ids
+        assert isinstance(output_ids, torch.Tensor)
+        return self.tokenizer.decode(output_ids[0], skip_special_tokens=True), output_ids, prompt_len
 
     def generate_batch(
         self,
-        prompts: list[str],
-        batch_size: int = 8,
+        prompts: List[Union[str, List[Dict]]],
         max_new_tokens: int = 256,
-    ) -> list[str]:
-        """Run batched generation over *prompts* and return decoded outputs.
+        batch_size: int = 8,
+    ) -> Tuple[List[str], List[torch.Tensor], List[int]]:
+        """Generate responses for a batch of prompts.
 
         Args:
-            prompts: List of input texts to send to the model.
-            batch_size: Number of prompts to process at once.
+            prompts: List of input prompts (strings or chat templates).
             max_new_tokens: Maximum number of tokens to generate per prompt.
+            batch_size: Number of prompts to process in parallel.
 
         Returns:
-            A list of generated texts (excluding the original prompts).
+            A tuple of (texts, output_ids, prompt_lengths) where each element
+            is a list with one entry per prompt.
         """
-        decoded_outputs: list[str] = []
-        for i in tqdm(range(0, len(prompts), batch_size), desc="Generating"):
-            batch = prompts[i : i + batch_size]
+        # Apply chat template where needed
+        processed: List[str] = []
+        for p in prompts:
+            if isinstance(p, list):
+                p = self.tokenizer.apply_chat_template(
+                    p, tokenize=False, add_generation_prompt=True,
+                )
+            processed.append(p)
+
+        self.tokenizer.padding_side = "left"
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        all_texts: List[str] = []
+        all_ids: List[torch.Tensor] = []
+        all_prompt_lens: List[int] = []
+
+        for i in tqdm(range(0, len(processed), batch_size), desc="Generating"):
+            batch = processed[i : i + batch_size]
             inputs = self.tokenizer(
-                batch,
-                padding=True,
-                add_special_tokens=True,
-                return_tensors="pt",
+                batch, return_tensors="pt", padding=True, add_special_tokens=True,
             ).to(self.model.device)
 
+            # Per-prompt lengths (excluding padding)
+            prompt_lens = inputs["attention_mask"].sum(dim=1).tolist()
+
             with torch.no_grad():
-                output_tokens = self.model.generate(
-                    **inputs,
-                    max_new_tokens=max_new_tokens,
-                    pad_token_id=self.tokenizer.pad_token_id,
+                output_ids = self.model.generate(
+                    **inputs, max_new_tokens=max_new_tokens,
                 )
-            decoded_outputs.extend(
-                self.tokenizer.batch_decode(output_tokens, skip_special_tokens=True)
-            )
 
-            del inputs, output_tokens
-            torch.cuda.empty_cache()
+            assert isinstance(output_ids, torch.Tensor)
+            padded_input_len = inputs["input_ids"].shape[1]
 
-        print(f"Generated {len(decoded_outputs)} outputs")
-        return decoded_outputs
+            pad_id = self.tokenizer.pad_token_id
+            padding_len = padded_input_len - torch.tensor(prompt_lens, dtype=torch.long)
+
+            for j in range(output_ids.shape[0]):
+                # Strip only the left-padding, keep prompt + generation
+                ids = output_ids[j, int(padding_len[j]):]
+                all_texts.append(self.tokenizer.decode(ids, skip_special_tokens=True))
+                all_ids.append(ids)
+                all_prompt_lens.append(int(prompt_lens[j]))
+
+        return all_texts, all_ids, all_prompt_lens
 
     @staticmethod
     def _gather_acts_hook(
-        mod, inputs, outputs, cache: dict, key: str, use_input: bool
+        _mod, _inputs, outputs, cache: dict, key: str,
     ):
-        if use_input:
-            acts = inputs[0].squeeze(0)
-        else:
-            acts = outputs[0] if isinstance(outputs, tuple) else outputs
-        # Ensure 3-D (batch, seq, d_model) even if the layer squeezed the batch dim
-        if acts.ndim == 2:
-            acts = acts.unsqueeze(0)
-        cache[key] = acts.detach()
+        acts = outputs[0] if isinstance(outputs, tuple) else outputs
+        # Remove batch dim: (1, seq, d_model) -> (seq, d_model)
+        cache[key] = acts.detach().squeeze(0)
         return outputs
-
 
     def gather_residual_activations(
         self, target_layer: int, inputs: torch.Tensor
     ) -> torch.Tensor:
-        """Run a forward pass and capture the residual stream output at *target_layer*."""
+        """Run a forward pass on a single prompt and capture the residual stream at *target_layer*.
+
+        Args:
+            target_layer: Index of the transformer layer to hook.
+            inputs: 1-D token IDs tensor of shape ``(n_tokens,)``.
+
+        Returns:
+            Tensor of shape ``(n_tokens, d_model)``.
+        """
         cache: dict[str, torch.Tensor] = {}
 
         handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
-            partial(self._gather_acts_hook, cache=cache, key="resid_post", use_input=False)
+            partial(self._gather_acts_hook, cache=cache, key="resid_post")
         )
 
-        if inputs.ndim == 1:
-            inputs = inputs.unsqueeze(0)
         try:
-            self.model.forward(input_ids=inputs)
+            self.model.forward(input_ids=inputs.unsqueeze(0))
         finally:
             handle.remove()
 

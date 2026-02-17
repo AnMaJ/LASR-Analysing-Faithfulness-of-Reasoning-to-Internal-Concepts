@@ -56,24 +56,17 @@ class DatasetConfig:
 
 @dataclass
 class ModelConfig:
-    model_name: str = "google/gemma-3-4b-it"
+    model_name: str
     device: str = field(default_factory=_default_device)
 
 
 @dataclass
-class InferenceConfig:
-    batch_size: int = 8
-    max_new_tokens: int = 256
-    downsample_rate: int = 10
-
-
-@dataclass
 class SAEConfig:
-    repo_id: str = "google/gemma-scope-2-4b-it"
-    sae_type: str = "resid_post"  # resid_post, mlp_out, attn_out
-    layer: int = 22
-    width: str = "65k"  # 16k, 65k, 262k, 1m
-    l0: str = "medium"
+    repo_id: str
+    sae_type: str # resid_post, mlp_out, attn_out
+    layer: int
+    width: str # 16k, 65k, 262k, 1m
+    l0: str
 
     @property
     def sae_path(self) -> str:
