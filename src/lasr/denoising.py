@@ -26,9 +26,9 @@ def continuous_tfidf(activations: torch.Tensor) -> torch.Tensor:
     """
     num_tokens = activations.shape[0]
     tf = activations
-    df = activations.sum(dim=0)  # (num_features,)
+    df = (activations > 10).sum(dim=0)  # (num_features,)
     idf = torch.log(num_tokens / (1 + df))  # (num_features,)
-    return tf * idf
+    return tf * idf, idf
 
 
 def denoise(activations: torch.Tensor, config: DenoisingConfig) -> torch.Tensor:
@@ -40,13 +40,15 @@ def denoise(activations: torch.Tensor, config: DenoisingConfig) -> torch.Tensor:
         config: A :class:`DenoisingConfig` selecting the denoising method.
 
     Returns:
-        Tensor of the same shape as *activations*.
+        Tuple of (
+            Tensor of the same shape as `activations`,
+            Tensor of scaling factors).
     """
     squeezed = activations.squeeze(0)  # (num_tokens, num_features)
 
     if config.method is DenoisingMethod.CONTINUOUS_TFIDF:
-        result = continuous_tfidf(squeezed)
+        denoised_act, scaling_factors = continuous_tfidf(squeezed)
     else:
         raise ValueError(f"Unknown denoising method: {config.method}")
 
-    return result.unsqueeze(0)
+    return denoised_act.unsqueeze(0), scaling_factors
