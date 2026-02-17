@@ -11,8 +11,7 @@ F = Callable[..., Any]
 def _denoising_method(func: F) -> F:
     """Decorator that registers a method as a denoising strategy and adds a shape check.
 
-    Expects a 2-D ``(num_tokens, num_features)`` input and validates that the
-    output shape matches the input shape.
+    Expects a 2-D input and validates that the output shape matches the input shape.
     """
 
     @wraps(func)
@@ -39,8 +38,7 @@ class Denoiser:
     """Container for denoising / normalization strategies on SAE activations.
 
     Each public method decorated with ``@_denoising_method`` is a strategy that
-    takes a 2-D tensor ``(num_tokens, num_features)`` and returns a tensor of
-    the same shape. Can be called directly (e.g.
+    takes a 2-D tensor and returns a tensor of the same shape. Can be called directly (e.g.
     ``denoiser.continuous_tfidf(tensor)``).
 
     Usage::
@@ -66,12 +64,6 @@ class Denoiser:
 
         Treats each row (token) as a document and each column (feature) as a
         term.
-
-        Args:
-            activations: Tensor of shape ``(num_tokens, num_features)``.
-
-        Returns:
-            Tensor of the same shape with TF-IDF weighting applied.
         """
         num_docs = activations.shape[0]
         tf = activations
@@ -85,12 +77,6 @@ class Denoiser:
 
         Computes z-score normalization along the token dimension (``dim=0``),
         equivalent to sklearn's StandardScaler.
-
-        Args:
-            activations: Tensor of shape ``(num_tokens, num_features)``.
-
-        Returns:
-            Tensor of the same shape with zero mean and unit variance per feature.
         """
         mean = activations.mean(dim=0, keepdim=True)
         std = activations.std(dim=0, keepdim=True)

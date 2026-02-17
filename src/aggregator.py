@@ -10,9 +10,6 @@ F = Callable[..., Any]
 
 def _aggregation_method(func: F) -> F:
     """Decorator that registers a method as an aggregation strategy and adds a shape check.
-
-    Expects a 2-D ``(num_tokens, hidden_size)`` input and validates that the
-    output is 1-D ``(hidden_size,)``.
     """
 
     @wraps(func)
@@ -41,14 +38,13 @@ class Aggregator:
     """Container for aggregation strategies over the token dimension.
 
     Each public method decorated with ``@_aggregation_method`` is a strategy
-    that takes a 2-D tensor ``(num_tokens, hidden_size)`` and reduces the
-    token dimension to produce a 1-D tensor ``(hidden_size,)``.
+    that takes a 2-D tensor and reduces the token dimension to produce a 1-D tensor.
 
     Usage::
 
         aggregator = Aggregator()
         print(aggregator.get_methods())
-        out = aggregator.max_pooling(x)   # (hidden_size,)
+        out = aggregator.max_pooling(x)
     """
 
     def get_methods(self) -> List[str]:
@@ -64,11 +60,5 @@ class Aggregator:
     @_aggregation_method
     def max(self, activations: torch.Tensor) -> torch.Tensor:
         """Take the element-wise max across tokens.
-
-        Args:
-            activations: Tensor of shape ``(num_tokens, hidden_size)``.
-
-        Returns:
-            Tensor of shape ``(hidden_size,)``.
         """
         return activations.max(dim=0).values
