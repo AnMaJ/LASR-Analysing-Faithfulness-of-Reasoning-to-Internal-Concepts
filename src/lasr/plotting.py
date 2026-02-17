@@ -186,10 +186,14 @@ def plot_feature_activation_heatmap(
     activations: np.ndarray,
     tokens: list[str] | None = None,
     feature_indices: list[int] | None = None,
+    labels: dict[int, str | None] | None = None,
     title: str = "SAE Feature Activations",
     colorscale: str | list | None = None,
 ) -> go.Figure:
     """Create an interactive heatmap of SAE feature activations.
+
+    Renders as a wide horizontal plot with tokens on the x-axis (top)
+    and features on the y-axis (feature #1 at top).
 
     Parameters
     ----------
@@ -201,10 +205,12 @@ def plot_feature_activation_heatmap(
         positional indices and the input is treated as a single feature.
     feature_indices:
         Custom y-axis labels (feature IDs).
+    labels:
+        Optional ``{feature_index: description}`` mapping from Neuronpedia.
     title:
         Figure title.
     colorscale:
-        Plotly colorscale.  Defaults to ``"RdBu_r"``.
+        Plotly colorscale.  Defaults to a diverging red-white-blue scale.
     """
     # Handle torch tensors.
     if hasattr(activations, "detach"):
@@ -215,10 +221,16 @@ def plot_feature_activation_heatmap(
     if activations.ndim == 1:
         activations = activations.reshape(1, -1)
 
-    if colorscale is None:
-        colorscale = "RdBu_r"
-
     n_features, n_tokens = activations.shape
+
+    # Diverging colorscale matching plot_per_token_topk_heatmap.
+    if colorscale is None:
+        colorscale = [
+            [0.0, "rgb(178,24,43)"],
+            [0.5, "rgb(255,255,255)"],
+            [1.0, "rgb(33,102,172)"],
+        ]
+    abs_max = max(float(np.abs(activations).max()), 1e-6)
 
     x_labels = tokens if tokens is not None else list(range(n_tokens))
     y_labels = (
@@ -227,16 +239,30 @@ def plot_feature_activation_heatmap(
         else [str(i) for i in range(n_features)]
     )
 
+    if labels is None:
+        labels = {}
+
+    # Compute per-token ranks: for each token, rank features by descending
+    # activation.  rank 1 = highest activation for that token.
+    ranks = np.zeros_like(activations, dtype=int)
+    for ti in range(n_tokens):
+        # argsort of argsort gives rank; negate for descending order.
+        ranks[:, ti] = np.argsort(np.argsort(-activations[:, ti])) + 1
+
     # Build custom hover text.
+    raw_indices = feature_indices if feature_indices is not None else list(range(n_features))
     hover: list[list[str]] = []
     for fi in range(n_features):
+        feat_idx = raw_indices[fi]
+        description = labels.get(feat_idx) or "N/A"
         row_hover: list[str] = []
         for ti in range(n_tokens):
             token_str = x_labels[ti] if tokens is not None else f"Position {ti}"
             row_hover.append(
                 f"Token: {token_str}<br>"
-                f"Feature Index: {y_labels[fi]}<br>"
-                f"Activation: {activations[fi, ti]:.4f}"
+                f"Description: {description}<br>"
+                f"Activation: {activations[fi, ti]:.4f}<br>"
+                f"Rank: {ranks[fi, ti]}"
             )
         hover.append(row_hover)
 
@@ -245,20 +271,28 @@ def plot_feature_activation_heatmap(
             z=activations,
             x=x_labels,
             y=y_labels,
+            zmin=-abs_max,
+            zmax=abs_max,
             colorscale=colorscale,
             hoverinfo="text",
             text=hover,
+            colorbar=dict(title="Activation"),
         )
     )
 
-    # Dynamic sizing.
-    width = max(600, n_tokens * 60 + 150)
-    height = max(350, n_features * 40 + 200)
+    # Small square cells – 20px per cell.
+    cell_size = 20
+    width = max(400, n_tokens * cell_size + 200)
+    height = max(200, n_features * cell_size + 150)
 
     fig.update_layout(
         title=title,
-        xaxis=dict(title="Token" if tokens is not None else "Position", type="category"),
-        yaxis=dict(title="Feature Index", autorange="reversed"),
+        xaxis=dict(
+            title="Token" if tokens is not None else "Position",
+            type="category",
+            side="top",
+        ),
+        yaxis=dict(title="Feature Index", autorange="reversed", type="category"),
         width=width,
         height=height,
     )
@@ -274,6 +308,9 @@ def plot_per_token_topk_heatmap(
 ) -> go.Figure:
     """Heatmap showing the top-K SAE feature activations per token.
 
+    Renders as a wide horizontal plot with tokens on the x-axis and
+    feature ranks on the y-axis (rank #1 at top).
+
     Parameters
     ----------
     top_values:
@@ -281,7 +318,7 @@ def plot_per_token_topk_heatmap(
     top_indices:
         2-D array of shape ``(n_tokens, k)`` – feature indices.
     tokens:
-        Token strings for the y-axis.
+        Token strings for the x-axis.
     labels:
         Optional ``{feature_index: concept_label}`` mapping from Neuronpedia.
     title:
@@ -299,13 +336,13 @@ def plot_per_token_topk_heatmap(
     if labels is None:
         labels = {}
 
-    x_labels = [f"#{r + 1}" for r in range(k)]
+    y_labels = [f"#{r + 1}" for r in range(k)]
 
-    # Build hover text: activation, feature label, feature number.
+    # Build hover text (shape: k × n_tokens after transpose).
     hover: list[list[str]] = []
-    for ti in range(n_tokens):
+    for ri in range(k):
         row_hover: list[str] = []
-        for ri in range(k):
+        for ti in range(n_tokens):
             feat_idx = int(top_indices[ti, ri])
             feat_label = labels.get(feat_idx) or "N/A"
             row_hover.append(
@@ -316,21 +353,40 @@ def plot_per_token_topk_heatmap(
             )
         hover.append(row_hover)
 
-    # Diverging colorscale: red (negative) → white (zero) → blue (positive).
-    abs_max = max(float(np.abs(top_values).max()), 1e-6)
-    colorscale = [
-        [0.0, "rgb(178,24,43)"],
-        [0.5, "rgb(255,255,255)"],
-        [1.0, "rgb(33,102,172)"],
-    ]
+    # Choose colorscale based on whether data contains negative values.
+    vmin = float(top_values.min())
+    vmax = float(top_values.max())
+    if vmin >= 0:
+        # Sequential colorscale: white (zero) → blue (max).
+        colorscale = [
+            [0.0, "rgb(255,255,255)"],
+            [1.0, "rgb(33,102,172)"],
+        ]
+        zmin = 0.0
+        zmax = max(vmax, 1e-6)
+    else:
+        # Diverging colorscale: red (negative) → white (zero) → blue (positive).
+        abs_max = max(float(np.abs(top_values).max()), 1e-6)
+        colorscale = [
+            [0.0, "rgb(178,24,43)"],
+            [0.5, "rgb(255,255,255)"],
+            [1.0, "rgb(33,102,172)"],
+        ]
+        zmin = -abs_max
+        zmax = abs_max
 
+    # Use integer positions for the x-axis so that duplicate token strings
+    # do not collapse onto the same category position.
+    x_positions = list(range(n_tokens))
+
+    # Transpose: z becomes (k, n_tokens).
     fig = go.Figure(
         data=go.Heatmap(
-            z=top_values,
-            x=x_labels,
-            y=tokens,
-            zmin=-abs_max,
-            zmax=abs_max,
+            z=top_values.T,
+            x=x_positions,
+            y=y_labels,
+            zmin=zmin,
+            zmax=zmax,
             colorscale=colorscale,
             hoverinfo="text",
             text=hover,
@@ -340,13 +396,18 @@ def plot_per_token_topk_heatmap(
 
     # Small square cells – 20px per cell.
     cell_size = 20
-    width = max(400, k * cell_size + 200)
-    height = max(400, n_tokens * cell_size + 150)
+    width = max(400, n_tokens * cell_size + 200)
+    height = max(200, k * cell_size + 150)
 
     fig.update_layout(
         title=title,
-        xaxis=dict(title="Feature Rank", type="category", side="top"),
-        yaxis=dict(title="Token", autorange="reversed", type="category"),
+        xaxis=dict(
+            title="Token",
+            side="top",
+            tickvals=x_positions,
+            ticktext=tokens,
+        ),
+        yaxis=dict(title="Feature Rank", autorange="reversed", type="category"),
         width=width,
         height=height,
     )
