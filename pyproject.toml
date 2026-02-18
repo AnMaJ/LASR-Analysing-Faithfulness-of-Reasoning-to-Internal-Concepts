@@ -10,6 +10,9 @@ dependencies = [
     "safetensors",
     "requests",
     "ipython",
+    "datasets>=4.5.0",
+    "ipykernel>=7.2.0",
+    "dotenv>=0.9.9",
 ]
 
 [tool.setuptools.packages.find]
