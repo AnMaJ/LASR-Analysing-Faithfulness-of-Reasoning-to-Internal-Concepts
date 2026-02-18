@@ -43,7 +43,6 @@ class ESNLI_Dataset(BaseDataset):
             "- Step 2: Output your analysis inside <reasoning> tags.\n"
             "- Step 3: Output the final classification (entailment, neutral, or contradiction) inside <label> tags.\n\n"
             "Format:\n"
-            "<reasoning>[Your analysis here]</reasoning>\n"
             "<label>[label]</label>\n"
         ),
         PromptStyle.CHAIN_OF_THOUGHT_NO_TAGS: (
