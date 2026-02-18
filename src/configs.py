@@ -61,6 +61,13 @@ class ModelConfig:
 
 
 @dataclass
+class InferenceConfig:
+    batch_size: int = 8
+    max_new_tokens: int = 256
+    downsample_rate: int = 10
+
+
+@dataclass
 class SAEConfig:
     repo_id: str
     sae_type: str # resid_post, mlp_out, attn_out
