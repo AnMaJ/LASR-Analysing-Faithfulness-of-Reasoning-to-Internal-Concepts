@@ -13,11 +13,11 @@ class Feature:
     def __init__(
         self,
         feature_idx: int,
-        strentgh: float,
+        strength: float,
         client: NeuronpediaClient,
     ):
         self.feature_idx = feature_idx
-        self.strentgh = strentgh
+        self.strength = strength
         self.client = client
         self._get_neuronpedia_info()
 
@@ -45,7 +45,7 @@ class Feature:
             return [
                 cls(
                     feature_idx=int(idx),
-                    strentgh=float(strength.detach()),
+                    strength=float(strength.detach()),
                     client=client,
                 )
                 for idx, strength in zip(feature_indices, feature_strengths)
@@ -55,7 +55,7 @@ class Feature:
             [
                 cls(
                     feature_idx=int(idx),
-                    strentgh=float(strength.detach()),
+                    strength=float(strength.detach()),
                     client=client,
                 )
                 for idx, strength in zip(indices_row, strengths_row)
