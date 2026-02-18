@@ -62,3 +62,9 @@ class Aggregator:
         """Take the element-wise max across tokens.
         """
         return activations.max(dim=0).values
+    
+    @_aggregation_method
+    def mean(self, activations: torch.Tensor) -> torch.Tensor:
+        """Take the element-wise mean across tokens.
+        """
+        return activations.mean(dim=0)
