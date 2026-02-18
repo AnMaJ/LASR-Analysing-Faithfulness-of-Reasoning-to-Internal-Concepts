@@ -4,20 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Research project investigating faithfulness of chain-of-thought reasoning in language models (Gemma) by analyzing internal concept representations via GemmaScope 2 Sparse Autoencoders (SAEs). It connects internal model features to human-interpretable descriptions via the Neuronpedia API, then evaluates whether stated reasoning corresponds to actual internal activations.
-
-## Setup
-
-```bash
-# Requires Python >= 3.12
-python -m venv env
-source env/bin/activate
-pip install -e .
-# Additional undeclared deps needed at runtime:
-pip install transformers tqdm datasets pandas matplotlib
-```
-
-The package is installed in editable mode. Virtual environment lives at `./env/` (gitignored).
+Research project investigating faithfulness of chain-of-thought reasoning in language models (Gemma) by analyzing internal concept representations via GemmaScope 2 Sparse Autoencoders (SAEs). It connects internal model features to human-interpretable descriptions via the Neuronpedia API, then evaluates whether stated reasoning corresponds to actual internal activations. Objective is to find interpretable features out of the full set of SAEs features from in a certain prompt.
 
 ## Project Structure
 
@@ -44,7 +31,7 @@ Each dataset defines `_INSTRUCTIONS_` mappings, `build_prompt()`, and answer par
 
 ### Key Patterns
 
-- **Decorator-based method registration:** `Aggregator` and `Denoiser` use `@_aggregation_method`/`@_denoising_method` decorators that register strategies and enforce shape contracts
+- **Decorator-based method registration:** `Aggregator` and `Denoiser` use `@_aggregation_method`/`@_denoising_method` decorators that register strategies and enforce shape contracts. Every ne method should respect this interface. The idea is to have a very modular architecture, so we can define different pipelines combining these methods.
 - **Device auto-detection:** `ModelConfig._default_device()` checks MPS → CUDA → CPU
 - **Notebooks in `notebooks/`** are the primary experiment interface (demo.ipynb, gemmascope_2_first_experiment.ipynb)
 
