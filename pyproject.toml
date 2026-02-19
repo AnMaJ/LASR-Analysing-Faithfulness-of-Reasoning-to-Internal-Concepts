@@ -13,6 +13,10 @@ dependencies = [
     "datasets>=4.5.0",
     "ipykernel>=7.2.0",
     "dotenv>=0.9.9",
+    "matplotlib>=3.10.8",
+    "plotly>=6.5.2",
+    "transformers>=5.2.0",
+    "accelerate>=1.12.0",
 ]
 
 [tool.setuptools.packages.find]
