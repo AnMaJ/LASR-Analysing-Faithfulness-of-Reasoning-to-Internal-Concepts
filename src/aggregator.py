@@ -52,26 +52,21 @@ class Aggregator:
         """Compute a per-feature activation threshold for consistency windowing.
 
         Args:
-            activations: ``(n_tokens, d_sae)`` SAE activation tensor.
-            mode: One of ``"per_feature_median"``, ``"global_median"``.
+            activations: (n_tokens, d_sae) SAE activation tensor.
+            mode: One of "per_feature_median", "global_median".
 
         Returns:
-            ``(d_sae,)`` threshold vector — one value per feature.
+            (d_sae,) threshold vector — one value per feature.
         """
         if mode == "global_median":
             nonzero = activations[activations > 0]
             val = nonzero.median().item() if nonzero.numel() > 0 else 0.0
             return torch.full((activations.shape[1],), val, device=activations.device)
 
-        # per_feature_median: median of each feature's nonzero activations
-        d_sae = activations.shape[1]
-        tau = torch.zeros(d_sae, device=activations.device)
-        sorted_acts, _ = activations.sort(dim=0, descending=True)   # (n_tokens, d_sae)
-        counts = (activations > 0).sum(dim=0)                        # (d_sae,)
-        for j in range(d_sae):
-            c = int(counts[j].item())
-            if c > 0:
-                tau[j] = sorted_acts[:c, j].median()
+        # per_feature_median: vectorized median of each feature's nonzero activations
+        masked_acts = activations.masked_fill(activations == 0, float('nan'))
+        tau = torch.nanmedian(masked_acts, dim=0).values  # (d_sae,)
+        tau = torch.nan_to_num(tau, nan=0.0)  # replace NaNs (all-zero features) with 0
         return tau
 
     def get_methods(self) -> List[str]:
