@@ -83,14 +83,15 @@ class Denoiser:
 
     @_denoising_method
     def standard_scaler(self, activations: torch.Tensor) -> torch.Tensor:
-        """Standardize features by removing the mean and scaling to unit variance.
-
-        Computes z-score normalization along the token dimension (``dim=0``),
-        equivalent to sklearn's StandardScaler.
         """
+        Apply the standard scaler normalization. 
+        
+        To zero-out dead features after the normalization, it uses the nonzero mask.
+        """
+        nonzero_mask = activations != 0                        
         mean = activations.mean(dim=0, keepdim=True)
-        std = activations.std(dim=0, keepdim=True)
-        return (activations - mean) / (std + 1e-8)
+        std  = activations.std(dim=0, keepdim=True)
+        return ((activations - mean) / (std + 1e-8)) * nonzero_mask
 
     @_denoising_method
     def global_idf(self, activations: torch.Tensor) -> torch.Tensor:
