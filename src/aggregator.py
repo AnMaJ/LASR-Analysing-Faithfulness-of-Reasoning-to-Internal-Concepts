@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import wraps
-from typing import Any, Callable, List
+from typing import Any, Callable
 
 import torch
 
@@ -45,7 +45,7 @@ class Aggregator:
 
         aggregator = Aggregator()
         print(aggregator.get_methods())
-        out = aggregator.max_pooling(x)
+        out = aggregator.max(x)
     """
 
     def _compute_threshold(self, activations: torch.Tensor, mode: str) -> torch.Tensor:
@@ -69,7 +69,7 @@ class Aggregator:
         tau = torch.nan_to_num(tau, nan=0.0)  # replace NaNs (all-zero features) with 0
         return tau
 
-    def get_methods(self) -> List[str]:
+    def get_methods(self) -> list[str]:
         """Return the names of all available aggregation strategies."""
         return [
             name

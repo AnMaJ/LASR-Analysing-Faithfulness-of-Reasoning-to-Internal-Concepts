@@ -1,8 +1,12 @@
+"""Denoising / normalisation strategies for SAE activations."""
+
 from __future__ import annotations
 
 import time
+from dataclasses import dataclass
+from enum import Enum
 from functools import wraps
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable
 
 import torch
 from tqdm import tqdm
@@ -54,11 +58,11 @@ class Denoiser:
 
     def __init__(
         self,
-        neuronpedia_client: Optional[NeuronpediaClient] = None
+        neuronpedia_client: NeuronpediaClient | None = None,
     ) -> None:
         self._client = neuronpedia_client
 
-    def get_methods(self) -> List[str]:
+    def get_methods(self) -> list[str]:
         """Return the names of all available denoising strategies."""
         return [
             name
@@ -73,11 +77,12 @@ class Denoiser:
         """Apply continuous TF-IDF weighting to SAE activations.
 
         Treats each row (token) as a document and each column (feature) as a
-        term.
+        term.  Document frequency is the number of tokens where the feature
+        activation exceeds a threshold of 10.
         """
         num_docs = activations.shape[0]
         tf = activations
-        df = activations.sum(dim=0, keepdim=True)
+        df = (activations > 10).sum(dim=0, keepdim=True)
         idf = torch.log(num_docs / (1 + df))
         return tf * idf
 
@@ -117,7 +122,7 @@ class Denoiser:
             )
 
         # Identify columns that are active in at least one row
-        active_indices: List[int] = (
+        active_indices: list[int] = (
             (activations != 0).any(dim=0).nonzero(as_tuple=False).view(-1).tolist()
         )
 
@@ -173,7 +178,7 @@ class Denoiser:
         d_sae = activations.shape[1]
 
         # Identify columns with at least one non-zero activation
-        active_indices: List[int] = (
+        active_indices: list[int] = (
             (activations != 0).any(dim=0).nonzero(as_tuple=False).view(-1).tolist()
         )
 
@@ -217,3 +222,53 @@ class Denoiser:
         ppmi_scores = ppmi_scores * valid_mask.unsqueeze(0)
 
         return ppmi_scores
+
+
+# --------------------------------------------------------------------------- #
+# Convenience API (config + function)
+# --------------------------------------------------------------------------- #
+
+
+class DenoisingMethod(Enum):
+    """Available denoising methods."""
+    CONTINUOUS_TFIDF = "continuous_tfidf"
+
+
+@dataclass
+class DenoisingConfig:
+    """Configuration selecting a denoising method."""
+    method: DenoisingMethod = DenoisingMethod.CONTINUOUS_TFIDF
+
+
+def denoise(
+    activations: torch.Tensor,
+    config: DenoisingConfig | None = None,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Denoise SAE activations using the method specified in *config*.
+
+    Args:
+        activations: 2-D tensor ``(n_tokens, n_features)``.  The caller is
+            responsible for squeezing/unsqueezing any batch dimensions.
+        config: A :class:`DenoisingConfig` selecting the method.  Defaults to
+            continuous TF-IDF.
+
+    Returns:
+        ``(denoised_activations, idf_scaling_factors)``
+    """
+    if config is None:
+        config = DenoisingConfig()
+
+    if activations.dim() != 2:
+        raise ValueError(
+            f"denoise() expects a 2-D tensor (n_tokens, n_features), "
+            f"got {activations.dim()}-D with shape {tuple(activations.shape)}"
+        )
+
+    if config.method is DenoisingMethod.CONTINUOUS_TFIDF:
+        num_tokens = activations.shape[0]
+        tf = activations
+        df = (activations > 10).sum(dim=0)
+        idf = torch.log(num_tokens / (1 + df))
+        return tf * idf, idf
+
+    raise ValueError(f"Unknown denoising method: {config.method}")

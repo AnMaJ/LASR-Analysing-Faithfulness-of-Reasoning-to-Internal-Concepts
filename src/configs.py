@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
 
 import torch
 
@@ -37,7 +38,7 @@ class DatasetConfig:
     path: str
     prompt_style: PromptStyle
     use_chat_template: bool
-    hf_data_config: Optional[Dict] = None
+    hf_data_config: dict | None = None
     few_shot: bool = False
 
     def __post_init__(self):
@@ -85,10 +86,10 @@ class SAEConfig:
 class NeuronpediaFeature:
     """Container for feature information from Neuronpedia."""
     feature_idx: int
-    description: Optional[str] = None
-    frac_nonzero: Optional[float] = None  # Activation density
-    max_act_approx: Optional[float] = None  # Max activation value
-    max_activating_examples: Optional[List[Dict]] = None
-    url: Optional[str] = None
-    embed_url: Optional[str] = None
-    error: Optional[str] = None
+    description: str | None = None
+    frac_nonzero: float | None = None
+    max_act_approx: float | None = None
+    max_activating_examples: list[dict] | None = None
+    url: str | None = None
+    embed_url: str | None = None
+    error: str | None = None

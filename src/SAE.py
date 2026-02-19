@@ -82,7 +82,9 @@ class JumpReLUSAE(nn.Module):
         the reconstruction.
         """
         sae_acts = self.encode(activations)
-        reconstruction = self.forward(activations)
+        reconstruction = self.decode(sae_acts)
+        if self.affine_skip_connection is not None:
+            reconstruction = reconstruction + activations @ self.affine_skip_connection
         return sae_acts, reconstruction
 
     def get_reconstruction_stats(self, activations: torch.Tensor):

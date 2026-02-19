@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import re
-from typing import Dict, Optional, NamedTuple
+from typing import NamedTuple
 
 from datasets import Dataset as HFDataset
 
@@ -8,8 +10,8 @@ from src.dataset.base_dataset import BaseDataset, PromptStyle
 
 class ParsedAnswer(NamedTuple):
     """Parsed model output for an NLI task."""
-    label: Optional[str]      # "entailment", "neutral", "contradiction", or None
-    reasoning: Optional[str]  # Extracted reasoning text, or None
+    label: str | None      # "entailment", "neutral", "contradiction", or None
+    reasoning: str | None  # Extracted reasoning text, or None
 
 
 _LABEL_MAP_ = {0: "entailment", 1: "neutral", 2: "contradiction"}
@@ -62,7 +64,7 @@ class ESNLI_Dataset(BaseDataset):
         ),
     }
 
-    def load_dataset(self, path: str, hf_kwargs: Dict):
+    def load_dataset(self, path: str, hf_kwargs: dict):
         """Load e-SNLI from HuggingFace Hub and add a string ``gold_label`` column.
 
         The ``esnli/esnli`` repository uses a legacy loading script that is no

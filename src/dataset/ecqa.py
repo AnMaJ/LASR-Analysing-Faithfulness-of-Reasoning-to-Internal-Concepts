@@ -1,4 +1,5 @@
-from typing import Dict, Optional
+from __future__ import annotations
+
 import re
 
 import pandas as pd
@@ -27,7 +28,7 @@ class ECQA_Dataset(BaseDataset):
     }
     _OPTION_LABELS_ = ["A", "B", "C", "D", "E"]
 
-    def load_dataset(self, path: str, config: Dict):
+    def load_dataset(self, path: str, config: dict):
         """Load the ECQA dataset from a Parquet file.
 
         Args:
@@ -61,7 +62,7 @@ class ECQA_Dataset(BaseDataset):
             f"Question: {row['q_text']}\n\nOptions:\n{options_text}"
         )
 
-    def get_correct_letter(self, row) -> Optional[str]:
+    def get_correct_letter(self, row) -> str | None:
         """Return the option letter (A–E) that matches the gold answer.
 
         Args:
@@ -78,7 +79,7 @@ class ECQA_Dataset(BaseDataset):
         return None
 
     @staticmethod
-    def extract_answer_letter_cot(text: str) -> Optional[str]:
+    def extract_answer_letter_cot(text: str) -> str | None:
         """Extract the predicted answer letter from a chain-of-thought response.
 
         Applies a cascade of regex patterns—from the most explicit
@@ -121,7 +122,7 @@ class ECQA_Dataset(BaseDataset):
         return None
 
     @staticmethod
-    def extract_answer_letter_no_cot(text: str) -> Optional[str]:
+    def extract_answer_letter_no_cot(text: str) -> str | None:
         """Extract the predicted answer letter from a short (non-CoT) response.
 
         Expects the response to be a single letter or a very short string
