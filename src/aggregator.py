@@ -6,32 +6,6 @@ from typing import Any, Callable, List
 import torch
 
 
-def _compute_threshold(activations: torch.Tensor, mode: str) -> torch.Tensor:
-    """Compute a per-feature activation threshold for consistency windowing.
-
-    Args:
-        activations: ``(n_tokens, d_sae)`` SAE activation tensor.
-        mode: One of ``"per_feature_median"``, ``"global_median"``.
-
-    Returns:
-        ``(d_sae,)`` threshold vector — one value per feature.
-    """
-    if mode == "global_median":
-        nonzero = activations[activations > 0]
-        val = nonzero.median().item() if nonzero.numel() > 0 else 0.0
-        return torch.full((activations.shape[1],), val, device=activations.device)
-
-    # per_feature_median: median of each feature's nonzero activations
-    d_sae = activations.shape[1]
-    tau = torch.zeros(d_sae, device=activations.device)
-    sorted_acts, _ = activations.sort(dim=0, descending=True)   # (n_tokens, d_sae)
-    counts = (activations > 0).sum(dim=0)                        # (d_sae,)
-    for j in range(d_sae):
-        c = int(counts[j].item())
-        if c > 0:
-            tau[j] = sorted_acts[:c, j].median()
-    return tau
-
 F = Callable[..., Any]
 
 
@@ -74,6 +48,32 @@ class Aggregator:
         out = aggregator.max_pooling(x)
     """
 
+    def _compute_threshold(self, activations: torch.Tensor, mode: str) -> torch.Tensor:
+        """Compute a per-feature activation threshold for consistency windowing.
+
+        Args:
+            activations: ``(n_tokens, d_sae)`` SAE activation tensor.
+            mode: One of ``"per_feature_median"``, ``"global_median"``.
+
+        Returns:
+            ``(d_sae,)`` threshold vector — one value per feature.
+        """
+        if mode == "global_median":
+            nonzero = activations[activations > 0]
+            val = nonzero.median().item() if nonzero.numel() > 0 else 0.0
+            return torch.full((activations.shape[1],), val, device=activations.device)
+
+        # per_feature_median: median of each feature's nonzero activations
+        d_sae = activations.shape[1]
+        tau = torch.zeros(d_sae, device=activations.device)
+        sorted_acts, _ = activations.sort(dim=0, descending=True)   # (n_tokens, d_sae)
+        counts = (activations > 0).sum(dim=0)                        # (d_sae,)
+        for j in range(d_sae):
+            c = int(counts[j].item())
+            if c > 0:
+                tau[j] = sorted_acts[:c, j].median()
+        return tau
+
     def get_methods(self) -> List[str]:
         """Return the names of all available aggregation strategies."""
         return [
@@ -86,14 +86,12 @@ class Aggregator:
 
     @_aggregation_method
     def max(self, activations: torch.Tensor) -> torch.Tensor:
-        """Take the element-wise max across tokens.
-        """
+        """Take the element-wise max across tokens."""
         return activations.max(dim=0).values
     
     @_aggregation_method
     def mean(self, activations: torch.Tensor) -> torch.Tensor:
-        """Take the element-wise mean across tokens.
-        """
+        """Take the element-wise mean across tokens."""
         return activations.mean(dim=0)
 
     @_aggregation_method
@@ -104,6 +102,8 @@ class Aggregator:
         rewards features which remain active across consecutive windows of tokens,
         rather than firing intensely on a single token and nowhere else.
         """
+        # Alpha controls the weight given to the max activation.
+        # Consistency weight is computed as (1-alpha)
         alpha: float = 0.8
         window_length: int = 15
         tau_mode: str = "per_feature_median"
@@ -118,7 +118,7 @@ class Aggregator:
             return max_act
 
         # ── Step 2: per-feature threshold ────────────────────────────────────
-        tau = _compute_threshold(activations, tau_mode)              # (d_sae,)
+        tau = self._compute_threshold(activations, tau_mode)              # (d_sae,)
 
         # ── Step 3: sliding window consistency mask ──────────────────────────
         # above_tau[t, i] = 1 if a_i(t) >= tau_i
