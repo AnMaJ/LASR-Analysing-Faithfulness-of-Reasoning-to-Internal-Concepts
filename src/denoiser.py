@@ -188,8 +188,8 @@ class Denoiser:
         Returns:
             PPMI score tensor of the same shape.
         """
-        _SWEET_SPOT_MIN: float = 1e-4
-        _SWEET_SPOT_MAX: float = 5e-2
+        _SWEET_SPOT_MIN: float = 1e-5
+        _SWEET_SPOT_MAX: float = 5e-3
         _EPS: float = 1e-8
 
         if self._client is None:

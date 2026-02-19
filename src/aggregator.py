@@ -126,8 +126,8 @@ class Aggregator:
         Returns:
             ``(d_sae,)`` aggregated score per feature.
         """
-        alpha: float = 0.5
-        window_length: int = 5
+        alpha: float = 0.8
+        window_length: int = 15
         tau_mode: str = "per_feature_median"
 
         n_tokens, d_sae = activations.shape
