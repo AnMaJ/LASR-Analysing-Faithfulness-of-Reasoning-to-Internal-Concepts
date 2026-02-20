@@ -112,6 +112,16 @@ def main():
 
     # --- Move all CUDA tensors to CPU and free Gemma model to reclaim VRAM ---
     generation_ids = [ids.cpu() for ids in generation_ids]
+
+    # Decode full sequences (prompt + generation) and compute character-level prompt boundaries
+    sequences = []
+    prompt_char_lens = []
+    for gen_ids, prompt_len in zip(generation_ids, prompt_lens):
+        full_text = model.tokenizer.decode(gen_ids, skip_special_tokens=True)
+        prompt_text = model.tokenizer.decode(gen_ids[:prompt_len], skip_special_tokens=True)
+        sequences.append(full_text)
+        prompt_char_lens.append(len(prompt_text))
+
     del model
     gc.collect()
     torch.cuda.empty_cache()
@@ -142,18 +152,15 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    filename = f"bbq-l{args.sae_layer}-{args.sae_width}"
+
     torch.save({
         "sae_activations": sae_activations,
         "recon_stats": recon_stats,
-        "generations": generations,
-        "generation_ids": generation_ids,
-        "prompt_lens": prompt_lens,
-        "categories": all_categories,
-        "ground_truths": all_ground_truths,
-        "model_config": {
-            "model_name": model_config.model_name,
-            "device": model_config.device,
-        },
+        "sequence": sequences,
+        "prompt_lens": prompt_char_lens,
+        "dataset_info": {"categories": all_categories,
+        "ground_truths": all_ground_truths},
         "sae_config": {
             "repo_id": sae_config.repo_id,
             "sae_type": sae_config.sae_type,
@@ -161,7 +168,7 @@ def main():
             "width": sae_config.width,
             "l0": sae_config.l0,
         },
-    }, output_dir / "activations.pt")
+    }, output_dir / f"{filename}.pt")
 
     print(f"Saved {len(sae_activations)} samples to {output_dir / 'activations.pt'}")
     print(f"  Mean FVU: {sum(s['fvu'] for s in recon_stats) / len(recon_stats):.4f}")
