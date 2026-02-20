@@ -21,9 +21,12 @@ class GemmaModel:
         self.config = config
 
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
+        load_kwargs = {"device_map": config.device}
+        if config.torch_dtype is not None:
+            load_kwargs["torch_dtype"] = config.torch_dtype
         self.model = AutoModelForCausalLM.from_pretrained(
             config.model_name,
-            device_map=config.device,
+            **load_kwargs,
         )
         self.model.eval()
 
