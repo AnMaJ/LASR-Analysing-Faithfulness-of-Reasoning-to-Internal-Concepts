@@ -1,22 +1,20 @@
 from __future__ import annotations
 
-from typing import Optional
-
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
 import plotly.graph_objects as go
 
-from src.feature import Feature
+from src.feature import Feature, create_features
 from src.neuronpedia_client import NeuronpediaClient, build_sae_id
 from src.utils.activations_utils import top_k_features_per_token
 
 
 def plot_feature_magnitudes(
     aggregated: torch.Tensor,
-    label: Optional[str] = None,
-    top_k: Optional[int] = None,
+    label: str | None = None,
+    top_k: int | None = None,
 ) -> None:
     """Plot a bar chart of feature magnitudes for a single aggregated vector.
 
@@ -287,23 +285,34 @@ def summarize_latents(
     model_name: str,
     top_k: int = 10,
     print_first_n: int = 3,
-) -> dict:
+    full_sae_activations: torch.Tensor | None = None,
+    all_tokens: list[str] | None = None,
+) -> dict[int, Feature]:
     """Summarize top-k SAE features per token and plot a heatmap.
 
     Parameters
     ----------
     sae_activations:
-        SAE activation tensor of shape ``(n_tokens, n_features)``.
+        SAE activation tensor of shape ``(n_tokens, n_features)`` for the
+        slice to analyse (e.g. generation-only tokens).
     tokens:
         List of token strings (same length as ``sae_activations`` dim 0).
     sae_config:
         A :class:`SAEConfig` instance (used to build the Neuronpedia SAE ID).
     model_name:
-        Neuronpedia model identifier (e.g. ``"gemma-3-27b-it"``).
+        Full or short model identifier (e.g. ``"google/gemma-3-27b-it"``).
     top_k:
         Number of top features to summarize per token.
     print_first_n:
         Number of leading tokens for which to print detailed feature info.
+    full_sae_activations:
+        Optional full-sequence SAE activations ``(n_all_tokens, n_features)``.
+        When provided together with *all_tokens*, the returned Feature objects
+        will include per-token activations from the full sequence (enabling
+        :meth:`Feature.inspect`, :meth:`Feature.top_tokens`, etc.).
+    all_tokens:
+        Full-sequence token strings.  Required when *full_sae_activations* is
+        given.
 
     Returns
     -------
@@ -333,17 +342,21 @@ def summarize_latents(
         set(per_token_idxs.cpu().numpy().ravel().tolist()))
 
     # Create Feature objects — one per unique feature.
-    feature_map: dict = {}
-    for idx in unique_indices:
-        # Use mean activation strength across all tokens where this feature
-        # appears in the top-k as a representative strength.
-        mask = per_token_idxs == idx
-        strength = float(per_token_vals[mask].mean()) if mask.any() else 0.0
-        feature_map[idx] = Feature(
-            feature_idx=idx,
-            strentgh=strength,
-            client=client,
-        )
+    if full_sae_activations is not None and all_tokens is not None:
+        # Per-token mode: Feature objects carry full-sequence activations.
+        features = create_features(full_sae_activations, unique_indices, all_tokens)
+        for f in features:
+            f.fetch_details(client)
+        feature_map = {f.feature_idx: f for f in features}
+    else:
+        # Aggregated mode: Feature objects carry a single strength value.
+        feature_map = {}
+        for idx in unique_indices:
+            mask = per_token_idxs == idx
+            strength = float(per_token_vals[mask].mean()) if mask.any() else 0.0
+            feat = Feature(feature_idx=idx, strength=strength)
+            feat.fetch_details(client)
+            feature_map[idx] = feat
 
     print(f"\nCreated {len(feature_map)} Feature objects")
     first_key = unique_indices[0]
