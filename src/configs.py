@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 import torch
 
@@ -82,43 +83,18 @@ class SAEConfig:
         return f"{self.sae_type}/layer_{self.layer}_width_{self.width}_l0_{self.l0}/params.safetensors"
 
 
-class DenoisingMethod(Enum):
-    """Available denoising strategies."""
-    CONTINUOUS_TFIDF = "continuous_tfidf"
-    STANDARD_SCALER = "standard_scaler"
-    GLOBAL_IDF = "global_idf"
-    PMI = "pmi"
-
-
 @dataclass
 class DenoisingConfig:
     """Configuration for a denoising method.
 
     Args:
-        method: The denoising strategy to apply.  Must be specified.
-        threshold: Document frequency threshold (used by ``continuous_tfidf``).
-            When ``None``, the method's own default applies.
-        sweet_spot_min: Minimum activation density for feature filtering
-            (used by ``global_idf`` and ``pmi``).  When ``None``, each method
-            falls back to its own default.
-        sweet_spot_max: Maximum activation density for feature filtering
-            (used by ``global_idf`` and ``pmi``).  When ``None``, each method
-            falls back to its own default.
+        method: Name of the denoising strategy (must match a method on
+            :class:`~src.denoiser.Denoiser` decorated with
+            ``@_denoising_method``).
+        params: Keyword arguments forwarded to the chosen method.
     """
-    method: DenoisingMethod
-    threshold: float | None = None
-    sweet_spot_min: float | None = None
-    sweet_spot_max: float | None = None
-
-    def __post_init__(self) -> None:
-        if isinstance(self.method, str):
-            try:
-                self.method = DenoisingMethod(self.method)
-            except ValueError:
-                valid = [e.value for e in DenoisingMethod]
-                raise ValueError(
-                    f"Invalid method '{self.method}'. Must be one of {valid}"
-                )
+    method: str
+    params: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass

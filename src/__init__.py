@@ -3,7 +3,6 @@
 from src.configs import (
     DatasetConfig,
     DenoisingConfig,
-    DenoisingMethod,
     InferenceConfig,
     ModelConfig,
     NeuronpediaFeature,
@@ -11,7 +10,7 @@ from src.configs import (
     SAEConfig,
 )
 from src.feature import Feature, create_features
-from src.denoiser import Denoiser, denoise
+from src.denoiser import Denoiser
 from src.aggregator import Aggregator
 from src.neuronpedia_client import NeuronpediaClient, build_sae_id
 
@@ -31,8 +30,6 @@ __all__ = [
     "create_features",
     "Denoiser",
     "DenoisingConfig",
-    "DenoisingMethod",
-    "denoise",
     "Aggregator",
     "NeuronpediaClient",
     "build_sae_id",
