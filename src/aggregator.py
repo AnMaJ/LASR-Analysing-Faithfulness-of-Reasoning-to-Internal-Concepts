@@ -6,32 +6,6 @@ from typing import Any, Callable, List
 import torch
 
 
-def _compute_threshold(activations: torch.Tensor, mode: str) -> torch.Tensor:
-    """Compute a per-feature activation threshold for consistency windowing.
-
-    Args:
-        activations: ``(n_tokens, d_sae)`` SAE activation tensor.
-        mode: One of ``"per_feature_median"``, ``"global_median"``.
-
-    Returns:
-        ``(d_sae,)`` threshold vector — one value per feature.
-    """
-    if mode == "global_median":
-        nonzero = activations[activations > 0]
-        val = nonzero.median().item() if nonzero.numel() > 0 else 0.0
-        return torch.full((activations.shape[1],), val, device=activations.device)
-
-    # per_feature_median: median of each feature's nonzero activations
-    d_sae = activations.shape[1]
-    tau = torch.zeros(d_sae, device=activations.device)
-    sorted_acts, _ = activations.sort(dim=0, descending=True)   # (n_tokens, d_sae)
-    counts = (activations > 0).sum(dim=0)                        # (d_sae,)
-    for j in range(d_sae):
-        c = int(counts[j].item())
-        if c > 0:
-            tau[j] = sorted_acts[:c, j].median()
-    return tau
-
 F = Callable[..., Any]
 
 
@@ -74,6 +48,27 @@ class Aggregator:
         out = aggregator.max_pooling(x)
     """
 
+    def _compute_threshold(self, activations: torch.Tensor, mode: str) -> torch.Tensor:
+        """Compute a per-feature activation threshold for consistency windowing.
+
+        Args:
+            activations: (n_tokens, d_sae) SAE activation tensor.
+            mode: One of "per_feature_median", "global_median".
+
+        Returns:
+            (d_sae,) threshold vector — one value per feature.
+        """
+        if mode == "global_median":
+            nonzero = activations[activations > 0]
+            val = nonzero.median().item() if nonzero.numel() > 0 else 0.0
+            return torch.full((activations.shape[1],), val, device=activations.device)
+
+        # per_feature_median: vectorized median of each feature's nonzero activations
+        masked_acts = activations.masked_fill(activations == 0, float('nan'))
+        tau = torch.nanmedian(masked_acts, dim=0).values  # (d_sae,)
+        tau = torch.nan_to_num(tau, nan=0.0)  # replace NaNs (all-zero features) with 0
+        return tau
+
     def get_methods(self) -> List[str]:
         """Return the names of all available aggregation strategies."""
         return [
@@ -86,14 +81,12 @@ class Aggregator:
 
     @_aggregation_method
     def max(self, activations: torch.Tensor) -> torch.Tensor:
-        """Take the element-wise max across tokens.
-        """
+        """Take the element-wise max across tokens."""
         return activations.max(dim=0).values
     
     @_aggregation_method
     def mean(self, activations: torch.Tensor) -> torch.Tensor:
-        """Take the element-wise mean across tokens.
-        """
+        """Take the element-wise mean across tokens."""
         return activations.mean(dim=0)
 
     @_aggregation_method
@@ -103,32 +96,12 @@ class Aggregator:
         Combines standard max-pooling with a *temporal consistency* score that
         rewards features which remain active across consecutive windows of tokens,
         rather than firing intensely on a single token and nowhere else.
-
-        Parameters (fixed defaults)::
-
-            alpha         = 0.5   # blend: 1.0 → pure max, 0.0 → pure consistency
-            window_length = 5     # number of consecutive tokens per window (l)
-            tau_mode      = "per_feature_median"  # threshold strategy
-
-        **Algorithm** — for feature *i* over *T* tokens:
-
-        1. ``M_i = max_t a_i(t)``
-        2. Compute threshold ``tau_i`` (median of nonzero activations of feature *i*).
-        3. ``W_i`` = set of window start positions where *all l* consecutive tokens
-           satisfy ``a_i(t) >= tau_i``.
-        4. ``C_i = mean over W_i of (mean activation inside the window)``, or 0
-           if no consistent window exists.
-        5. ``S_i = alpha * M_i + (1 - alpha) * C_i``
-
-        Args:
-            activations: ``(n_tokens, d_sae)`` per-token SAE activations.
-
-        Returns:
-            ``(d_sae,)`` aggregated score per feature.
         """
-        alpha: float = 0.8
-        window_length: int = 15
-        tau_mode: str = "per_feature_median"
+        # Alpha controls the weight given to the max activation.
+        # Consistency weight is computed as (1-alpha)
+        alpha: float = 0.4
+        window_length: int = 3
+        tau_mode: str = "global_median"
 
         n_tokens, d_sae = activations.shape
 
@@ -140,7 +113,7 @@ class Aggregator:
             return max_act
 
         # ── Step 2: per-feature threshold ────────────────────────────────────
-        tau = _compute_threshold(activations, tau_mode)              # (d_sae,)
+        tau = self._compute_threshold(activations, tau_mode)              # (d_sae,)
 
         # ── Step 3: sliding window consistency mask ──────────────────────────
         # above_tau[t, i] = 1 if a_i(t) >= tau_i

@@ -12,7 +12,6 @@ from src.neuronpedia_client import NeuronpediaClient
 F = Callable[..., Any]
 
 
-
 def _denoising_method(func: F) -> F:
     """Decorator that registers a method as a denoising strategy and adds a shape check.
 
@@ -43,17 +42,14 @@ class Denoiser:
     """Container for denoising / normalization strategies on SAE activations.
 
     Each public method decorated with ``@_denoising_method`` is a strategy that
-    takes a 2-D tensor and returns a tensor of the same shape.
+    takes a 2-D tensor and returns a tensor of the same shape. Can be called directly (e.g.
+    ``denoiser.continuous_tfidf(tensor)``).
 
     Usage::
 
-        # Methods that do not require Neuronpedia:
         denoiser = Denoiser()
-        out = denoiser.continuous_tfidf(x)
-
-        # Methods that require Neuronpedia (global_idf):
-        denoiser = Denoiser(model_id="gemma-3-27b-it", sae_id="31-gemmascope-2-res-65k")
-        out = denoiser.global_idf(x)
+        print(denoiser.get_methods())
+        out = denoiser.continuous_tfidf(x)   # same shape as x
     """
 
     def __init__(
@@ -87,14 +83,49 @@ class Denoiser:
 
     @_denoising_method
     def standard_scaler(self, activations: torch.Tensor) -> torch.Tensor:
-        """Standardize features by removing the mean and scaling to unit variance.
-
-        Computes z-score normalization along the token dimension (``dim=0``),
-        equivalent to sklearn's StandardScaler.
         """
+        Apply the standard scaler normalization. 
+        
+        To zero-out dead features after the normalization, it uses the nonzero mask.
+        """
+        nonzero_mask = activations != 0                        
         mean = activations.mean(dim=0, keepdim=True)
-        std = activations.std(dim=0, keepdim=True)
-        return (activations - mean) / (std + 1e-8)
+        std  = activations.std(dim=0, keepdim=True)
+        return ((activations - mean) / (std + 1e-8)) * nonzero_mask
+
+    @_denoising_method
+    def tf_idf(self, activations: torch.Tensor) -> torch.Tensor:
+        """Apply corpus-level TF-IDF weighting to a matrix of aggregated activations.
+
+        Unlike :meth:`continuous_tfidf` (which operates within a single sample
+        treating tokens as documents), this method expects the **full corpus
+        matrix** as input — one row per sample, one column per feature — and
+        derives IDF from the dataset itself without any external API call.
+
+        **Formula** — for sample *s* and feature *i*::
+
+            TF_{s,i}  =  aggregated activation of feature i in sample s
+            df_i      =  number of samples where feature i fires at least once
+            IDF_i     =  log( N / (1 + df_i) )   clipped to ≥ 0
+            score     =  TF * IDF
+
+        Features that fire in every sample get IDF = 0 and are suppressed
+        (they are structural / non-discriminative).  Features that never fire
+        remain zero.
+
+        ``max_df`` controls an upper document-frequency cutoff: features that
+        fire in more than ``max_df`` fraction of samples are zeroed out
+        entirely, regardless of their IDF value.  This suppresses high-frequency
+        language features (e.g. "more than", "and/or/not") that survive the log
+        formula because they are common but not universal.
+        """
+        _MAX_DF: float = 0.15   # zero out features firing in > _MAX_DF of samples
+        _THRESHOLD: float = 0.1
+        N = float(activations.shape[0])
+        df = (activations > _THRESHOLD).sum(dim=0, keepdim=True).float()   # (1, d_sae)
+        idf = torch.clamp(torch.log(torch.tensor(N) / (1.0 + df)), min=0.0)
+        idf = idf * (df / N <= _MAX_DF).float()   # hard cutoff above max_df
+        return activations * idf
 
     @_denoising_method
     def global_idf(self, activations: torch.Tensor) -> torch.Tensor:
@@ -109,20 +140,6 @@ class Denoiser:
         Features whose activation density falls outside the interpretable
         sweet spot [0.01%, 5%] are zeroed out entirely.  Features for which
         Neuronpedia returns no density information are also zeroed out.
-
-        Requires the ``Denoiser`` to be constructed with ``model_id`` and
-        ``sae_id``::
-
-            denoiser = Denoiser(model_id="gemma-3-27b-it",
-                                sae_id="31-gemmascope-2-res-65k")
-            out = denoiser.global_idf(activations)   # same shape as input
-
-        Args:
-            activations: 2-D tensor of shape ``(n_rows, d_sae)``.
-
-        Returns:
-            Weighted tensor of the same shape.  Only features in the sweet
-            spot carry non-zero values.
         """
         _SWEET_SPOT_MIN: float = 1e-4   # 0.01% — below this: likely noise / dead features
         _SWEET_SPOT_MAX: float = 5e-2   # 5.00% — above this: unspecific / structural features
@@ -150,7 +167,7 @@ class Denoiser:
 
         # Broadcast weight vector over the row dimension
         return activations * weights.to(activations.device).unsqueeze(0)
-
+    
     @_denoising_method
     def pmi(self, activations: torch.Tensor) -> torch.Tensor:
         """Apply Positive Pointwise Mutual Information (PPMI) weighting.
@@ -175,18 +192,6 @@ class Denoiser:
         ``log(1 / frac_nonzero_i)``, which is the same as the ``global_idf``
         weight — making ``global_idf`` a special case of PPMI where every
         active feature is assumed to fire at its maximum value.
-
-        Features outside the interpretable sweet spot [0.01%, 5%] or missing
-        ``max_act_approx`` from Neuronpedia are zeroed out.
-
-        Requires the ``Denoiser`` to be constructed with a
-        :class:`~src.neuronpedia_client.NeuronpediaClient`.
-
-        Args:
-            activations: 2-D tensor of shape ``(n_tokens, d_sae)``.
-
-        Returns:
-            PPMI score tensor of the same shape.
         """
         _SWEET_SPOT_MIN: float = 1e-5
         _SWEET_SPOT_MAX: float = 5e-3
