@@ -43,7 +43,7 @@ def parse_args():
     parser.add_argument("--model_name", type=str, default="google/gemma-3-27b-it")
     parser.add_argument("--repo_id", type=str, default="google/gemma-scope-2-27b-it")
     parser.add_argument("--sae_layer", type=int, default=31)
-    parser.add_argument("--sae_width", type=str, default="65k")
+    parser.add_argument("--sae_width", type=str, default="252k")
     parser.add_argument("--sae_l0", type=str, default="medium")
     return parser.parse_args()
 
@@ -112,6 +112,13 @@ def main():
 
     # --- Move all CUDA tensors to CPU and free Gemma model to reclaim VRAM ---
     generation_ids = [ids.cpu() for ids in generation_ids]
+
+    # Decode only the generated tokens (after the prompt) for each sample
+    sequences = [
+        model.tokenizer.decode(gen_ids[prompt_len:], skip_special_tokens=True)
+        for gen_ids, prompt_len in zip(generation_ids, prompt_lens)
+    ]
+
     del model
     gc.collect()
     torch.cuda.empty_cache()
@@ -142,18 +149,15 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    filename = f"bbq-l{args.sae_layer}-{args.sae_width}"
+
     torch.save({
         "sae_activations": sae_activations,
         "recon_stats": recon_stats,
-        "generations": generations,
-        "generation_ids": generation_ids,
+        "sequence": sequences,
         "prompt_lens": prompt_lens,
-        "categories": all_categories,
-        "ground_truths": all_ground_truths,
-        "model_config": {
-            "model_name": model_config.model_name,
-            "device": model_config.device,
-        },
+        "dataset_info": {"categories": all_categories,
+        "ground_truths": all_ground_truths},
         "sae_config": {
             "repo_id": sae_config.repo_id,
             "sae_type": sae_config.sae_type,
@@ -161,7 +165,7 @@ def main():
             "width": sae_config.width,
             "l0": sae_config.l0,
         },
-    }, output_dir / "activations.pt")
+    }, output_dir / f"{filename}.pt")
 
     print(f"Saved {len(sae_activations)} samples to {output_dir / 'activations.pt'}")
     print(f"  Mean FVU: {sum(s['fvu'] for s in recon_stats) / len(recon_stats):.4f}")
