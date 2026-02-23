@@ -200,15 +200,13 @@ class GemmaModel:
                 output = outputs[0] if isinstance(outputs, tuple) else outputs
                 dtype = output.dtype
                 steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
-
-                if output.shape[1] == 1:  # cached decode step
+                if output.shape[0] == 1:  # cached decode step
                     avg_norm = torch.norm(output, dim=-1, keepdim=True)
                     output = output + steering_coeff * avg_norm * steering_vec
                 else:  # prefill
                     avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
                     output = output.clone()
                     output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
-
                 if isinstance(outputs, tuple):
                     return (output,) + outputs[1:]
                 return output
