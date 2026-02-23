@@ -3,9 +3,19 @@
 BBQ mode:  loads 100 disambig samples from each of the 9 BBQ categories.
 e-SNLI mode: streams N samples from HuggingFace, builds few-shot CoT prompts.
 
-Usage:
+Usage (run from the activations-script project root):
     python -m src.utils.store_activations --dataset bbq  [options]
     python -m src.utils.store_activations --dataset esnli [options]
+
+Example — e-SNLI with layer-40 65k SAE (500 validation samples):
+    python -m src.utils.store_activations \
+        --dataset esnli \
+        --sae_layer 40 \
+        --sae_width 65k \
+        --sae_l0 medium \
+        --num_samples 500 \
+        --split validation \
+        --output_dir data/activations
 """
 
 import argparse
@@ -206,6 +216,8 @@ def main():
     # --- Move all CUDA tensors to CPU and free Gemma model to reclaim VRAM ---
     generation_ids = [ids.cpu() for ids in generation_ids]
 
+    gen_token_ids = [ids[prompt_len:] for ids, prompt_len in zip(generation_ids, prompt_lens)]
+
     sequences = []
     prompt_char_lens = []
     for gen_ids, prompt_len in zip(generation_ids, prompt_lens):
@@ -264,6 +276,7 @@ def main():
         "recon_stats": recon_stats,
         "sequence": sequences,
         "prompt_lens": prompt_char_lens,
+        "generation_token_ids": gen_token_ids,
         "dataset_info": dataset_info,
         "sae_config": {
             "repo_id": sae_config.repo_id,
