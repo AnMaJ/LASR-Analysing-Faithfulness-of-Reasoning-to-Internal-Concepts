@@ -85,8 +85,39 @@ class Aggregator:
         return activations.max(dim=0).values
     
     @_aggregation_method
+    def topk_mean(self, activations: torch.Tensor, k: int = 10, **kwargs) -> torch.Tensor:
+        """Mean of the top-k activation values per feature across tokens.
+
+        Args:
+            activations: [seq_len, num_features]
+            k: number of top tokens to average over (default: 10).
+
+        Returns:
+            [num_features] mean of top-k activations per feature.
+        """
+        k = min(k, activations.shape[0])
+        topk_vals, _ = torch.topk(activations, k=k, dim=0)  # [k, num_features]
+        return topk_vals.mean(dim=0)
+    
+    @_aggregation_method
+    def topk_sum(self, activations: torch.Tensor, k: int = 10, **kwargs) -> torch.Tensor:
+        """Sum of the top-k activation values per feature across tokens.
+
+        Args:
+            activations: [seq_len, num_features]
+            k: number of top tokens to sum over (default: 10).
+
+        Returns:
+            [num_features] sum of top-k activations per feature.
+        """
+        k = min(k, activations.shape[0])
+        topk_vals, _ = torch.topk(activations, k=k, dim=0)  # [k, num_features]
+        return topk_vals.sum(dim=0)
+    
+    @_aggregation_method
     def mean(self, activations: torch.Tensor) -> torch.Tensor:
-        """Take the element-wise mean across tokens."""
+        """Take the mean across tokens.
+        """
         return activations.mean(dim=0)
 
     @_aggregation_method
