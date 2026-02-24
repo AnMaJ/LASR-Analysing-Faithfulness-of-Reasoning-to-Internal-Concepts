@@ -153,3 +153,91 @@ class GemmaModel:
             handle.remove()
 
         return cache["resid_post"]
+    
+    def generate_steered(
+        self,
+        prompt: Union[str, List[Dict]],
+        sae,
+        feature_idx: int,
+        coeff: float,
+        target_layer: int,
+        max_new_tokens: int = 500,
+        response_split_token: str = "<start_of_turn>model",
+    ) -> Dict[str, str]:
+        """Generate steered and unsteered responses for a given prompt.
+
+        Applies activation steering along a given SAE feature direction at
+        *target_layer* during generation, and returns both the steered and
+        unsteered outputs for comparison.
+
+        Args:
+            prompt: Input text or chat-template list.
+            sae: A JumpReLUSAE (or compatible) instance with ``w_dec`` attribute.
+            feature_idx: Index of the SAE feature to steer along.
+            coeff: Steering coefficient. Positive amplifies the feature,
+                   negative suppresses it. Use 0.0 to get unsteered output only.
+            target_layer: Transformer layer index at which to apply the hook.
+            max_new_tokens: Maximum number of tokens to generate.
+            response_split_token: Token string used to split off the model's
+                response from the full decoded output.
+
+        Returns:
+            A dict with keys:
+                - ``"steered"``: the steered model response string.
+                - ``"unsteered"``: the unsteered model response string.
+        """
+        # Handle chat template
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(
+                prompt, tokenize=False, add_generation_prompt=True
+            )
+
+        inputs = self.tokenizer(
+            prompt, return_tensors="pt", add_special_tokens=True
+        ).to(self.model.device)
+
+        def steering_hook(mod, hook_inputs, outputs):
+            output = outputs[0] if isinstance(outputs, tuple) else outputs
+            
+            # Squeeze batch dim if present: (1, seq, hidden) -> (seq, hidden)
+            if output.dim() == 3:
+                output = output.squeeze(0)
+            
+            dtype = output.dtype
+            steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
+        
+            if output.shape[0] == 1:  # cached decode step: (1, hidden)
+                avg_norm = torch.norm(output, dim=-1, keepdim=True)
+                output = output + steering_coeff * avg_norm * steering_vec
+            else:  # prefill: (seq, hidden)
+                avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
+                output = output.clone()
+                output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
+        
+            if isinstance(outputs, tuple):
+                return (output,) + outputs[1:]
+            return output
+
+            handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
+                steering_hook
+            )
+            try:
+                with torch.no_grad():
+                    out_ids = self.model.generate(
+                        **inputs,
+                        max_new_tokens=max_new_tokens,
+                        do_sample=False,
+                        pad_token_id=self.tokenizer.eos_token_id,
+                    )
+                decoded = self.tokenizer.decode(out_ids[0])
+            finally:
+                handle.remove()
+
+            return decoded.split(response_split_token)[-1].strip()
+
+        return {
+            "unsteered": _run(steering_coeff=0.0),
+            "steered": _run(steering_coeff=coeff),
+        }
+
+
