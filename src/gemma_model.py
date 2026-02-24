@@ -195,23 +195,29 @@ class GemmaModel:
             prompt, return_tensors="pt", add_special_tokens=True
         ).to(self.model.device)
 
-        def _run(steering_coeff: float) -> str:
-            def steering_hook(mod, hook_inputs, outputs):
-                output = outputs[0] if isinstance(outputs, tuple) else outputs
-                dtype = output.dtype
-                steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
-                if output.shape[0] == 1:  # cached decode step
-                    avg_norm = torch.norm(output, dim=-1, keepdim=True)
-                    output = output + steering_coeff * avg_norm * steering_vec
-                else:  # prefill
-                    avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
-                    output = output.clone()
-                    output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
-                if isinstance(outputs, tuple):
-                    return (output,) + outputs[1:]
-                return output
+        def steering_hook(mod, hook_inputs, outputs):
+            output = outputs[0] if isinstance(outputs, tuple) else outputs
+            
+            # Squeeze batch dim if present: (1, seq, hidden) -> (seq, hidden)
+            if output.dim() == 3:
+                output = output.squeeze(0)
+            
+            dtype = output.dtype
+            steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
+        
+            if output.shape[0] == 1:  # cached decode step: (1, hidden)
+                avg_norm = torch.norm(output, dim=-1, keepdim=True)
+                output = output + steering_coeff * avg_norm * steering_vec
+            else:  # prefill: (seq, hidden)
+                avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
+                output = output.clone()
+                output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
+        
+            if isinstance(outputs, tuple):
+                return (output,) + outputs[1:]
+            return output
 
-            handle = self.model.model.model.language_model.layers[target_layer].register_forward_hook(
+            handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
                 steering_hook
             )
             try:
