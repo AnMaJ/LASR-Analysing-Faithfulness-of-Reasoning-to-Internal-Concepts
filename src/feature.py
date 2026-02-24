@@ -139,56 +139,70 @@ class Feature:
     ) -> None:
         """Display Neuronpedia IFrame (if available) and token highlighting.
 
+        When per-token activations are not available, an informational
+        message is shown and token highlighting is skipped.  The IFrame
+        and feature metadata are still displayed.
+
         Args:
             token_range: ``"all"`` — full sequence, ``"prompt"`` — prompt only,
                 ``"generation"`` — generated tokens only.
             prompt_length: Number of prompt tokens.  Required when
                 *token_range* is ``"prompt"`` or ``"generation"``.
         """
-        if self.activations is None or self.tokens is None:
-            raise ValueError("Per-token activations not available")
-
         from IPython.display import display, HTML, IFrame
 
-        # Determine slice
-        if token_range in ("prompt", "generation"):
-            if prompt_length is None:
-                raise ValueError(
-                    f"prompt_length is required when token_range={token_range!r}"
-                )
-            if token_range == "prompt":
-                acts = self.activations[:prompt_length]
-                toks = self.tokens[:prompt_length]
-            else:
-                acts = self.activations[prompt_length:]
-                toks = self.tokens[prompt_length:]
-        else:
-            acts = self.activations
-            toks = self.tokens
+        has_activations = self.activations is not None and self.tokens is not None
+
+        if not has_activations:
+            display(HTML(
+                '<div style="margin-top:12px;padding:8px 12px;'
+                'background:#fff3cd;border:1px solid #ffc107;'
+                'border-radius:4px;font-size:13px;">'
+                '<b>Note:</b> Per-token activations are not available. '
+                'Token highlighting will not be displayed.'
+                '</div>'
+            ))
 
         # IFrame — only if embed_url has been populated via fetch_details()
         if self.embed_url is not None:
             display(IFrame(src=self.embed_url, width=620, height=480))
 
-        # Token highlighting
-        abs_max = float(np.abs(acts).max()) if np.abs(acts).max() > 0 else 1.0
-        normed = np.clip(acts / abs_max, 0.0, 1.0)
-
+        # Token highlighting — only when per-token activations are present
         spans: list[str] = []
-        for i, (tok, intensity) in enumerate(zip(toks, normed)):
-            r = int(255 * (1 - intensity))
-            g = int(255 - 155 * intensity)
-            b = int(255 * (1 - intensity))
-            text_color = "#000" if intensity < 0.6 else "#fff"
-            tok_display = tok.replace("<", "&lt;").replace(">", "&gt;")
-            spans.append(
-                f'<span style="background:rgb({r},{g},{b});color:{text_color};'
-                f'padding:2px 3px;margin:1px;border-radius:3px;display:inline-block;'
-                f'font-family:monospace;font-size:13px;" '
-                f'title="activation={acts[i]:.4f}">'
-                f"{tok_display}</span>"
-            )
+        if has_activations:
+            if token_range in ("prompt", "generation"):
+                if prompt_length is None:
+                    raise ValueError(
+                        f"prompt_length is required when token_range={token_range!r}"
+                    )
+                if token_range == "prompt":
+                    acts = self.activations[:prompt_length]
+                    toks = self.tokens[:prompt_length]
+                else:
+                    acts = self.activations[prompt_length:]
+                    toks = self.tokens[prompt_length:]
+            else:
+                acts = self.activations
+                toks = self.tokens
 
+            abs_max = float(np.abs(acts).max()) if np.abs(acts).max() > 0 else 1.0
+            normed = np.clip(acts / abs_max, 0.0, 1.0)
+
+            for i, (tok, intensity) in enumerate(zip(toks, normed)):
+                r = int(255 * (1 - intensity))
+                g = int(255 - 155 * intensity)
+                b = int(255 * (1 - intensity))
+                text_color = "#000" if intensity < 0.6 else "#fff"
+                tok_display = tok.replace("<", "&lt;").replace(">", "&gt;")
+                spans.append(
+                    f'<span style="background:rgb({r},{g},{b});color:{text_color};'
+                    f'padding:2px 3px;margin:1px;border-radius:3px;display:inline-block;'
+                    f'font-family:monospace;font-size:13px;" '
+                    f'title="activation={acts[i]:.4f}">'
+                    f"{tok_display}</span>"
+                )
+
+        # Feature metadata — always shown
         desc_str = self.description or "N/A"
         frac_str = (
             f"{self.frac_nonzero:.4f}" if self.frac_nonzero is not None else "N/A"
@@ -196,14 +210,19 @@ class Feature:
         max_act_str = (
             f"{self.max_act_approx:.2f}" if self.max_act_approx is not None else "N/A"
         )
+        token_highlight_html = ""
+        if spans:
+            token_highlight_html = (
+                f'<br><span style="font-size:11px;color:#666;">'
+                f"Dark green = strong activation, white = weak/no activation"
+                f" (showing: {token_range})</span>"
+                f'<div style="margin-top:6px;line-height:2;">{"".join(spans)}</div>'
+            )
         html = (
             f'<div style="margin-top:12px;">'
             f"<b>Feature {self.feature_idx}</b> — <i>{desc_str}</i>"
             f"<br><b>frac_nonzero:</b> {frac_str} | <b>max_act_approx:</b> {max_act_str}"
-            f'<br><span style="font-size:11px;color:#666;">'
-            f"Dark green = strong activation, white = weak/no activation"
-            f" (showing: {token_range})</span>"
-            f'<div style="margin-top:6px;line-height:2;">{"".join(spans)}</div>'
+            f"{token_highlight_html}"
             f"</div>"
         )
         display(HTML(html))

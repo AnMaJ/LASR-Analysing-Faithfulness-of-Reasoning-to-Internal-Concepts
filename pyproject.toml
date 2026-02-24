@@ -21,6 +21,8 @@ dependencies = [
     "nbformat>=5.10.4",
     "ipywidgets>=8.1.8",
     "tqdm>=4.67.3",
+    "seaborn>=0.13.2",
+    "scipy>=1.17.1",
 ]
 
 [tool.setuptools.packages.find]
