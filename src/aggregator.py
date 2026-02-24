@@ -99,8 +99,8 @@ class Aggregator:
         """
         # Alpha controls the weight given to the max activation.
         # Consistency weight is computed as (1-alpha)
-        alpha: float = 0.8
-        window_length: int = 15
+        alpha: float = 0.5
+        window_length: int = 3
         tau_mode: str = "per_feature_median"
 
         n_tokens, d_sae = activations.shape

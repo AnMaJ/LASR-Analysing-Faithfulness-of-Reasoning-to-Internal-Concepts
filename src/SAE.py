@@ -74,17 +74,23 @@ class JumpReLUSAE(nn.Module):
         return sae
 
 
-    def get_reconstruction_stats(self, activations: torch.Tensor):
+    def get_reconstruction_stats(self, activations: torch.Tensor, encoded: torch.Tensor = None):
         """Compute reconstruction quality for a single prompt.
 
         Args:
             activations: Tensor of shape ``(n_tokens, d_model)``.
+            encoded: Pre-computed encoded activations (optional). If provided,
+                avoids a redundant encode call.
 
         Returns:
             Dict with ``fvu`` (fraction of variance unexplained) and
             ``l0`` (average number of active features per token).
         """
-        recon = self.forward(activations)
+        if encoded is None:
+            encoded = self.encode(activations)
+        recon = self.decode(encoded)
+        if self.affine_skip_connection is not None:
+            recon = recon + activations @ self.affine_skip_connection
         reconstruction_mse = torch.mean((recon[1:] - activations[1:].float()) ** 2)
         target_variance = activations[1:].float().var()
 
@@ -92,5 +98,5 @@ class JumpReLUSAE(nn.Module):
 
         return {
             "fvu": fvu.item(),
-            "l0": (self.encode(activations) > 0).float().sum(dim=-1).mean().item(),
+            "l0": (encoded > 0).float().sum(dim=-1).mean().item(),
         }

@@ -37,7 +37,6 @@ class GemmaModel:
         Returns:
             A tuple of (decoded_text, full_output_ids, prompt_length_in_tokens).
         """
-        # TODO in case it is needed, make it usable for batch of prompt
         # Handle chat template
         if isinstance(prompt, list):
             prompt = self.tokenizer.apply_chat_template(
@@ -112,11 +111,20 @@ class GemmaModel:
             padding_len = padded_input_len - torch.tensor(prompt_lens, dtype=torch.long)
 
             for j in range(output_ids.shape[0]):
-                # Strip only the left-padding, keep prompt + generation
+                # Strip left-padding, keep prompt + generation
                 ids = output_ids[j, int(padding_len[j]):]
+
+                # Strip trailing pad tokens produced when this sequence is shorter
+                # than the longest one in the batch (pad_id == eos_id, so find the
+                # first EOS in the generated portion and truncate after it).
+                prompt_len = int(prompt_lens[j])
+                eos_positions = (ids[prompt_len:] == pad_id).nonzero(as_tuple=True)[0]
+                if len(eos_positions) > 0:
+                    ids = ids[: prompt_len + int(eos_positions[0]) + 1]
+
                 all_texts.append(self.tokenizer.decode(ids, skip_special_tokens=True))
                 all_ids.append(ids)
-                all_prompt_lens.append(int(prompt_lens[j]))
+                all_prompt_lens.append(prompt_len)
 
         return all_texts, all_ids, all_prompt_lens
 
@@ -148,8 +156,88 @@ class GemmaModel:
         )
 
         try:
-            self.model.forward(input_ids=inputs.unsqueeze(0))
+            with torch.no_grad():
+                self.model.forward(input_ids=inputs.unsqueeze(0), use_cache=False)
         finally:
             handle.remove()
 
         return cache["resid_post"]
+
+    def generate_with_ablation(
+        self,
+        prompt: str | list[dict],
+        sae,
+        feature_idx: int,
+        target_layer: int,
+        max_new_tokens: int = 500,
+        response_split_token: str = "<start_of_turn>model",
+    ) -> dict[str, str]:
+            """Generate ablated and normal responses for a given prompt.
+
+            Removes the contribution of a specific SAE feature direction at
+            *target_layer* during generation by projecting it out of the
+            residual stream, and returns both outputs for comparison.
+
+            Args:
+                prompt: Input text or chat-template list.
+                sae: A JumpReLUSAE (or compatible) instance with ``w_dec`` attribute.
+                feature_idx: Index of the SAE feature to ablate.
+                target_layer: Transformer layer index at which to apply the hook.
+                max_new_tokens: Maximum number of tokens to generate.
+                response_split_token: Token string used to split off the model's
+                    response from the full decoded output.
+
+            Returns:
+                A dict with keys:
+                    - ``"ablated"``: the model response with the feature ablated.
+                    - ``"normal"``: the normal (unmodified) model response.
+            """
+            # Handle chat template
+            if isinstance(prompt, list):
+                prompt = self.tokenizer.apply_chat_template(
+                    prompt, tokenize=False, add_generation_prompt=True
+                )
+
+            inputs = self.tokenizer(
+                prompt, return_tensors="pt", add_special_tokens=True
+            ).to(self.model.device)
+
+            def _run(ablate: bool) -> str:
+                def ablation_hook(mod, hook_inputs, outputs):
+                    output = outputs[0] if isinstance(outputs, tuple) else outputs
+                    dtype = output.dtype
+                    direction = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
+                    # Normalise to a unit vector for a clean projection
+                    direction = direction / (direction.norm() + 1e-8)
+
+                    # Project out the feature direction: v - (v · d) d
+                    dots = torch.einsum("...d,d->...", output, direction)
+                    output = output - dots.unsqueeze(-1) * direction
+
+                    if isinstance(outputs, tuple):
+                        return (output,) + outputs[1:]
+                    return output
+
+                if ablate:
+                    handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
+                        ablation_hook
+                    )
+                try:
+                    with torch.no_grad():
+                        out_ids = self.model.generate(
+                            **inputs,
+                            max_new_tokens=max_new_tokens,
+                            do_sample=False,
+                            pad_token_id=self.tokenizer.eos_token_id,
+                        )
+                    decoded = self.tokenizer.decode(out_ids[0])
+                finally:
+                    if ablate:
+                        handle.remove()
+
+                return decoded.split(response_split_token)[-1].strip()
+
+            return {
+                "normal": _run(ablate=False),
+                "ablated": _run(ablate=True),
+            }
