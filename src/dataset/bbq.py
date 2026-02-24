@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import re
-from typing import Optional
 
 from src.dataset.base_dataset import BaseDataset, PromptStyle
 
@@ -49,7 +50,7 @@ class BBQ_Dataset(BaseDataset):
 
         return f"<start_of_turn>user {user_content}\n{instruction} <end_of_turn>model "
 
-    def parse_model_answer(self, response: str) -> Optional[str]:
+    def parse_model_answer(self, response: str) -> str | None:
         
         # Primary: look for answer inside <label> tags
         match = re.search(r'<label>\s*([ABCabc])\s*</label>', response)

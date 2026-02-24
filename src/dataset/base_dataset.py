@@ -1,6 +1,8 @@
-from abc import ABC
-from typing import Optional, Dict
+from __future__ import annotations
 
+from abc import ABC
+
+import pandas as pd
 from torch.utils.data import Dataset
 from datasets import load_dataset as hf_load_dataset
 
@@ -32,7 +34,7 @@ class BaseDataset(ABC, Dataset):
         # Load data directly from HF.
         self.data = self.load_dataset(config.path, hf_kwargs)
 
-    def load_dataset(self, path: str, hf_kwargs: Dict):
+    def load_dataset(self, path: str, hf_kwargs: dict):
         """
         Function to load the data.
         
@@ -61,7 +63,7 @@ class BaseDataset(ABC, Dataset):
             f"{self.__class__.__name__} does not implement build_prompt()"
         )
     
-    def parse_model_answer(self, response: str) -> Optional[str]:
+    def parse_model_answer(self, response: str) -> str | None:
         """Extract the predicted answer letter from a BBQ model response.
 
         Applies a cascade of regex patterns to locate the chosen option
@@ -76,3 +78,16 @@ class BaseDataset(ABC, Dataset):
         raise NotImplementedError(
             f"{self.__class__.__name__} does not implement parse_model_answer()"
         )
+
+    def get_sample_dataframe(self, n: int, seed: int = 42) -> pd.DataFrame:
+        """Randomly sample *n* rows and return as a pandas DataFrame.
+
+        Args:
+            n: Number of rows to sample. Clamped to dataset size if larger.
+            seed: Random seed for reproducibility.
+
+        Returns:
+            pandas DataFrame with *n* randomly selected rows.
+        """
+        n = min(n, len(self.data))
+        return self.data.shuffle(seed=seed).select(range(n)).to_pandas()

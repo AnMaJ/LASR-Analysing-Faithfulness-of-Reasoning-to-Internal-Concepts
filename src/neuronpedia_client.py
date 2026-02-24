@@ -5,7 +5,6 @@ from __future__ import annotations
 import time
 
 import requests
-from IPython.display import IFrame, display
 
 from src.configs import NeuronpediaFeature, SAEConfig
 
@@ -123,5 +122,7 @@ class NeuronpediaClient:
 
     def display_feature_dashboard(self, feature_idx: int, height: int = 400):
         """Display an embedded Neuronpedia dashboard for a feature."""
+        from IPython.display import IFrame, display
+
         url = self.get_dashboard_embed(feature_idx)
         display(IFrame(url, width=1000, height=height))

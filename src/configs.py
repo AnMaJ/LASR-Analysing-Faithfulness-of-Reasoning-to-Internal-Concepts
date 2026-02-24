@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Any
 
 import torch
 
@@ -37,7 +39,7 @@ class DatasetConfig:
     path: str
     prompt_style: PromptStyle
     use_chat_template: bool
-    hf_data_config: Optional[Dict] = None
+    hf_data_config: dict | None = None
     few_shot: bool = False
 
     def __post_init__(self):
@@ -61,6 +63,13 @@ class ModelConfig:
 
 
 @dataclass
+class InferenceConfig:
+    batch_size: int = 8
+    max_new_tokens: int = 256
+    downsample_rate: int = 10
+
+
+@dataclass
 class SAEConfig:
     repo_id: str
     sae_type: str # resid_post, mlp_out, attn_out
@@ -75,13 +84,27 @@ class SAEConfig:
 
 
 @dataclass
+class DenoisingConfig:
+    """Configuration for a denoising method.
+
+    Args:
+        method: Name of the denoising strategy (must match a method on
+            :class:`~src.denoiser.Denoiser` decorated with
+            ``@_denoising_method``).
+        params: Keyword arguments forwarded to the chosen method.
+    """
+    method: str
+    params: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class NeuronpediaFeature:
     """Container for feature information from Neuronpedia."""
     feature_idx: int
-    description: Optional[str] = None
-    frac_nonzero: Optional[float] = None  # Activation density
-    max_act_approx: Optional[float] = None  # Max activation value
-    max_activating_examples: Optional[List[Dict]] = None
-    url: Optional[str] = None
-    embed_url: Optional[str] = None
-    error: Optional[str] = None
+    description: str | None = None
+    frac_nonzero: float | None = None
+    max_act_approx: float | None = None
+    max_activating_examples: list[dict] | None = None
+    url: str | None = None
+    embed_url: str | None = None
+    error: str | None = None

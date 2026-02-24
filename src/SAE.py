@@ -72,18 +72,7 @@ class JumpReLUSAE(nn.Module):
         sae = sae.to(device=device, dtype=torch.float32)
 
         return sae
-    
-    def encode_activations(
-        self, activations: torch.Tensor
-    ) -> tuple[torch.Tensor, torch.Tensor]:
-        """Encode *activations* through the SAE and return (sae_acts, reconstruction).
 
-        Like :meth:`forward` but always returns both the sparse features and
-        the reconstruction.
-        """
-        sae_acts = self.encode(activations)
-        reconstruction = self.forward(activations)
-        return sae_acts, reconstruction
 
     def get_reconstruction_stats(self, activations: torch.Tensor):
         """Compute reconstruction quality for a single prompt.

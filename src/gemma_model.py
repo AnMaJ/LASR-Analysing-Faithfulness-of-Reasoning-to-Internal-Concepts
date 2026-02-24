@@ -1,4 +1,5 @@
-from typing import Dict, List, Tuple, Union
+from __future__ import annotations
+
 from functools import partial
 
 import torch
@@ -26,7 +27,7 @@ class GemmaModel:
         )
         self.model.eval()
 
-    def generate(self, prompt: Union[str, List[Dict]], max_new_tokens: int = 256) -> Tuple[str, torch.Tensor, int]:
+    def generate(self, prompt: str | list[dict], max_new_tokens: int = 256) -> tuple[str, torch.Tensor, int]:
         """Generate a response for the given *prompt*.
 
         Args:
@@ -58,10 +59,10 @@ class GemmaModel:
 
     def generate_batch(
         self,
-        prompts: List[Union[str, List[Dict]]],
+        prompts: list[str | list[dict]],
         max_new_tokens: int = 256,
         batch_size: int = 8,
-    ) -> Tuple[List[str], List[torch.Tensor], List[int]]:
+    ) -> tuple[list[str], list[torch.Tensor], list[int]]:
         """Generate responses for a batch of prompts.
 
         Args:
@@ -74,7 +75,7 @@ class GemmaModel:
             is a list with one entry per prompt.
         """
         # Apply chat template where needed
-        processed: List[str] = []
+        processed: list[str] = []
         for p in prompts:
             if isinstance(p, list):
                 p = self.tokenizer.apply_chat_template(
@@ -86,9 +87,9 @@ class GemmaModel:
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        all_texts: List[str] = []
-        all_ids: List[torch.Tensor] = []
-        all_prompt_lens: List[int] = []
+        all_texts: list[str] = []
+        all_ids: list[torch.Tensor] = []
+        all_prompt_lens: list[int] = []
 
         for i in tqdm(range(0, len(processed), batch_size), desc="Generating"):
             batch = processed[i : i + batch_size]
