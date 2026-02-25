@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import Dict, List, Union
 
 import torch
 from tqdm import tqdm
@@ -21,9 +22,12 @@ class GemmaModel:
         self.config = config
 
         self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
+        load_kwargs = {"device_map": config.device}
+        if config.torch_dtype is not None:
+            load_kwargs["torch_dtype"] = config.torch_dtype
         self.model = AutoModelForCausalLM.from_pretrained(
             config.model_name,
-            device_map=config.device,
+            **load_kwargs,
         )
         self.model.eval()
 
@@ -163,7 +167,7 @@ class GemmaModel:
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
-    ) -> Dict[str, str]:
+    ) -> dict:
         """Generate steered and unsteered responses for a given prompt.
 
         Applies activation steering along a given SAE feature direction at
@@ -182,11 +186,9 @@ class GemmaModel:
                 response from the full decoded output.
 
         Returns:
-            A dict with keys:
-                - ``"steered"``: the steered model response string.
-                - ``"unsteered"``: the unsteered model response string.
+            A dict with keys ``"steered"``, ``"unsteered"`` (response strings)
+            and ``"steered_ids"``, ``"unsteered_ids"`` (token-ID tensors).
         """
-        # Handle chat template
         if isinstance(prompt, list):
             prompt = self.tokenizer.apply_chat_template(
                 prompt, tokenize=False, add_generation_prompt=True
@@ -196,27 +198,27 @@ class GemmaModel:
             prompt, return_tensors="pt", add_special_tokens=True
         ).to(self.model.device)
 
-        def steering_hook(mod, hook_inputs, outputs):
-            output = outputs[0] if isinstance(outputs, tuple) else outputs
-            
-            # Squeeze batch dim if present: (1, seq, hidden) -> (seq, hidden)
-            if output.dim() == 3:
-                output = output.squeeze(0)
-            
-            dtype = output.dtype
-            steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
-        
-            if output.shape[0] == 1:  # cached decode step: (1, hidden)
-                avg_norm = torch.norm(output, dim=-1, keepdim=True)
-                output = output + steering_coeff * avg_norm * steering_vec
-            else:  # prefill: (seq, hidden)
-                avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
-                output = output.clone()
-                output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
-        
-            if isinstance(outputs, tuple):
-                return (output,) + outputs[1:]
-            return output
+        def _run(steering_coeff: float):
+            def steering_hook(mod, hook_inputs, outputs):
+                output = outputs[0] if isinstance(outputs, tuple) else outputs
+
+                if output.dim() == 3:
+                    output = output.squeeze(0)
+
+                dtype = output.dtype
+                steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
+
+                if output.shape[0] == 1:  # cached decode step
+                    avg_norm = torch.norm(output, dim=-1, keepdim=True)
+                    output = output + steering_coeff * avg_norm * steering_vec
+                else:  # prefill
+                    avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
+                    output = output.clone()
+                    output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
+
+                if isinstance(outputs, tuple):
+                    return (output,) + outputs[1:]
+                return output
 
             handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
                 steering_hook
@@ -233,11 +235,17 @@ class GemmaModel:
             finally:
                 handle.remove()
 
-            return decoded.split(response_split_token)[-1].strip()
+            text = decoded.split(response_split_token)[-1].strip()
+            return text, out_ids[0]
+
+        unsteered_text, unsteered_ids = _run(steering_coeff=0.0)
+        steered_text, steered_ids = _run(steering_coeff=coeff)
 
         return {
-            "unsteered": _run(steering_coeff=0.0),
-            "steered": _run(steering_coeff=coeff),
+            "unsteered": unsteered_text,
+            "steered": steered_text,
+            "unsteered_ids": unsteered_ids,
+            "steered_ids": steered_ids,
         }
 
 

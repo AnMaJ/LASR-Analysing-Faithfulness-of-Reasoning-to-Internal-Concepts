@@ -247,6 +247,54 @@ class Denoiser:
 
         return ppmi_scores
 
+    # ── Corpus-level helpers ──────────────────────────────────────────────
+
+    @staticmethod
+    def compute_corpus_idf(
+        encodings: list[torch.Tensor],
+        threshold: float,
+    ) -> tuple[torch.Tensor, int]:
+        """Compute IDF vector from a corpus of (possibly sparse) SAE activations.
+
+        Streams over encodings one at a time to avoid materializing the full
+        dense corpus in memory.
+
+        Args:
+            encodings: List of tensors, each ``(n_tokens_i, n_features)``.
+                       May be sparse (COO) or dense.
+            threshold: Activation threshold for document-frequency counting.
+
+        Returns:
+            ``(idf, total_tokens)`` where *idf* has shape ``(n_features,)``
+            and *total_tokens* is the sum of all token counts.
+        """
+        df: torch.Tensor | None = None
+        total_tokens = 0
+        for enc in tqdm(encodings, desc="Computing corpus IDF"):
+            dense = enc.to_dense() if enc.is_sparse else enc
+            if df is None:
+                df = torch.zeros(dense.shape[1], dtype=torch.float32)
+            df += (dense > threshold).sum(dim=0).float().cpu()
+            total_tokens += dense.shape[0]
+        idf = torch.log(torch.tensor(total_tokens, dtype=torch.float32) / (1 + df))
+        return idf, total_tokens
+
+    @staticmethod
+    def apply_tfidf(
+        activations: torch.Tensor,
+        idf: torch.Tensor,
+    ) -> torch.Tensor:
+        """Apply a pre-computed IDF vector to a single sample's activations.
+
+        Args:
+            activations: 2-D tensor ``(n_tokens, n_features)``, dense.
+            idf: 1-D tensor ``(n_features,)``.
+
+        Returns:
+            Tensor of same shape as *activations* with TF-IDF weighting.
+        """
+        return activations * idf.unsqueeze(0).to(activations.device)
+
     # ── Helpers ────────────────────────────────────────────────────────────
 
     @staticmethod

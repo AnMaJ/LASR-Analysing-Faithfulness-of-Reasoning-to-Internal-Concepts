@@ -5,6 +5,8 @@ from typing import Sequence
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import seaborn as sns
 import torch
 
 import plotly.graph_objects as go
@@ -433,6 +435,137 @@ def plot_feature_magnitudes(
 # ---------------------------------------------------------------------------
 # Orchestration helper
 # ---------------------------------------------------------------------------
+
+def plot_token_activation_ridgeplot(
+    activations: torch.Tensor | np.ndarray,
+    tokens: list[str],
+    n_tokens: int = 50,
+    max_tokens: int = 200,
+    seed: int = 42,
+    title: str | None = None,
+    palette: str = "viridis",
+    bw_adjust: float = 0.8,
+) -> plt.Figure:
+    """Ridgeplot (joy plot) of per-token activation distributions.
+
+    Each row shows the KDE density of all activation values for one token.
+    Rows are sorted by descending peak density (tokens whose distribution
+    has the tallest peak appear at the top).  Row colour is mapped to the
+    peak density via *palette*, so colour encodes how many features
+    concentrate in the densest value bucket.
+
+    Parameters
+    ----------
+    activations:
+        2-D tensor/array of shape ``(n_tokens, n_features)``.
+    tokens:
+        Token label strings (length must match ``activations`` dim 0).
+    n_tokens:
+        Number of tokens to randomly sample.  Set to ``0`` to include all
+        tokens (capped at *max_tokens*).
+    max_tokens:
+        Upper bound when *n_tokens* is ``0``.
+    seed:
+        Random seed for reproducible sampling.
+    title:
+        Optional figure title.  When ``None`` a default is generated.
+    palette:
+        Matplotlib colormap name used for mapping peak density to colour.
+    bw_adjust:
+        Bandwidth adjustment passed to :func:`seaborn.kdeplot`.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    from scipy.stats import gaussian_kde
+
+    if hasattr(activations, "detach"):
+        activations = activations.detach().cpu().numpy()
+    activations = np.asarray(activations, dtype=float)
+
+    n_total = activations.shape[0]
+
+    if n_tokens == 0:
+        n_sample = min(n_total, max_tokens)
+    else:
+        n_sample = min(n_tokens, n_total)
+
+    rng = np.random.RandomState(seed)
+    sampled_indices = list(
+        rng.choice(n_total, size=n_sample, replace=False))
+
+    peak_densities: dict[int, float] = {}
+    for idx in sampled_indices:
+        vals = activations[idx]
+        try:
+            kde = gaussian_kde(vals, bw_method=bw_adjust)
+            x_grid = np.linspace(vals.min(), vals.max(), 512)
+            peak_densities[idx] = float(kde(x_grid).max())
+        except np.linalg.LinAlgError:
+            peak_densities[idx] = 0.0
+
+    sorted_indices = sorted(
+        sampled_indices, key=lambda i: peak_densities[i], reverse=True)
+
+    rows: list[dict] = []
+    for idx in sorted_indices:
+        vals = activations[idx]
+        label = f"{idx}: {tokens[idx]}"
+        for v in vals:
+            rows.append({"token": label, "value": float(v)})
+
+    df = pd.DataFrame(rows)
+
+    token_order = [f"{idx}: {tokens[idx]}" for idx in sorted_indices]
+    df["token"] = pd.Categorical(
+        df["token"], categories=token_order, ordered=True)
+
+    sorted_peaks = [peak_densities[i] for i in sorted_indices]
+    peak_min, peak_max = min(sorted_peaks), max(sorted_peaks)
+    cmap = plt.colormaps[palette]
+    norm = plt.Normalize(vmin=peak_min, vmax=peak_max)
+    row_colors = {
+        label: cmap(norm(peak))
+        for label, peak in zip(token_order, sorted_peaks)
+    }
+
+    g = sns.FacetGrid(
+        df, row="token", hue="token",
+        aspect=15, height=0.5,
+        palette=row_colors,
+    )
+    g.map(sns.kdeplot, "value",
+          fill=True, alpha=0.5, linewidth=1.0, bw_adjust=bw_adjust)
+    g.map(sns.kdeplot, "value",
+          fill=False, color="k", linewidth=0.3, bw_adjust=bw_adjust)
+
+    g.figure.subplots_adjust(hspace=-0.3)
+    g.set_titles("")
+    g.set(yticks=[], ylabel="")
+    g.despine(bottom=True, left=True)
+
+    for ax, label in zip(g.axes.flat, token_order):
+        ax.text(
+            -0.02, 0.1, label, fontsize=7, ha="right",
+            transform=ax.transAxes, fontweight="bold",
+        )
+
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+    sm.set_array([])
+    cbar = g.figure.colorbar(
+        sm, ax=list(g.axes.flat), location="right",
+        shrink=0.5, aspect=30, pad=0.02,
+    )
+    cbar.set_label("Peak density (feature count concentration)", fontsize=9)
+
+    if title is None:
+        title = (f"Activation Distribution per Token "
+                 f"(n={n_sample} of {n_total})")
+    g.figure.suptitle(title, fontsize=12, y=1.01)
+
+    return g.figure
+
 
 def summarize_latents(
     sae_activations: torch.Tensor,
