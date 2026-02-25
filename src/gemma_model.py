@@ -162,24 +162,24 @@ class GemmaModel:
         self,
         prompt: Union[str, List[Dict]],
         sae,
-        feature_idx: int,
-        coeff: float,
+        feature_idx: Union[int, List[int]],
+        coeff: Union[float, List[float]],
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
     ) -> dict:
         """Generate steered and unsteered responses for a given prompt.
 
-        Applies activation steering along a given SAE feature direction at
+        Applies activation steering along one or more SAE feature directions at
         *target_layer* during generation, and returns both the steered and
         unsteered outputs for comparison.
 
         Args:
             prompt: Input text or chat-template list.
             sae: A JumpReLUSAE (or compatible) instance with ``w_dec`` attribute.
-            feature_idx: Index of the SAE feature to steer along.
-            coeff: Steering coefficient. Positive amplifies the feature,
-                   negative suppresses it. Use 0.0 to get unsteered output only.
+            feature_idx: Index (or list of indices) of the SAE feature(s) to steer along.
+            coeff: Steering coefficient (or list, one per feature). Positive amplifies
+                   the feature, negative suppresses it.
             target_layer: Transformer layer index at which to apply the hook.
             max_new_tokens: Maximum number of tokens to generate.
             response_split_token: Token string used to split off the model's
@@ -198,23 +198,35 @@ class GemmaModel:
             prompt, return_tensors="pt", add_special_tokens=True
         ).to(self.model.device)
 
-        def _run(steering_coeff: float):
-            def steering_hook(mod, hook_inputs, outputs):
-                output = outputs[0] if isinstance(outputs, tuple) else outputs
+        # Normalize to lists
+        if isinstance(feature_idx, int):
+            feature_idxs = [feature_idx]
+            coeffs_list = [coeff] if isinstance(coeff, (int, float)) else list(coeff)
+        else:
+            feature_idxs = list(feature_idx)
+            coeffs_list = [coeff] * len(feature_idxs) if isinstance(coeff, (int, float)) else list(coeff)
 
-                if output.dim() == 3:
-                    output = output.squeeze(0)
+        def _run(apply_steering: bool):
+            def steering_hook(mod, hook_inputs, outputs):
+                if not apply_steering:
+                    return outputs
+                output = outputs[0] if isinstance(outputs, tuple) else outputs
+                # output shape: (batch, seq, d_model) — preserve 3D, do NOT squeeze
 
                 dtype = output.dtype
-                steering_vec = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
 
-                if output.shape[0] == 1:  # cached decode step
+                # Combined steering vector: sum of coeff_i * w_dec[feature_i]
+                combined_vec = torch.zeros(output.shape[-1], dtype=dtype, device=output.device)
+                for fi, c in zip(feature_idxs, coeffs_list):
+                    combined_vec = combined_vec + c * sae.w_dec[fi].to(dtype=dtype, device=output.device)
+
+                if output.shape[1] == 1:  # cached decode step (seq=1)
                     avg_norm = torch.norm(output, dim=-1, keepdim=True)
-                    output = output + steering_coeff * avg_norm * steering_vec
+                    output = output + avg_norm * combined_vec
                 else:  # prefill
-                    avg_norm = torch.norm(output[-1:], dim=-1, keepdim=True)
+                    avg_norm = torch.norm(output[:, -1:], dim=-1, keepdim=True)
                     output = output.clone()
-                    output[-1:] = output[-1:] + steering_coeff * avg_norm * steering_vec
+                    output[:, -1:] = output[:, -1:] + avg_norm * combined_vec
 
                 if isinstance(outputs, tuple):
                     return (output,) + outputs[1:]
@@ -238,8 +250,8 @@ class GemmaModel:
             text = decoded.split(response_split_token)[-1].strip()
             return text, out_ids[0]
 
-        unsteered_text, unsteered_ids = _run(steering_coeff=0.0)
-        steered_text, steered_ids = _run(steering_coeff=coeff)
+        unsteered_text, unsteered_ids = _run(apply_steering=False)
+        steered_text, steered_ids = _run(apply_steering=True)
 
         return {
             "unsteered": unsteered_text,
