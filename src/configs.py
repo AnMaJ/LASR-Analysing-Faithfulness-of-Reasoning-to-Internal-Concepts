@@ -84,6 +84,19 @@ class SAEConfig:
 
 
 @dataclass
+class TranscoderConfig:
+    repo_id: str = "google/gemma-scope-2-27b-it"
+    layer: int = 31
+    width: str = "262k"  # 262k, etc.
+    l0: str = "medium"   # medium, etc.
+
+    @property
+    def transcoder_path(self) -> str:
+        """Construct the transcoder path for HuggingFace download."""
+        return f"transcoder/layer_{self.layer}_width_{self.width}_l0_{self.l0}/params.safetensors"
+
+
+@dataclass
 class DenoisingConfig:
     """Configuration for a denoising method.
 

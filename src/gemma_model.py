@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import Dict, List, Union
 
 import torch
 from tqdm import tqdm
@@ -163,81 +164,266 @@ class GemmaModel:
 
         return cache["resid_post"]
 
-    def generate_with_ablation(
+    def gather_feedforward_activations(
+        self, target_layer: int, inputs: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Run a forward pass and capture pre- and post-feedforward layernorm activations.
+
+        These are the input and reconstruction-target for a transcoder at *target_layer*.
+
+        Args:
+            target_layer: Index of the transformer layer to hook.
+            inputs: 1-D token IDs tensor of shape ``(n_tokens,)``.
+
+        Returns:
+            Tuple of ``(pre_ffn_acts, post_ffn_acts)``, each of shape
+            ``(n_tokens, d_model)``.
+        """
+        cache: dict[str, torch.Tensor] = {}
+
+        handle_pre = self.model.model.language_model.layers[target_layer].pre_feedforward_layernorm.register_forward_hook(
+            partial(self._gather_acts_hook, cache=cache, key="pre_ffn")
+        )
+        handle_post = self.model.model.language_model.layers[target_layer].post_feedforward_layernorm.register_forward_hook(
+            partial(self._gather_acts_hook, cache=cache, key="post_ffn")
+        )
+
+        try:
+            with torch.no_grad():
+                self.model.forward(input_ids=inputs.unsqueeze(0), use_cache=False)
+        finally:
+            handle_pre.remove()
+            handle_post.remove()
+
+        return cache["pre_ffn"], cache["post_ffn"]
+
+    def generate_steered(
         self,
-        prompt: str | list[dict],
+        prompt: Union[str, List[Dict]],
         sae,
-        feature_idx: int,
+        feature_idx: Union[int, List[int]],
+        coeff: Union[float, List[float]],
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
-    ) -> dict[str, str]:
-            """Generate ablated and normal responses for a given prompt.
+    ) -> dict:
+        """Generate steered and unsteered responses for a given prompt.
 
-            Removes the contribution of a specific SAE feature direction at
-            *target_layer* during generation by projecting it out of the
-            residual stream, and returns both outputs for comparison.
+        Applies activation steering along one or more SAE feature directions at
+        *target_layer* during generation, and returns both the steered and
+        unsteered outputs for comparison.
 
-            Args:
-                prompt: Input text or chat-template list.
-                sae: A JumpReLUSAE (or compatible) instance with ``w_dec`` attribute.
-                feature_idx: Index of the SAE feature to ablate.
-                target_layer: Transformer layer index at which to apply the hook.
-                max_new_tokens: Maximum number of tokens to generate.
-                response_split_token: Token string used to split off the model's
-                    response from the full decoded output.
+        Args:
+            prompt: Input text or chat-template list.
+            sae: A JumpReLUSAE (or compatible) instance with ``w_dec`` attribute.
+            feature_idx: Index (or list of indices) of the SAE feature(s) to steer along.
+            coeff: Steering coefficient (or list, one per feature). Positive amplifies
+                   the feature, negative suppresses it.
+            target_layer: Transformer layer index at which to apply the hook.
+            max_new_tokens: Maximum number of tokens to generate.
+            response_split_token: Token string used to split off the model's
+                response from the full decoded output.
 
-            Returns:
-                A dict with keys:
-                    - ``"ablated"``: the model response with the feature ablated.
-                    - ``"normal"``: the normal (unmodified) model response.
-            """
-            # Handle chat template
-            if isinstance(prompt, list):
-                prompt = self.tokenizer.apply_chat_template(
-                    prompt, tokenize=False, add_generation_prompt=True
-                )
+        Returns:
+            A dict with keys ``"steered"``, ``"unsteered"`` (response strings)
+            and ``"steered_ids"``, ``"unsteered_ids"`` (token-ID tensors).
+        """
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(
+                prompt, tokenize=False, add_generation_prompt=True
+            )
 
-            inputs = self.tokenizer(
-                prompt, return_tensors="pt", add_special_tokens=True
-            ).to(self.model.device)
+        inputs = self.tokenizer(
+            prompt, return_tensors="pt", add_special_tokens=True
+        ).to(self.model.device)
 
-            def _run(ablate: bool) -> str:
-                def ablation_hook(mod, hook_inputs, outputs):
-                    output = outputs[0] if isinstance(outputs, tuple) else outputs
-                    dtype = output.dtype
-                    direction = sae.w_dec[feature_idx].to(dtype=dtype, device=output.device)
-                    # Normalise to a unit vector for a clean projection
-                    direction = direction / (direction.norm() + 1e-8)
+        # Normalize to lists
+        if isinstance(feature_idx, int):
+            feature_idxs = [feature_idx]
+            coeffs_list = [coeff] if isinstance(coeff, (int, float)) else list(coeff)
+        else:
+            feature_idxs = list(feature_idx)
+            coeffs_list = [coeff] * len(feature_idxs) if isinstance(coeff, (int, float)) else list(coeff)
 
-                    # Project out the feature direction: v - (v · d) d
-                    dots = torch.einsum("...d,d->...", output, direction)
-                    output = output - dots.unsqueeze(-1) * direction
+        def _run(apply_steering: bool):
+            def steering_hook(mod, hook_inputs, outputs):
+                if not apply_steering:
+                    return outputs
+                output = outputs[0] if isinstance(outputs, tuple) else outputs
+                # output shape: (batch, seq, d_model) — preserve 3D, do NOT squeeze
 
-                    if isinstance(outputs, tuple):
-                        return (output,) + outputs[1:]
-                    return output
+                dtype = output.dtype
 
-                if ablate:
-                    handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
-                        ablation_hook
+                # Combined steering vector: sum of coeff_i * w_dec[feature_i]
+                combined_vec = torch.zeros(output.shape[-1], dtype=dtype, device=output.device)
+                for fi, c in zip(feature_idxs, coeffs_list):
+                    combined_vec = combined_vec + c * sae.w_dec[fi].to(dtype=dtype, device=output.device)
+
+                if output.shape[1] == 1:  # cached decode step (seq=1)
+                    avg_norm = torch.norm(output, dim=-1, keepdim=True)
+                    output = output + avg_norm * combined_vec
+                else:  # prefill
+                    avg_norm = torch.norm(output[:, -1:], dim=-1, keepdim=True)
+                    output = output.clone()
+                    output[:, -1:] = output[:, -1:] + avg_norm * combined_vec
+
+                if isinstance(outputs, tuple):
+                    return (output,) + outputs[1:]
+                return output
+
+            handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
+                steering_hook
+            )
+            try:
+                with torch.no_grad():
+                    out_ids = self.model.generate(
+                        **inputs,
+                        max_new_tokens=max_new_tokens,
+                        do_sample=False,
+                        pad_token_id=self.tokenizer.eos_token_id,
                     )
-                try:
-                    with torch.no_grad():
-                        out_ids = self.model.generate(
-                            **inputs,
-                            max_new_tokens=max_new_tokens,
-                            do_sample=False,
-                            pad_token_id=self.tokenizer.eos_token_id,
-                        )
-                    decoded = self.tokenizer.decode(out_ids[0])
-                finally:
-                    if ablate:
-                        handle.remove()
+                decoded = self.tokenizer.decode(out_ids[0])
+            finally:
+                handle.remove()
 
-                return decoded.split(response_split_token)[-1].strip()
+            text = decoded.split(response_split_token)[-1].strip()
+            return text, out_ids[0]
 
-            return {
-                "normal": _run(ablate=False),
-                "ablated": _run(ablate=True),
-            }
+        unsteered_text, unsteered_ids = _run(apply_steering=False)
+        steered_text, steered_ids = _run(apply_steering=True)
+
+        return {
+            "unsteered": unsteered_text,
+            "steered": steered_text,
+            "unsteered_ids": unsteered_ids,
+            "steered_ids": steered_ids,
+        }
+
+    def generate_steered_transcoder(
+        self,
+        prompt: Union[str, List[Dict]],
+        transcoder,
+        feature_idx: Union[int, List[int]],
+        coeff: Union[float, List[float]],
+        target_layer: int,
+        max_new_tokens: int = 500,
+        response_split_token: str = "<start_of_turn>model",
+    ) -> dict:
+        """Generate steered and unsteered responses using transcoder feature intervention.
+
+        Unlike SAE steering (which adds a vector to the residual stream), transcoder
+        steering works by substituting the entire MLP block with a modified transcoder
+        forward pass:
+
+            1. Hook ``pre_feedforward_layernorm`` to capture the MLP input ``x``.
+            2. Encode: ``f = transcoder.encode(x)``  →  sparse feature activations.
+            3. Steer:  ``f[..., feature_idx] += coeff``  (amplify / suppress features).
+            4. Decode: ``y' = transcoder.decode(f)``  →  modified MLP output.
+            5. Hook ``post_feedforward_layernorm`` to replace its output with ``y'``,
+               so the residual addition uses the transcoder output instead of the real MLP.
+
+        The **unsteered** run also routes through the transcoder (no feature
+        modification) so that the only difference between the two runs is the
+        feature intervention, not transcoder reconstruction error.
+
+        Args:
+            prompt: Input text or chat-template list.
+            transcoder: A ``JumpReLUTranscoder`` instance (must already be on the
+                correct device).
+            feature_idx: Index (or list of indices) of the transcoder feature(s)
+                to steer.
+            coeff: Amount to add to each feature activation.  Positive values
+                amplify the feature; negative values suppress it.  Can be a
+                scalar (applied to all features) or a list aligned with
+                ``feature_idx``.
+            target_layer: Transformer layer index at which to intervene.
+            max_new_tokens: Maximum number of new tokens to generate.
+            response_split_token: Token used to split off the model response
+                from the full decoded string.
+
+        Returns:
+            Dict with keys ``"steered"``, ``"unsteered"`` (response strings)
+            and ``"steered_ids"``, ``"unsteered_ids"`` (token-ID tensors).
+        """
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(
+                prompt, tokenize=False, add_generation_prompt=True
+            )
+
+        inputs = self.tokenizer(
+            prompt, return_tensors="pt", add_special_tokens=True
+        ).to(self.model.device)
+
+        # Normalise scalar / single-index inputs to lists
+        if isinstance(feature_idx, int):
+            feature_idxs = [feature_idx]
+            coeffs_list = [coeff] if isinstance(coeff, (int, float)) else list(coeff)
+        else:
+            feature_idxs = list(feature_idx)
+            coeffs_list = [coeff] * len(feature_idxs) if isinstance(coeff, (int, float)) else list(coeff)
+
+        def _run(apply_steering: bool):
+            # Cache for the pre-FFN layernorm output shared between the two hooks
+            _cache: dict[str, torch.Tensor] = {}
+
+            def pre_ffn_hook(_mod, _inp, outputs):
+                # Capture the normalised input that will be fed to the MLP.
+                # LayerNorm returns a plain tensor (not a tuple).
+                acts = outputs[0] if isinstance(outputs, tuple) else outputs
+                _cache["pre_ffn"] = acts  # shape: (batch, seq, d_model)
+                return outputs
+
+            def post_ffn_hook(_mod, _inp, outputs):
+                # Replace the real MLP output with the transcoder reconstruction
+                # (optionally with modified feature activations).
+                pre_ffn = _cache["pre_ffn"].to(dtype=torch.float32)
+
+                # Encode to sparse transcoder feature space
+                encoded = transcoder.encode(pre_ffn)  # (batch, seq, d_sae)
+
+                # Apply per-feature additive interventions when steering
+                if apply_steering:
+                    encoded = encoded.clone()
+                    for fi, c in zip(feature_idxs, coeffs_list):
+                        encoded[..., fi] = encoded[..., fi] + c
+
+                # Decode back to model activation space
+                transcoder_out = transcoder.decode(encoded)  # (batch, seq, d_model)
+
+                # Match the original output dtype (bfloat16 / float16 on GPU)
+                orig = outputs[0] if isinstance(outputs, tuple) else outputs
+                transcoder_out = transcoder_out.to(dtype=orig.dtype)
+
+                if isinstance(outputs, tuple):
+                    return (transcoder_out,) + outputs[1:]
+                return transcoder_out
+
+            layer = self.model.model.language_model.layers[target_layer]
+            handle_pre = layer.pre_feedforward_layernorm.register_forward_hook(pre_ffn_hook)
+            handle_post = layer.post_feedforward_layernorm.register_forward_hook(post_ffn_hook)
+
+            try:
+                with torch.no_grad():
+                    out_ids = self.model.generate(
+                        **inputs,
+                        max_new_tokens=max_new_tokens,
+                        do_sample=False,
+                        pad_token_id=self.tokenizer.eos_token_id,
+                    )
+                decoded = self.tokenizer.decode(out_ids[0])
+            finally:
+                handle_pre.remove()
+                handle_post.remove()
+
+            text = decoded.split(response_split_token)[-1].strip()
+            return text, out_ids[0]
+
+        unsteered_text, unsteered_ids = _run(apply_steering=False)
+        steered_text, steered_ids = _run(apply_steering=True)
+
+        return {
+            "unsteered": unsteered_text,
+            "steered": steered_text,
+            "unsteered_ids": unsteered_ids,
+            "steered_ids": steered_ids,
+        }
