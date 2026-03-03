@@ -308,6 +308,8 @@ class GemmaModel:
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
+        use_cache: bool = True,
+        verbose: bool = False,
     ) -> dict:
         """Generate steered and unsteered responses using transcoder feature intervention.
 
@@ -365,6 +367,7 @@ class GemmaModel:
         def _run(apply_steering: bool):
             # Cache for the pre-FFN layernorm output shared between the two hooks
             _cache: dict[str, torch.Tensor] = {}
+            _diag = {"hook_calls": 0}
 
             def pre_ffn_hook(_mod, _inp, outputs):
                 # Capture the normalised input that will be fed to the MLP.
@@ -374,6 +377,7 @@ class GemmaModel:
                 return outputs
 
             def post_ffn_hook(_mod, _inp, outputs):
+                _diag["hook_calls"] += 1
                 # Replace the real MLP output with the transcoder reconstruction
                 # (optionally with modified feature activations).
                 pre_ffn = _cache["pre_ffn"].to(dtype=torch.float32)
@@ -408,12 +412,21 @@ class GemmaModel:
                         **inputs,
                         max_new_tokens=max_new_tokens,
                         do_sample=False,
+                        use_cache=use_cache,
                         pad_token_id=self.tokenizer.eos_token_id,
                     )
                 decoded = self.tokenizer.decode(out_ids[0])
             finally:
                 handle_pre.remove()
                 handle_post.remove()
+
+            if verbose:
+                label = "STEERED" if apply_steering else "UNSTEERED"
+                n_generated = out_ids.shape[1] - inputs["input_ids"].shape[1]
+                print(
+                    f"  [{label}] hook fired {_diag['hook_calls']}x "
+                    f"(expected ~{1 + n_generated} = 1 prefill + {n_generated} gen steps)"
+                )
 
             text = decoded.split(response_split_token)[-1].strip()
             return text, out_ids[0]
@@ -436,6 +449,8 @@ class GemmaModel:
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
+        use_cache: bool = True,
+        verbose: bool = False,
     ) -> dict:
         """Ablate transcoder feature(s) for the entire generation.
 
@@ -450,6 +465,11 @@ class GemmaModel:
             target_layer: Transformer layer index at which to intervene.
             max_new_tokens: Maximum number of new tokens to generate.
             response_split_token: Token used to split off the model response.
+            use_cache: Whether to use KV caching.  Set to ``False`` to force
+                full recomputation every generation step (slower but ensures
+                hooks fire on all tokens every step).
+            verbose: If ``True``, print diagnostic information about hook
+                firing and ablation magnitudes.
 
         Returns:
             Dict with keys ``"unablated"``, ``"ablated"`` (response strings)
@@ -469,6 +489,7 @@ class GemmaModel:
 
         def _run(apply_ablation: bool):
             _cache: dict[str, torch.Tensor] = {}
+            _diag = {"hook_calls": 0, "total_ablated_energy": 0.0}
 
             # -- Transcoder hooks ----------------------------------------------
             def pre_ffn_hook(_mod, _inp, outputs):
@@ -477,6 +498,7 @@ class GemmaModel:
                 return outputs
 
             def post_ffn_hook(_mod, _inp, outputs):
+                _diag["hook_calls"] += 1
                 pre_ffn = _cache["pre_ffn"].to(dtype=torch.float32)
                 encoded = transcoder.encode(pre_ffn)
 
@@ -484,6 +506,9 @@ class GemmaModel:
                 if apply_ablation:
                     encoded = encoded.clone()
                     for fi in feature_idxs:
+                        _diag["total_ablated_energy"] += float(
+                            encoded[..., fi].abs().sum()
+                        )
                         encoded[..., fi] = 0.0
 
                 transcoder_out = transcoder.decode(encoded)
@@ -509,12 +534,26 @@ class GemmaModel:
                         **inputs,
                         max_new_tokens=max_new_tokens,
                         do_sample=False,
+                        use_cache=use_cache,
                         pad_token_id=self.tokenizer.eos_token_id,
                     )
                 decoded = self.tokenizer.decode(out_ids[0])
             finally:
                 handle_pre.remove()
                 handle_post.remove()
+
+            if verbose:
+                label = "ABLATED" if apply_ablation else "UNABLATED"
+                n_generated = out_ids.shape[1] - inputs["input_ids"].shape[1]
+                print(
+                    f"  [{label}] hook fired {_diag['hook_calls']}x "
+                    f"(expected ~{1 + n_generated} = 1 prefill + {n_generated} gen steps)"
+                )
+                if apply_ablation:
+                    print(
+                        f"  [{label}] total ablated activation energy: "
+                        f"{_diag['total_ablated_energy']:.4f}"
+                    )
 
             text = decoded.split(response_split_token)[-1].strip()
             return text, out_ids[0]

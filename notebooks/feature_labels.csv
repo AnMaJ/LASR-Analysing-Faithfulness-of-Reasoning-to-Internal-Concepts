@@ -1,0 +1,4551 @@
+feature_idx,label,description
+2,other,
+5,other,
+31,other,
+197,other,
+309,other,
+351,other,
+355,other,
+356,other,
+362,other,
+464,other,
+494,other,
+603,other,
+925,other,
+934,other,
+1069,other,
+1082,other,
+1144,other,
+1163,other,
+1239,other,
+1283,other,
+1618,other,
+1839,other,
+1876,other,
+1922,other,
+1995,other,
+2056,other,
+2062,other,
+2215,other,
+2274,other,
+2333,other,
+2383,other,
+2607,other,
+2630,other,
+2656,other,
+2682,other,
+2720,other,
+2748,other,
+2896,other,
+2952,other,
+2971,other,
+2975,other,
+3129,other,
+3170,other,
+3194,other,
+3226,other,
+3257,other,
+3267,other,
+3282,other,
+3292,other,
+3358,other,
+3532,other,
+3612,other,
+3619,other,
+3797,other,
+3856,other,
+4019,other,
+4051,other,
+4252,other,
+4259,other,
+4507,other,
+4557,other,
+4636,other,
+4781,other,
+4803,other,
+4930,other,
+4952,other,
+5072,other,
+5099,other,
+5110,other,
+5221,other,
+5259,other,
+5394,other,
+5406,other,
+5590,other,
+5681,other,
+5706,other,
+5766,other,
+5931,other,
+6063,other,
+6079,other,
+6108,other,
+6199,other,
+6201,other,
+6307,other,
+6368,other,
+6377,other,
+6386,other,
+6415,other,
+6522,other,
+6608,other,
+6660,other,
+6818,other,
+6822,other,
+6902,other,
+6942,other,
+6946,other,
+6957,other,
+7018,other,
+7094,other,
+7192,other,
+7216,other,
+7246,other,
+7248,other,
+7283,other,
+7357,other,
+7361,other,
+7420,other,
+7566,other,
+7582,other,
+7602,other,
+7639,other,
+7676,other,
+7679,other,
+7824,other,
+7861,other,
+8074,other,
+8089,other,
+8093,other,
+8271,other,
+8409,other,
+8606,other,
+8812,other,
+8841,other,
+9203,other,
+9464,other,
+9502,other,
+9618,other,
+9645,other,
+9766,other,
+9863,other,
+9952,other,
+10084,other,
+10139,other,
+10225,other,
+10244,other,
+10407,other,
+10624,other,
+10853,other,
+10935,other,
+11253,other,
+11528,other,
+11607,other,
+11713,other,
+11962,other,
+11974,other,
+11988,other,
+12201,other,
+12244,other,
+12288,other,
+12345,other,
+12405,other,
+12477,other,
+12551,other,
+12571,other,
+12686,other,
+12725,other,
+12790,other,
+12811,other,
+13004,other,
+13277,other,
+13295,other,
+13332,other,
+13369,other,
+13454,other,
+13739,other,
+14002,other,
+14023,other,
+14032,other,
+14207,other,
+14279,other,
+14373,other,
+14567,other,
+14788,other,
+14790,other,
+14860,other,
+14969,other,
+15107,other,
+15138,other,
+15169,other,
+15306,other,
+15337,other,
+15479,other,
+15623,other,
+15634,other,
+15691,other,
+15728,other,
+15848,other,
+15882,other,
+15892,other,
+15948,other,
+16034,other,
+16036,other,
+16073,other,
+16074,other,
+16192,other,
+16294,other,
+16344,other,
+16352,other,
+16377,other,
+16389,other,
+16711,other,
+16905,other,
+17051,other,
+17063,other,
+17112,other,
+17158,other,
+17610,other,
+17699,other,
+17810,other,
+17859,other,
+17954,other,
+17962,other,
+18069,other,
+18078,other,
+18105,other,
+18143,other,
+18252,other,
+18473,other,
+18534,other,
+18571,other,
+18899,other,
+18931,other,
+18941,other,
+19011,other,
+19202,other,
+19446,other,
+19547,other,
+19725,other,
+19909,other,
+20054,other,
+20497,other,
+20529,other,
+20647,other,
+20869,other,
+21175,other,
+21180,other,
+21284,other,
+21601,other,
+21709,other,
+21800,other,
+22404,other,
+22465,other,
+22481,other,
+22768,other,
+22837,other,
+22880,other,
+22881,other,
+23015,other,
+23271,other,
+23564,other,
+23969,other,
+23986,other,
+24267,other,
+24386,other,
+24511,other,
+25007,other,
+25180,other,
+25418,other,
+25631,other,
+25881,other,
+26139,other,
+26298,other,
+26368,other,
+26524,other,
+26811,other,
+26894,other,
+26973,other,
+27141,other,
+27216,other,
+27345,other,
+27501,other,
+27677,other,
+27691,other,
+28123,other,
+28142,other,
+28379,other,
+28557,other,
+28740,other,
+28972,other,
+28986,other,
+29009,other,
+29082,other,
+29280,other,
+29554,other,
+29749,other,
+30041,other,
+30077,other,
+30080,other,
+30553,other,
+30603,other,
+30683,other,
+30704,other,
+30835,other,
+30904,other,
+31053,other,
+31192,other,
+31315,other,
+31397,other,
+31503,other,
+32100,other,
+32176,other,
+32225,other,
+32350,other,
+32377,other,
+32475,other,
+32684,other,
+32690,other,
+32734,other,
+32815,other,
+33340,other,
+33368,other,
+33549,other,
+33587,other,
+33742,other,
+33752,other,
+33874,other,
+33927,other,
+34230,other,
+34326,other,
+34368,other,
+34446,other,
+34665,other,
+34759,other,
+34804,other,
+34924,other,
+35027,other,
+35090,other,
+35121,other,
+35520,other,
+35608,other,
+35628,other,
+35941,other,
+36293,other,
+36314,other,
+36330,other,
+36388,other,
+36607,other,
+36824,other,
+36895,other,
+36911,other,
+36979,other,
+37265,other,
+37299,other,
+37429,other,
+37636,other,
+37789,other,
+37858,other,
+38107,other,
+38603,other,
+38699,other,
+38769,other,
+38856,other,
+38988,other,
+39170,other,
+40190,other,
+40193,other,
+40232,other,
+40303,other,
+40432,other,
+40588,other,
+40658,other,
+40674,other,
+41239,other,
+41612,other,
+41614,other,
+41812,other,
+41889,other,
+42336,other,
+42352,other,
+42549,other,
+42622,other,
+42660,other,
+42809,other,
+43302,other,
+43403,other,
+43564,other,
+43577,other,
+44099,other,
+44172,other,
+44402,other,
+44424,other,
+45233,other,
+45299,other,
+45497,other,
+45554,other,
+45754,other,
+45878,other,
+46203,other,
+46374,other,
+46811,other,
+46892,other,
+47340,other,
+47543,other,
+47679,other,
+48043,other,
+48142,other,
+48434,other,
+48756,other,
+48774,other,
+48849,other,
+48901,other,
+49342,other,
+49594,other,
+49665,other,
+49835,other,
+50019,other,
+50173,other,
+50403,other,
+50730,other,
+51043,other,
+51115,other,
+51280,other,
+51588,other,
+51683,other,
+51754,other,
+52108,other,
+52592,other,
+52913,other,
+52948,other,
+53028,other,
+53352,other,
+53700,other,
+53851,other,
+54127,other,
+54241,other,
+54350,other,
+54411,other,
+54449,other,
+54558,other,
+54677,other,
+54815,other,
+54980,other,
+54996,other,
+55089,other,
+55172,other,
+55633,other,
+55647,other,
+55937,other,
+56445,other,
+57604,other,
+58206,other,
+58329,other,
+58462,other,
+59063,other,
+59667,other,
+59799,other,
+59994,other,
+60004,other,
+60057,other,
+60151,other,
+60162,other,
+60391,other,
+61017,other,
+61405,other,
+61464,other,
+61902,other,
+61908,other,
+62180,other,
+62283,other,
+62300,other,
+62942,other,
+63301,other,
+63521,other,
+63803,other,
+63943,other,
+64288,other,
+64608,other,
+64773,other,
+65004,other,
+65011,other,
+65171,other,
+65372,other,
+65501,other,
+65817,other,
+65825,other,
+66606,other,
+66738,other,
+67093,other,
+67129,other,
+67142,other,
+67605,other,
+67886,other,
+68082,other,
+68159,other,
+68266,other,
+68750,other,
+69226,other,
+69269,other,
+69394,other,
+69573,other,
+69984,other,
+70237,other,
+70242,other,
+70289,other,
+70642,other,
+70661,other,
+71353,other,
+71772,other,
+71945,other,
+71966,other,
+71975,other,
+72474,other,
+72780,other,
+73168,other,
+73364,other,
+73455,other,
+73858,other,
+74000,other,
+74167,other,
+74424,other,
+74494,other,
+74566,other,
+74894,other,
+75070,other,
+75092,other,
+75410,other,
+75532,other,
+75660,other,
+75807,other,
+76061,other,
+76527,other,
+76712,other,
+76759,other,
+76936,other,
+77209,other,
+77222,other,
+77304,other,
+77575,other,
+77583,other,
+77647,other,
+77654,other,
+77659,other,
+77912,other,
+78750,other,
+78924,other,
+79903,other,
+80191,other,
+80291,other,
+80339,other,
+80402,other,
+80560,other,
+80715,other,
+80730,other,
+80803,other,
+80993,other,
+81000,other,
+81488,other,
+81739,other,
+81805,other,
+81907,other,
+82210,other,
+82802,other,
+83218,other,
+83361,other,
+83441,other,
+83825,other,
+84035,other,
+84253,other,
+84585,other,
+84774,other,
+85460,other,
+85802,other,
+85848,other,
+86170,other,
+86527,other,
+86625,other,
+87630,other,
+88350,other,
+88464,other,
+88725,other,
+89621,other,
+89753,other,
+89810,other,
+89890,other,
+89999,other,
+90939,other,
+91363,other,
+91476,other,
+92424,other,
+92581,other,
+92786,other,
+92899,other,
+92921,other,
+93059,other,
+93265,other,
+93371,other,
+93827,other,
+93988,other,
+94197,other,
+94340,other,
+94918,other,
+96259,other,
+96394,other,
+96615,other,
+96908,other,
+97667,other,
+97734,other,
+98328,other,
+99007,other,
+99872,other,
+100150,other,
+100722,other,
+101166,other,
+101191,other,
+101899,other,
+102461,other,
+102558,other,
+102726,other,
+102945,other,
+103375,other,
+103561,other,
+103891,other,
+104762,other,
+104823,other,
+105123,other,
+105455,other,
+105522,other,
+105597,other,
+105840,other,
+106072,other,
+106482,other,
+107526,other,
+108522,other,
+108684,other,
+109349,other,
+109616,other,
+109680,other,
+110225,other,
+110466,other,
+110828,other,
+111369,other,
+111454,other,
+111711,other,
+111765,other,
+112246,other,
+112385,other,
+112815,other,
+112889,other,
+112962,other,
+113668,other,
+113951,other,
+113967,other,
+114174,other,
+114331,other,
+114591,other,
+114977,other,
+115548,other,
+115783,other,
+116668,other,
+117280,other,
+117405,other,
+117719,other,
+118157,other,
+118663,other,
+119535,other,
+119585,other,
+120137,other,
+120246,other,
+120380,other,
+120767,other,
+120874,other,
+121292,other,
+121503,other,
+121925,other,
+122123,other,
+122353,other,
+122635,other,
+123326,other,
+123349,other,
+123866,other,
+124054,other,
+124178,other,
+124227,other,
+124335,other,
+124837,other,
+124965,other,
+125316,other,
+125429,other,
+125949,other,
+126082,other,
+126468,other,
+126538,other,
+126842,other,
+127316,other,
+127421,other,
+127702,other,
+127815,other,
+128104,other,
+128432,other,
+128663,other,
+128672,other,
+129167,other,
+129174,other,
+129867,other,
+129927,other,
+131845,other,
+132800,other,
+133102,other,
+133692,other,
+134079,other,
+134114,other,
+134494,other,
+134610,other,
+134945,other,
+135806,other,
+135912,other,
+136043,other,
+136172,other,
+136557,other,
+136952,other,
+137047,other,
+137778,other,
+138008,other,
+138277,other,
+138427,other,
+138488,other,
+139002,other,
+139135,other,
+139485,other,
+139979,other,
+140126,other,
+140626,other,
+141352,other,
+141760,other,
+142163,other,
+142504,other,
+142511,other,
+142523,other,
+143492,other,
+143533,other,
+144055,other,
+144728,other,
+144815,other,
+145363,other,
+145410,other,
+145744,other,
+145895,other,
+146220,other,
+146260,other,
+146372,other,
+147487,other,
+147708,other,
+148083,other,
+148467,other,
+148728,other,
+149357,other,
+149467,other,
+149923,other,
+149948,other,
+150020,other,
+150178,other,
+150904,other,
+151692,other,
+151831,other,
+151903,other,
+151933,other,
+152628,other,
+152658,other,
+152702,other,
+152832,other,
+153338,other,
+153638,other,
+153797,other,
+154652,other,
+154857,other,
+155056,other,
+155194,other,
+155371,other,
+156420,other,
+156754,other,
+156838,other,
+157225,other,
+157259,other,
+157918,other,
+157926,other,
+157983,other,
+158108,other,
+158130,other,
+158156,other,
+158286,other,
+158928,other,
+159681,other,
+159771,other,
+159946,other,
+160626,other,
+160844,other,
+161003,other,
+161169,other,
+161713,other,
+161829,other,
+161860,other,
+161931,other,
+162045,other,
+162094,other,
+162215,other,
+162244,other,
+162881,other,
+163601,other,
+163728,other,
+165226,other,
+165392,other,
+165539,other,
+165819,other,
+165869,other,
+166233,other,
+166490,other,
+167214,other,
+167387,other,
+167895,other,
+168880,other,
+169409,other,
+169444,other,
+169497,other,
+169855,other,
+170882,other,
+171492,other,
+171908,other,
+172495,other,
+172678,other,
+173678,other,
+173785,other,
+174559,other,
+174759,other,
+174896,other,
+175874,other,
+176074,other,
+176174,other,
+176360,other,
+176384,other,
+176428,other,
+176968,other,
+177108,other,
+177474,other,
+177556,other,
+177710,other,
+177908,other,
+177992,other,
+178441,other,
+178448,other,
+178450,other,
+178485,other,
+179606,other,
+180032,other,
+180706,other,
+181081,other,
+182118,other,
+182485,other,
+182536,other,
+182583,other,
+182779,other,
+183198,other,
+183219,other,
+183328,other,
+183676,other,
+184574,other,
+184905,other,
+184947,other,
+185102,other,
+185620,other,
+186107,other,
+186843,other,
+187431,other,
+187580,other,
+187738,other,
+187840,other,
+188416,other,
+188657,other,
+188741,other,
+188748,other,
+189187,other,
+189269,other,
+189579,other,
+189722,other,
+190008,other,
+190319,other,
+191434,other,
+191865,other,
+191984,other,
+192005,other,
+192394,other,
+192709,other,
+193255,other,
+193961,other,
+194205,other,
+195159,other,
+196168,other,
+196377,other,
+196431,other,
+196769,other,
+197096,other,
+197219,other,
+197400,other,
+197634,other,
+197937,other,
+198162,other,
+198373,other,
+198665,other,
+198673,other,
+199007,other,
+199214,other,
+199276,other,
+199438,other,
+200697,other,
+201379,other,
+201753,other,
+202793,other,
+203230,other,
+204364,other,
+204614,other,
+204778,other,
+204927,other,
+205101,other,
+205128,other,
+206330,other,
+206343,other,
+206706,other,
+207051,other,
+208549,other,
+208551,other,
+208854,other,
+208881,other,
+209191,other,
+209614,other,
+210368,other,
+210576,other,
+210843,other,
+211274,other,
+211400,other,
+211435,other,
+211724,other,
+211865,other,
+211952,other,
+212747,other,
+212968,other,
+213103,other,
+213155,other,
+213430,other,
+215052,other,
+215884,other,
+215945,other,
+216152,other,
+216246,other,
+216425,other,
+216692,other,
+216796,other,
+216997,other,
+218448,other,
+218565,other,
+218687,other,
+218809,other,
+219217,other,
+219619,other,
+220651,other,
+220709,other,
+220896,other,
+222461,other,
+223316,other,
+223360,other,
+223634,other,
+224058,other,
+224443,other,
+225364,other,
+225593,other,
+226169,other,
+226710,other,
+227106,other,
+227271,other,
+228087,other,
+228101,other,
+228883,other,
+229745,other,
+229757,other,
+230339,other,
+231132,other,
+231656,other,
+233750,other,
+233822,other,
+233975,other,
+234365,other,
+235016,other,
+235040,other,
+235613,other,
+235748,other,
+237882,other,
+238130,other,
+239020,other,
+239032,other,
+239247,other,
+239483,other,
+239688,other,
+239854,other,
+240173,other,
+240564,other,
+240586,other,
+241218,other,
+241776,other,
+241812,other,
+242656,other,
+243045,other,
+243123,other,
+243156,other,
+243357,other,
+243639,other,
+243850,other,
+244153,other,
+244596,other,
+244695,other,
+244737,other,
+245116,other,
+245272,other,
+245735,other,
+245862,other,
+245994,other,
+246773,other,
+248322,other,
+248373,other,
+248831,other,
+249033,other,
+249607,other,
+249792,other,
+249796,other,
+249813,other,
+250256,other,
+251526,other,
+251578,other,
+251736,other,
+251951,other,
+252195,other,
+252732,other,
+252772,other,
+252977,other,
+252990,other,
+253931,other,
+254030,other,
+254418,other,
+254733,other,
+255038,other,
+255175,other,
+255625,other,
+256947,other,
+257936,other,
+258035,other,
+258132,other,
+258784,other,
+260316,other,
+260615,other,
+260625,other,
+260739,other,
+260932,other,
+261158,other,
+68,syntactic,Here's a guide explaining
+138,syntactic,"explaining concepts after ""what is"" or ""understanding"""
+217,syntactic,"by default, convention"
+219,syntactic,reviewing content as specific roles
+233,syntactic,\usepackage{
+240,syntactic,Here's a guide
+257,syntactic,acknowledging understanding
+258,syntactic,word count limits
+371,syntactic,code formatting and utilities
+403,syntactic,.com or URLs
+479,syntactic,HTML tags
+500,syntactic,Input + Output
+522,syntactic,link.springer.com
+543,syntactic,tikz code
+551,syntactic,"""code for access"" or ""below tweet"""
+575,syntactic,closing punctuation and code blocks
+618,syntactic,expected output
+742,syntactic,variable names
+785,syntactic,conversational structure
+810,syntactic,This paper introduces
+812,syntactic,mathematical calculations
+839,syntactic,exist. case
+890,syntactic,"theme, css, styling, customization"
+937,syntactic,ASCII art parentheses
+968,syntactic,return after print
+970,syntactic,code context
+1216,syntactic,standard library namespace
+1251,syntactic,plug in the values
+1547,syntactic,code comments and syntax
+1581,syntactic,list item markers and non-English characters
+1782,syntactic,transition words at start of sentences
+1880,syntactic,Explanation:** headings
+1938,syntactic,phrases that summarize or conclude
+2036,syntactic,json data structures
+2043,syntactic,list items
+2072,syntactic,programming code elements
+2205,syntactic,module.exports assignments
+2362,syntactic,lists with asterisks and letters
+2391,syntactic,declaration and assignment
+2444,syntactic,ASCII art elements
+2477,syntactic,LaTeX commands and options
+2517,syntactic,gerunds and participles
+2612,syntactic,let's break down
+2641,syntactic,"list items, special characters, numbers"
+2692,syntactic,"so, what"
+2721,syntactic,if you
+38,semantic,biological secretions
+46,semantic,dragons or fantasy
+56,semantic,isolation of compounds
+125,semantic,key importance
+151,semantic,what to bring
+170,semantic,review titles and adjectives
+176,semantic,Dungeons & Dragons
+185,semantic,"job, introductory, health, social, family"
+211,semantic,citations and paper numbers
+275,semantic,drilling and installation
+319,semantic,"initial value, formula, quantity"
+322,semantic,materials or historical terms
+324,semantic,Red Carpet
+349,semantic,multiplication and addition operations
+404,semantic,dental health and dentists
+423,semantic,Science evaluating deals
+426,semantic,insurance claims and repairs
+472,semantic,on the edge
+473,semantic,"Kanye West, Balenciaga"
+570,semantic,organic products and farming
+648,semantic,"disappointed, disappointment"
+676,semantic,"healthcare costs, Planned Parenthood funding"
+745,semantic,improving your vision or home
+791,semantic,audience and customers
+815,semantic,country names and regions
+834,semantic,"looking, gazing, or staring"
+836,semantic,LiquidCrystal or ListView followed by name/rs/Low
+842,semantic,"business names, photos, social media, reviews"
+896,semantic,helplines and organizations
+935,semantic,Wolfram Language code
+946,semantic,Slightly more / less
+953,semantic,table headers
+981,semantic,expressions of gladness and happiness towards others
+1000,semantic,drink plenty of water
+1016,semantic,destination
+1025,semantic,insult causes
+1035,semantic,"ideal sheaf, category, maps"
+1107,semantic,relaxation
+1108,semantic,"temples, humidity"
+1142,semantic,robust
+1189,semantic,normal distribution probabilities
+1208,semantic,measurements and product features
+1225,semantic,Britannica links by topic
+1250,semantic,formational suffixes
+1269,semantic,two hydrogen atoms
+1339,semantic,code exports and imports
+1360,semantic,examples of creative writing
+1407,semantic,multi-language words
+1411,semantic,scientific names (genus and species)
+1414,semantic,breakdown of categorized recommendations
+1417,semantic,Ukraine allies aid Zelenskyy
+1454,semantic,local city newspapers magazines
+1492,semantic,sports leagues and seasons
+1515,semantic,ftp usage
+1552,semantic,reducing quantity or increasing degree
+1560,semantic,to a degree/extent
+1574,semantic,keynote speaker arrangements
+1591,semantic,find flaws or imperfections
+1597,semantic,S-curve growth and learning curve extrapolation
+1605,semantic,"Kaggle, Kai, Casbah, Calliope, certificates"
+1659,semantic,for general informational
+1678,semantic,summarizing or comparing
+1706,semantic,technical terms and formatting
+1712,semantic,Christ Jesus
+1749,semantic,dialogue starts
+1757,semantic,time or duration
+1768,semantic,lucid dreams and hallucinations
+1778,semantic,numbers and calculations
+1807,semantic,"Yan, Yara, Yong names"
+1836,semantic,it's
+1864,semantic,end of sentence punctuation
+1867,semantic,emojis and language diversity
+1878,semantic,information for general knowledge
+1940,semantic,specific professions and roles
+1948,semantic,"terminating, political, morning"
+1960,semantic,packages and reservations
+1962,semantic,words starting with q
+2027,semantic,numbers followed by units or descriptions
+2035,semantic,skills and knowledge requirements
+2042,semantic,career and identity
+2049,semantic,groups and creators
+2055,semantic,printing or writing
+2064,semantic,links to articles and resources
+2074,semantic,"Austria, industry, decrease, devices, loop"
+2077,semantic,solar installation invoices
+2096,semantic,patent claims and descriptions
+2104,semantic,URL paths and file references
+2119,semantic,Philippines
+2164,semantic,"Audacity, renpy, X4"
+2175,semantic,property
+2227,semantic,numerical labels surrounded by parentheses
+2289,semantic,"headache, nausea, dizziness, vomiting"
+2307,semantic,pronouns and gendered nouns
+2358,semantic,email recipients
+2360,semantic,"vanishing, disappearing"
+2382,semantic,water or liquid volume
+2402,semantic,"Image, art, or photograph"
+2403,semantic,predators alongside humans
+2441,semantic,(Chorus)
+2453,semantic,"measures, capacity, finances, court"
+2458,semantic,"chipset, few, advertising"
+2461,semantic,magnifying objects
+2474,semantic,body-related urgency
+2487,semantic,"stovetop, coffee, cabinets, lights"
+2492,semantic,hobbies and talents
+2507,semantic,get started
+2530,semantic,emotional intelligence and communication
+2543,semantic,religious or historical texts
+2551,semantic,optimal functioning
+2596,semantic,version numbers and words
+2610,semantic,album and music releases
+2626,semantic,news agencies
+2671,semantic,blood glucose and diabetes
+2673,semantic,card and scrapbook words
+2687,semantic,gradually increasing or scaling
+2713,semantic,story titles
+2722,semantic,clothing items
+2727,semantic,books and media titles
+2728,semantic,Korean names and titles
+2738,semantic,Series A valuation
+2746,semantic,dates and times
+2775,semantic,"gui, UI, widgets"
+2786,semantic,rhyming poems
+2788,semantic,yearly or financial reporting
+107,other,this is
+111,other,**
+363,other,actions or processes
+369,other,similarly Now
+477,other,no monarch
+596,other,closing or ending
+601,other,things that add value or quality
+605,other,"Choose, Select"
+615,other,there's or there are
+622,other,if you want
+727,other,"text following punctuation, numbers, or domain names"
+947,other,this is where it gets
+1002,other,but ethical boundaries
+1031,other,"""you own"""
+1125,other,which defines or describes
+1132,other,truly followed by awe
+1183,other,"Okay,"
+1242,other,non-English characters or symbols
+1366,other,adhere to guidelines and formats
+1534,other,if
+1688,other,than comparison
+1755,other,value and importance
+1947,other,I'll do my best
+2132,other,**Move/go beyond**
+2200,other,cannot and absolutely
+2281,other,numbers or code choices
+2490,other,Roughly
+2749,other,specific details
+2812,syntactic,punctuation followed by words
+2852,syntactic,function definitions and code blocks
+2862,syntactic,one sentence
+2925,syntactic,based on
+2930,syntactic,"after ""and"", ""it"" or ""it's"""
+2974,syntactic,question words and `if`
+2980,syntactic,code snippets
+3016,syntactic,URLs and lists
+3073,syntactic,"different, vary, differ, approaches"
+3087,syntactic,had to
+3101,syntactic,never disappoints
+3112,syntactic,"They say, want, can, add"
+3180,syntactic,hexadecimal strings
+3200,syntactic,greeting words
+3230,syntactic,results and analysis
+3274,syntactic,LaTeX commands like `\renewcommand`
+3286,syntactic,https://
+3349,syntactic,`model`
+3371,syntactic,current value access
+3516,syntactic,programming method calls
+3523,syntactic,hours
+3545,syntactic,answers and solutions
+3598,syntactic,.
+3609,syntactic,following key
+3688,syntactic,"command line argument"""
+3721,syntactic,code prompts and instructions
+3773,syntactic,This is
+3978,syntactic,sentence endings
+3980,syntactic,"numbers, volumes, years"
+3981,syntactic,`Now` or `Given Sentence`
+4024,syntactic,url componentsinternet domains
+4081,syntactic,programming and filteringprocess or functionprogram or filter
+4169,syntactic,If I were
+4189,syntactic,pronouns before emotions or actions
+4201,syntactic,code formatting and declarations
+4218,syntactic,structured lists or outlines
+4222,syntactic,svg or xml structure
+4225,syntactic,instruction or sequence counting
+4248,syntactic,next steps
+4267,syntactic,About Us or About Me
+4277,syntactic,URL paths
+4302,syntactic,list items or enumerations
+4315,syntactic,formatting like lists and emphasis
+4381,syntactic,rust imports
+4402,syntactic,realizing understanding that
+4459,syntactic,documentation comments `/**`
+4528,syntactic,at a time/place
+4536,syntactic,if you
+4558,syntactic,know if you'd like me to
+4593,syntactic,isinstance checks
+4618,syntactic,"links, examples, or details"
+4633,syntactic,is a
+4653,syntactic,element locators by ID
+4716,syntactic,The code
+4799,syntactic,"points, lists, enumerated items"
+4853,syntactic,final answer phrase
+4919,syntactic,list of lists
+4950,syntactic,more specific and impactful descriptions
+4962,syntactic,padding declaration
+4963,syntactic,"I walk, I am, while we can"
+5073,syntactic,from_
+5109,syntactic,sentence beginnings after punctuation
+5122,syntactic,not just
+5305,syntactic,following punctuation
+5359,syntactic,explanations categorized by approach
+5423,syntactic,affirmative response
+5431,syntactic,"question ""you answer"""
+5488,syntactic,code formatting
+5592,syntactic,python or R code
+5628,syntactic,bullet points or lists
+5673,syntactic,dictionary structure
+2809,semantic,requesting prescription
+2837,semantic,formulas and equations
+2881,semantic,Visual Studio build tools and projects
+2905,semantic,AccuWeather weather
+2935,semantic,mbti personality types
+2966,semantic,reverse or reversal
+2994,semantic,sales offer discount
+3018,semantic,German verb conjugations
+3029,semantic,"вести, води, привод, вывод"
+3049,semantic,"editing, sculpting, adjusting images"
+3059,semantic,go programming language
+3370,semantic,cracked or fractured teeth
+3440,semantic,month names
+3486,semantic,test questions and skills
+3557,semantic,COVID-19 pandemic and related events
+3595,semantic,code assignment or boolean values
+3604,semantic,product attributes and types
+3618,semantic,reach out for help
+3635,semantic,discord and slack communities
+3669,semantic,"empty, partially, or strings"
+3679,semantic,Rural roads
+3710,semantic,state or components
+3726,semantic,which clauses
+3730,semantic,base URL configuration
+3739,semantic,word count constraints
+3748,semantic,website links and financial terms
+3761,semantic,Jesus died for sins
+3774,semantic,company registration and formation
+3863,semantic,comes/came in sizes
+3925,semantic,business owners and entrepreneurs
+3938,semantic,apologies
+3951,semantic,lack of care or order
+3964,semantic,chapter titles
+3976,semantic,jigsaw group activities
+3994,semantic,context for relationships
+4027,semantic,meeting someone new
+4076,semantic,be verbs followed by adjectives/verbs
+4091,semantic,signs and symptoms
+4092,semantic,payday loans
+4094,semantic,"code/data structures like lists, tuples, objects"
+4099,semantic,"skin routine, conditioning, moisturizing"
+4105,semantic,love and related concepts
+4110,semantic,Libya and its cities
+4120,semantic,"range, duration, or cost"
+4130,semantic,"marketing, engineering, product, brand"
+4144,semantic,exploiting weaknesses or opponents
+4251,semantic,retention period
+4331,semantic,responsibility and decision-making
+4380,semantic,"operate, announce, Kings"
+4388,semantic,"violence, organs, Russia"
+4396,semantic,news agencies affiliation
+4403,semantic,sum of numbers
+4406,semantic,historical places and structures
+4419,semantic,rooms and locations
+4429,semantic,class definitions
+4433,semantic,data attributes
+4439,semantic,phone numbers
+4531,semantic,historical fiction genre
+4548,semantic,idioms and figurative language
+4576,semantic,character movement
+4583,semantic,Liam names
+4584,semantic,odd numbers
+4611,semantic,risk-free rate of return
+4625,semantic,complimentary words
+4648,semantic,"mathematical context ""model"""
+4668,semantic,length of
+4675,semantic,"solve equations, roots, maximize"
+4676,semantic,"snow, rain, and showers"
+4685,semantic,here's a breakdown
+4743,semantic,gift giving
+4745,semantic,women's clothing items
+4814,semantic,boat trips and fishing
+4837,semantic,wifi password
+4848,semantic,statistics and rankings
+4872,semantic,recipe yields
+4884,semantic,religious freedom
+4898,semantic,lookup parent from repository
+4949,semantic,military deployments and troops
+4958,semantic,heart rate and breathing
+4976,semantic,"mentioning specific details like brands, companies, cities, currencies"
+4983,semantic,image descriptions or titles
+4988,semantic,curved compact spacetime
+4999,semantic,"programmes, empires, theories, candidates, battles, ships, schools, projects, observations"
+5019,semantic,specialists providing services
+5031,semantic,dealerships and sales
+5032,semantic,"toys, art, accessories, computing"
+5059,semantic,gender discrimination
+5092,semantic,explaining changes and elaborating why
+5118,semantic,"numbers (one, three, four, seven, five)"
+5153,semantic,determine what to do
+5161,semantic,volunteer activities and cleaning
+5174,semantic,"API, config, data, strategy"
+5242,semantic,Turkish punctuation and numbers
+5270,semantic,options (A)
+5296,semantic,staying at or in places
+5299,semantic,ad blocker
+5302,semantic,concept of origin
+5315,semantic,"dangerous substances, purity, impurities"
+5354,semantic,real-life scenarios or discussions
+5377,semantic,list item context
+5386,semantic,key topics and questions
+5420,semantic,important considerations
+5460,semantic,appears to be a phrase
+5483,semantic,loss and difficult times
+5558,semantic,problem-solving questions
+5585,semantic,links to thebalance.com
+5619,semantic,news articles
+5672,semantic,numbers and sequences
+2843,other,want to
+3033,other,legal/financial advice disclaimer
+3042,other,model's turn
+3610,other,That sounds awesome/cool/interesting
+3678,other,given information
+3769,other,"numbers, dates, or ranges"
+4121,other,if
+4314,other,venture-backable businesses and startups
+4489,other,overwrite conflicts
+4586,other,cannot provide medical advice
+4706,other,understanding of concepts
+5335,other,presence of AI and questions
+5343,other,My purpose is to provide information
+5567,other,absolutely cannot
+5695,other,but I
+5736,syntactic,file or directory names
+5742,syntactic,url endings
+5743,syntactic,```csharp
+5823,syntactic,www links
+5885,syntactic,Xaml TextBlock Textbox
+5913,syntactic,alphanumeric sequences and links
+5928,syntactic,closing parentheses and braces
+6024,syntactic,"string, DataFrame, list, array"
+6033,syntactic,To start an action or purpose
+6132,syntactic,"later, eventually, or pending actions"
+6204,syntactic,```python
+6230,syntactic,by [name]
+6401,syntactic,still after 'but'
+6409,syntactic,documentation args
+6426,syntactic,the final answer is
+6431,syntactic,while clauses
+6464,syntactic,word count instructions
+6482,syntactic,following a request or prompt
+6483,syntactic,reasoning
+6571,syntactic,numbers and punctuation
+6665,syntactic,you ask a question
+6688,syntactic,"python code, yaml, initialization"
+6778,syntactic,counting numbers and symbols
+6827,syntactic,using a method
+6862,syntactic,php plugin code
+6954,syntactic,**1. Understanding The
+6955,syntactic,contractions and possessives
+6981,syntactic,sentence endings
+6985,syntactic,list item 2. explanations
+6996,syntactic,qualities or characteristics
+7102,syntactic,log and set
+7116,syntactic,package main import log
+7122,syntactic,❗
+7130,syntactic,expresses certainty or possibility
+7145,syntactic,"questions starting with ""What"""
+7157,syntactic,use strict; use warnings;
+7172,syntactic,list items or structure
+7204,syntactic,code documentation examples
+7227,syntactic,JSON and code structure identifiers
+7272,syntactic,breakdown of
+7278,syntactic,code syntax and functions
+7301,syntactic,table headers
+7318,syntactic,have any
+7347,syntactic,end of sentence or phrase
+7354,syntactic,XML and version attributes
+7387,syntactic,links to articles
+7438,syntactic,"tokens following ""**"""
+7450,syntactic,css pixel unit
+7464,syntactic,conjunctions followed by pronouns
+7478,syntactic,section/chapter markers
+7498,syntactic,assess or determine
+7589,syntactic,list items after punctuation
+7606,syntactic,too followed by conjunctions
+7615,syntactic,we will
+7617,syntactic,"programming actions: instantiate, set, replace"
+7629,syntactic,modeldialogue after a pause or question
+7643,syntactic,```sql and comments
+7647,syntactic,feeling confused or asking questions
+7688,syntactic,sounds natural or less natural
+7715,syntactic,emphasized bullet points
+7719,syntactic,applied and variants
+7959,syntactic,JSON structure or code blocks
+7964,syntactic,please provide
+8084,syntactic,mathematical operators
+8106,syntactic,"list markers (*, numbers)"
+8160,syntactic,sequences after commas
+8256,syntactic,error with subsequent word
+8323,syntactic,speculating or expressing possibility
+5700,semantic,governed by laws
+5718,semantic,requests and notifications
+5753,semantic,age and dates
+5796,semantic,"places, servers, volumes, tables"
+5810,semantic,"DLP, selects, Archiving"
+5886,semantic,"gone, no longer, extinct"
+5897,semantic,US cities and states
+5916,semantic,"wire, furnace, die, batch"
+5917,semantic,school years and grades
+5925,semantic,unlimited
+5932,semantic,peanut butter
+5986,semantic,multilingual words
+5989,semantic,how we know things
+6010,semantic,temperature degrees Celsius Fahrenheit
+6083,semantic,ecommerce platforms and operations
+6090,semantic,"REST, NO ACTION, Samsung"
+6158,semantic,FOREIGN KEY refers to
+6193,semantic,appearance and behavior of creatures
+6213,semantic,numbers and units
+6222,semantic,countries and numbers in URLs
+6272,semantic,dates and meeting details
+6273,semantic,tutor descriptions
+6280,semantic,rental services
+6345,semantic,"standard, standardization, standards, std"
+6363,semantic,invite or invitation
+6391,semantic,question or answer
+6407,semantic,as many or as needed
+6461,semantic,LoRA
+6480,semantic,"Beowulf, Earnest, Mockingbird, army, Green"
+6481,semantic,Office Hours
+6505,semantic,Apple arc
+6507,semantic,morning time slots
+6552,semantic,"route, routes, routing, router"
+6556,semantic,network authentication protocol
+6574,semantic,clarifying information
+6587,semantic,"room, bedroom, cabin quality, and amenities"
+6610,semantic,planets and life's purpose
+6618,semantic,summary / conclusion
+6668,semantic,bio-integrated processes and materials
+6671,semantic,vibe
+6677,semantic,add to any rooms
+6678,semantic,phonetics and pronunciation
+6725,semantic,describing women and their qualities
+6727,semantic,smelled faintly
+6738,semantic,cross-lingual discourse markers
+6761,semantic,prices change or increase
+6763,semantic,names and places
+6773,semantic,specific definitions
+6790,semantic,publisher against claim
+6840,semantic,amusement park rides and attractions
+6854,semantic,collecting or accumulating things
+6896,semantic,Vietnamese questions and statements
+6898,semantic,guess a number
+6989,semantic,trending hashtags and topics
+7091,semantic,names and surnames
+7124,semantic,fishing and fisheries
+7142,semantic,mental health conditions
+7163,semantic,路 不 即可 摸 索 想 问题 距离 解决
+7187,semantic,knowledge and unity
+7229,semantic,foreign diplomats and citizenship
+7250,semantic,medium difficulty or time
+7294,semantic,Random Forest
+7338,semantic,walking then
+7363,semantic,forever and ever
+7383,semantic,primary or main components
+7391,semantic,listening and confidentiality
+7392,semantic,election cycle events
+7400,semantic,century
+7406,semantic,genetic mutation and variation
+7475,semantic,Poj Arunanwa
+7538,semantic,paper introduces concept
+7544,semantic,"time, seconds, minutes, hours"
+7628,semantic,"""I have a bad feeling about this"""
+7660,semantic,mathematical equations and code blocks
+7680,semantic,special issue
+7681,semantic,TikTok and followers
+7714,semantic,parts of speech or specific words
+7724,semantic,"regular/frequent checks, updates, maintenance"
+7742,semantic,subjective
+7744,semantic,your phone number
+7780,semantic,effort or difficulty ratings
+7784,semantic,elegant English
+7789,semantic,introduction
+7798,semantic,bags and purses
+7836,semantic,noun followed by of
+7875,semantic,"address, city, state, and street components"
+7881,semantic,dramatic natural landscapes
+7889,semantic,"builder, updater, scaler, reader"
+7901,semantic,how to run code
+7917,semantic,anonymous functions and encryption
+7930,semantic,days of the week
+7979,semantic,python import statements
+8003,semantic,reading or understanding content
+8007,semantic,understand exploring themes
+8020,semantic,normal variation differences
+8026,semantic,foreign languages and punctuation
+8030,semantic,highly recommend
+8040,semantic,PyCharm Python code
+8065,semantic,explaining understanding
+8087,semantic,Chicago Illinois
+8103,semantic,promote positive and beneficial actions
+8109,semantic,drying or dried
+8119,semantic,interjections and pauses
+8168,semantic,make it fun
+8173,semantic,studies have shown or suggest
+8190,semantic,relative pronouns and conjunctions
+8232,semantic,estimation for calculations
+8233,semantic,gaining popularity or prominence
+8234,semantic,currency exchange rates and conversions
+8239,semantic,"giving, receiving, contributing"
+8263,semantic,Wikipedia articles and creation
+5760,other,skeletons don't go on dates
+5849,other,model
+5895,other,guide
+6011,other,at each/maximum/minimum
+6169,other,describe
+6178,other,essentially the same
+6311,other,need to
+6321,other,"code, multilingual, principles"
+6355,other,cannot provide advice
+6437,other,I *can* offer
+6541,other,proportional to
+6620,other,promotes hate speech or discrimination
+6622,other,harm to children or sensitive content
+6960,other,best suited
+6961,other,abstract concepts
+8077,other,that
+8081,other,"mere, vague, unsubstantiated"
+8213,other,"following a, the"
+8393,syntactic,AI model definitions
+8448,syntactic,mathematical expressions and code snippets
+8478,syntactic,ending punctuation
+8479,syntactic,code snippets
+8585,syntactic,price symbol `$`
+8870,syntactic,php code
+9103,syntactic,section titles
+9130,syntactic,Page numbers
+9159,syntactic,numbers and punctuation
+9382,syntactic,"`encoding=""` in XML"
+9408,syntactic,special characters and punctuation
+9500,syntactic,comparison or description
+9586,syntactic,multi-language transition or structure
+9625,syntactic,code keywords and symbols
+9639,syntactic,special characters and code formatting
+9671,syntactic,non-English characters and words
+9753,syntactic,This is
+9949,syntactic,section headings
+10171,syntactic,numbers and sequence markers
+10185,syntactic,"sections, numbering, listing"
+10272,syntactic,what is an
+10283,syntactic,explaining further
+10734,syntactic,"tables, lists, code blocks, or similar structured data"
+10961,syntactic,list item introductions
+11063,syntactic,"numbered lists, enumeration"
+11136,syntactic,a/an (articles)
+11297,syntactic,keywords and non-english words
+8349,semantic,c++ programming
+8404,semantic,LLC and privacy information
+8542,semantic,ethnic groups and nationalities
+8587,semantic,standards and specialized terms
+8594,semantic,subjects describing past activities
+8595,semantic,represents future or current value
+8604,semantic,"architect, Magento, Windows, tum"
+8630,semantic,dictionary definitions
+8648,semantic,examples
+8660,semantic,years of experience
+8661,semantic,tablet dosage
+8662,semantic,comparison
+8665,semantic,YouTube videos
+8668,semantic,"maximum value, length, or number"
+8677,semantic,architecture and design
+8684,semantic,largest or tallest country/economy/state/structure
+8694,semantic,definitions and explanations
+8719,semantic,official website links
+8729,semantic,protects from water damage
+8783,semantic,breaks and recharge
+8805,semantic,racial slurs or data items
+8863,semantic,"driven, security, principles"
+8893,semantic,quantities and measurements
+8922,semantic,chipped objects
+8927,semantic,family and family events
+8931,semantic,code constructs
+8936,semantic,building
+8946,semantic,asking for help or clarification
+8950,semantic,declaring indictment diplomacy
+8957,semantic,the most important thing
+8960,semantic,woodchuck chuck wood
+8989,semantic,hide scrollbars
+9052,semantic,quadratic formula with frac
+9074,semantic,love/like for activities
+9075,semantic,bubble / bubbling
+9076,semantic,pharmaceutical quality control
+9096,semantic,inflation
+9102,semantic,buying or selling
+9122,semantic,specific media sources and profiles
+9232,semantic,"one day,"
+9242,semantic,hormonal mood regulation
+9320,semantic,build tools and development workflow
+9377,semantic,not endorsements
+9397,semantic,multi-lingual content
+9417,semantic,sunlight intensity and angle
+9419,semantic,immigration and migrants
+9458,semantic,html <style> or <link>
+9564,semantic,understanding severity and how
+9600,semantic,phone numbers
+9693,semantic,Sir titles and honorable figures
+9716,semantic,adjust or tailor for specific needs
+9749,semantic,clarity and vagueness
+9757,semantic,convenience and access
+9784,semantic,data grids and tables
+9790,semantic,android build configurations
+9803,semantic,label htmlFor
+9805,semantic,liquids and containers
+9816,semantic,experience in employment history
+9831,semantic,"hot water, laundry, charging, parking"
+9854,semantic,собственные / свои
+9869,semantic,"API keys, access tokens, Gemini, BlockFi"
+9870,semantic,desechar consider combat intent
+9888,semantic,funzionamento di modelli e azioni
+9921,semantic,author information
+9923,semantic,UN Language English
+9934,semantic,loyalty and choosing a brand
+9959,semantic,image and media files on wikis
+9960,semantic,without giving access
+9984,semantic,"broad, wide, range"
+9991,semantic,citations and references
+10003,semantic,"url_for, index, todo"
+10010,semantic,financial/mathematical terms
+10014,semantic,project management
+10027,semantic,past or before
+10031,semantic,"properties, settings, configurations"
+10032,semantic,construction stages and execution
+10068,semantic,Sherbrooke
+10069,semantic,Job titles and descriptions
+10072,semantic,"in a real application, app"
+10085,semantic,tire and tyre related terms
+10099,semantic,* lists
+10147,semantic,calculate total cost or quantity
+10163,semantic,seeing what's next
+10198,semantic,FOR IMMEDIATE RELEASE
+10220,semantic,concerned about
+10248,semantic,skill or sky
+10271,semantic,Gemma team at Google DeepMind
+10320,semantic,"creative, elaborate, interesting, unique"
+10327,semantic,other diverse groups
+10330,semantic,appreciate your business
+10362,semantic,table formatting
+10373,semantic,"related keywords, phone, image"
+10405,semantic,"formulas with ""given by"""
+10446,semantic,project and task completion
+10452,semantic,"mathematical, scientific, technical definitions"
+10455,semantic,"res, response handling"
+10483,semantic,"legal, encoding, and specific genres"
+10507,semantic,numbers and temperatures
+10552,semantic,contrasting word or phrase
+10562,semantic,cannnot and will not
+10650,semantic,"digital marketing, painting, photography, content, twins"
+10659,semantic,price per night or week
+10664,semantic,confirm your
+10665,semantic,thorough and care
+10673,semantic,navigating conflict or exploring themes
+10698,semantic,hotel amenities
+10763,semantic,attributes and properties
+10796,semantic,`#ifndef`
+10808,semantic,seeing what happens
+10814,semantic,"multi-AZ deployment, society, parameter, safe"
+10831,semantic,if you
+10871,semantic,"aligned, positioned, left, away, end"
+10877,semantic,script metadata format
+10891,semantic,Duke of
+10902,semantic,academic fields and research
+10924,semantic,IELTS aptitude tests
+10928,semantic,i am here to
+10929,semantic,reading level
+10930,semantic,contact information
+10939,semantic,change over time
+10941,semantic,edition or author
+10942,semantic,"base currency, slow EMA, base"
+10959,semantic,"Okay,"
+10975,semantic,dosage instructions carefully
+10998,semantic,France; French
+11012,semantic,uric acid
+11014,semantic,historical periods and eras
+11016,semantic,registration or participation
+11059,semantic,away from home or location
+11112,semantic,results and analyses
+11120,semantic,system process identifiers
+11123,semantic,math and programming functions
+11137,semantic,estimating values
+11162,semantic,county administrative divisions
+11179,semantic,"policy, plan, roadmap, guidelines, statement, draft"
+11218,semantic,"touch, tactile, tingling, dexterity"
+11255,semantic,breakdown of why/how/what
+11260,semantic,company websites
+11267,semantic,districts and cities
+11331,semantic,"products, services, albums, songs, work"
+11338,semantic,"Looking at the provided lists:-   **MAX_ACTIVATING_TOKENS**: Contains numbers (5, 2, 1, 3, 6, 0) and the ""="" symbol.-   **TOKENS_AFTER_MAX_ACTIVATING_TOKEN**: Contains numbers (0, 2, 6, 4, 3) and a punctuation mark (.).-   **TOP_POSITIVE_LOGITS**: Contains a mix of words, including ""contracting"", ""computation"", and non-English words, as well as numerical-looking characters like ""cỡ"" (Vietnamese for size/measure) and ""手術"" (Japanese for surgery).-   **TOP_ACTIVATING_TEXTS**: The texts show examples of:    *   Mathematical calculations: ""183.71 * 110.22 ≈ 20,250"", ""509220"", ""44 = 1 + 1296 + 81 + 256 = 1634"", ""198 * 198 gives you 39204"", ""42^2 = 42 × 42 = 1764"", ""3.141624"", ""4 * 3.1416 * 60"", ""8.1 million tons + 12.5 million tons = 20.6 million metric tons"", ""41.01 mpg = 41.01 * 0.425144"".    *   Historical/contextual numbers: ""5th century AD"", ""around 250 BC"".The common theme is **mathematics, calculations, equations, and numbers**. The MAX_ACTIVATING_TOKENS includes '=', which is key in equations. The TOKENS_AFTER_MAX_ACTIVATING_TOKEN often includes numbers or a period, typical in numerical results or mathematical expressions. The TOP_POSITIVE_LOGITS suggest an underlying ""computation"" or ""contracting"" (as in contracting a problem/calculation). The activating texts strongly reinforce the idea of quantitative operations.Therefore, a concise explanation would be related to calculations or equations.mathematical calculations"
+11402,semantic,"""6 monthly"""
+8368,other,of course
+8401,other,"indicates ""this""/""it"""
+8576,other,contextual words
+8808,other,already and overall
+8819,other,qualifiers or minor negations
+8925,other,model
+9083,other,"Please, disclaimer"
+9109,other,There is
+9280,other,concept entity style
+9314,other,U-letter words and following tokens
+9355,other,number or quantity
+9406,other,"easy, easier, easiest"
+9422,other,starting user prompts
+9635,other,find or calculate unknown values
+10090,other,AI assistant refusals
+10486,other,anything at all
+10522,other,numbers and symbols
+10735,other,for a while
+10779,other,The request
+10791,other,for the
+10917,other,based on
+10944,other,numbers and counts
+10970,other,A value
+11023,other,with [noun]
+11124,other,asking questions or giving commands
+11428,syntactic,structured text markers
+11453,syntactic,"continue, further, another"
+11484,syntactic,youtube links or json
+11501,syntactic,asking for similar items
+11515,syntactic,.html file
+11635,syntactic,listing actions or functions
+11649,syntactic,end of sentence or clause
+11760,syntactic,SQL keywords and commands
+11779,syntactic,examples vary slightly
+11937,syntactic,code syntax and structure
+12029,syntactic,Hose songs HM cer
+12035,syntactic,programming code and commands
+12121,syntactic,e.g. examples and lists
+12145,syntactic,there's introducing another item
+12193,syntactic,*
+12232,syntactic,base64 encoded data
+12341,syntactic,formula used
+12362,syntactic,such information or code
+12432,syntactic,code blocks
+12484,syntactic,article headings
+12493,syntactic,ranging from X to Y
+12569,syntactic,"""this"" followed by descriptions"
+12647,syntactic,names following punctuation
+12747,syntactic,quoted speech starting new sentences
+12752,syntactic,app class definitions
+12911,syntactic,closing punctuation and code structure
+12942,syntactic,"`name`, `fields`, `key`"
+12945,syntactic,non-english characters
+13099,syntactic,identifying listed items
+13175,syntactic,sentence terminators in different languages
+13271,syntactic,code blocks and technical terms
+13275,syntactic,of each / these / your / them
+13297,syntactic,letter a followed by punctuation
+13335,syntactic,"naturally, logical, statistically"
+13348,syntactic,superlative adjectives followed by descriptions
+13392,syntactic,responses to user
+13397,syntactic,format and formula
+13413,syntactic,`/imagine prompt`
+13484,syntactic,create dropdownscriptdiv
+13494,syntactic,function parameters and arguments
+13851,syntactic,outputting text with echo
+13905,syntactic,'s
+13922,syntactic,reading disclaimer before discussing topics
+14352,syntactic,numbers and symbols
+14593,syntactic,code syntax and punctuation
+14642,syntactic,website links
+14723,syntactic,sentence endings
+14734,syntactic,Numbers followed by punctuation or list items
+11434,semantic,"Supplement, not replace"
+11440,semantic,"niches, affiliate, SEO"
+11511,semantic,committee
+11552,semantic,making mistakes
+11554,semantic,function return values
+11568,semantic,Rust syntax components
+11600,semantic,complexity and performance
+11637,semantic,Publisher
+11672,semantic,bounding boxes
+11714,semantic,dealing with problems and advice
+11718,semantic,numbers and specific measurements
+11732,semantic,how to command
+11761,semantic,financial estate tourism sector
+11768,semantic,graduation note
+11813,semantic,complex reasoning and description
+11815,semantic,military related terms
+11816,semantic,bullet points
+11845,semantic,Indian culture and practices
+11882,semantic,muscle fatigue
+11905,semantic,researchers and faculty publishing
+11911,semantic,fractions or division
+11921,semantic,Roofing manufacturers
+11934,semantic,control and power dynamics
+11942,semantic,lazy dog
+12017,semantic,"pronouns (they, them, their)"
+12044,semantic,Kaanapali Beach Famous
+12053,semantic,growth and development
+12063,semantic,doing/making things
+12072,semantic,"clothing, bedding, towels"
+12111,semantic,job titles and roles
+12120,semantic,"overuse, exertion, abuse, injuries"
+12143,semantic,"comic strip, horoscope, advice column"
+12154,semantic,taken with meal
+12197,semantic,help or danger
+12215,semantic,benchmarks and comparisons
+12234,semantic,public spaces and features
+12243,semantic,launch and attack actions
+12246,semantic,geometric shapes coordinates
+12300,semantic,Here's why
+12342,semantic,"day, month, year"
+12379,semantic,ESP or Gest
+12395,semantic,global context
+12417,semantic,words starting with Z
+12419,semantic,of Canada
+12425,semantic,past states and ownership
+12453,semantic,breakdown of the reasoning
+12454,semantic,inside
+12467,semantic,search for meaning
+12506,semantic,explaining relationships between words
+12511,semantic,sum of calculation
+12584,semantic,covid pandemic and recovery
+12675,semantic,translation or meaning
+12706,semantic,license or permit
+12719,semantic,copyright holder permission
+12737,semantic,negation
+12759,semantic,leader empathy strategic coaches approach
+12787,semantic,risk of heart
+12816,semantic,charts and statistics visualizations
+12841,semantic,cannot / unable / dare not
+12863,semantic,brands and brand ownership
+12864,semantic,To Kill a Mockingbird
+12883,semantic,Chinese poets and poetry
+12898,semantic,two main stages
+12994,semantic,"weakness, weaker, strength"
+13005,semantic,preventing crashing
+13101,semantic,email subject lines
+13106,semantic,Berberine
+13136,semantic,through each
+13174,semantic,"tween, girl, young, child"
+13215,semantic,people in relationships
+13252,semantic,relationships and communication
+13286,semantic,liquid falling
+13319,semantic,honor or remember the deceased
+13352,semantic,improvement of self
+13379,semantic,activate / enable commands
+13396,semantic,shut down or close
+13408,semantic,South Indian meals
+13419,semantic,solve step by step
+13426,semantic,give a rough idea
+13480,semantic,Link:**
+13514,semantic,instead
+13542,semantic,"like, as if comparisons"
+13567,semantic,today's or this day's
+13582,semantic,options and drafts
+13616,semantic,emergency and immediate care
+13641,semantic,increase or decrease by a factor
+13647,semantic,"numbers and letters, cyrillic"
+13654,semantic,"culinary food items, with preparation"
+13661,semantic,categorized recommendations
+13693,semantic,Broadway show tickets
+13718,semantic,non-english characters
+13733,semantic,colors and clothing items
+13745,semantic,list formatting
+13755,semantic,"Vogue, brands, Patagonia, UNICEF"
+13765,semantic,"control flow keywords: continue, break, return"
+13768,semantic,Key improvements
+13792,semantic,feeling states or sensations
+13806,semantic,actions leading to outcomes
+13840,semantic,"clothing, belongings, and their states"
+13877,semantic,during or while
+13891,semantic,"course, package, training, counseling, shelters, Bulgarian, phones"
+13901,semantic,asking clarifying questions
+13941,semantic,emotional expressions
+13959,semantic,"""to combine"", ""PDF Drive"""
+13969,semantic,code includes
+13989,semantic,Vantage finance companies
+14054,semantic,love and other emotions
+14090,semantic,roleplay command or suggestion
+14100,semantic,print pdf
+14121,semantic,phrases offering options or suggestions
+14141,semantic,can afford to
+14151,semantic,"collaboration, account, accident"
+14160,semantic,place names with 'brook' or 'creek'
+14173,semantic,"seeing, hearing, smelling"
+14202,semantic,series and Dragon Ball Z
+14215,semantic,annual checkups
+14249,semantic,most
+14261,semantic,planting of trees
+14309,semantic,brings about consequences or attributes
+14328,semantic,crossing street signals
+14329,semantic,"across, reaching, laptop, slightly, set, mug"
+14334,semantic,product descriptions and catalogs
+14345,semantic,javascript programming
+14362,semantic,build commands and files
+14389,semantic,to give *best* help/advice
+14395,semantic,explanation:
+14397,semantic,convert units or values
+14435,semantic,protein interactions and inhibition
+14529,semantic,math expressions
+14542,semantic,"job titles with ""Associate"""
+14555,semantic,numbers followed by BC
+14576,semantic,Portugal maritime historian's championship
+14580,semantic,Hello World
+14589,semantic,when [pronoun] first
+14594,semantic,popular because
+14622,semantic,"vanishing gradients, long-range dependencies"
+14648,semantic,financial statements
+14698,semantic,questions or introductions
+14729,semantic,Indian city names
+14736,semantic,mental health resources
+14753,semantic,fine-tune
+11486,other,asking why
+11503,other,adaptability and responding
+11991,other,in the style of
+12156,other,call or calc
+12631,other,placeholders and context words
+13355,other,nature of
+14234,other,you name it
+14985,syntactic,either or
+14993,syntactic,This means
+15075,syntactic,instruction or question
+15132,syntactic,"however, but"
+15289,syntactic,you can
+15291,syntactic,based on
+15295,syntactic,which of the following
+15309,syntactic,you can
+15321,syntactic,if you
+15454,syntactic,for loop index
+15507,syntactic,lack of usual/specific context
+15756,syntactic,variable names
+16100,syntactic,often followed by verb
+16274,syntactic,logical statements and programming
+16370,syntactic,Task 1: Sep 1:
+16450,syntactic,original input or error
+16740,syntactic,symbols and punctuation
+16837,syntactic,"sentences starting with ""By"""
+17043,syntactic,there
+17059,syntactic,since or in patterns
+17405,syntactic,the [famous/specific] noun
+17441,syntactic,separating by comma
+17443,syntactic,describing past actions or observations
+17502,syntactic,code structures and control flow
+17536,syntactic,citations ending in parenthesis
+17589,syntactic,"lists like "":"" or ""*"""
+17593,syntactic,"Furthermore,"
+17741,syntactic,le explicarías
+17865,syntactic,paste text here
+17879,syntactic,"x, 8, or 0"
+17969,syntactic,tasks like:
+18040,syntactic,to lists and sequences
+18293,syntactic,ensure that
+18415,syntactic,closing email salutations
+18701,syntactic,HTML code separators
+18898,syntactic,pronoun followed by speech
+16273,syntactic,"""do you know"" and ""is there"""
+15973,syntactic,Bold Mathematical
+14906,syntactic,group of
+18836,syntactic,our possessive pronouns
+14809,semantic,abstract concepts or states
+14841,semantic,international greetings
+14848,semantic,strategic and influence
+14850,semantic,park picnic
+14865,semantic,expertise and skills requirements
+14872,semantic,drawings for beginners
+14923,semantic,finding resources and articles
+14941,semantic,solid-state drives (SSDs) versus hard disk drives (HDDs)
+14984,semantic,behavior of matter and energy
+15046,semantic,dates and years
+15048,semantic,"Texas, California, historical periods"
+15049,semantic,bipolar disorder and lithium
+15072,semantic,major league baseball players
+15146,semantic,plate tectonics and movement
+15216,semantic,news reporting and sources
+15326,semantic,explaining what words mean
+15383,semantic,dates and numbers
+15513,semantic,cell differentiation and growth
+15582,semantic,do it yourself
+15592,semantic,nuclear fission
+15631,semantic,years and dates
+15649,semantic,parties and gatherings
+15686,semantic,"Single Asset Mode, cross-Unity"
+15718,semantic,cities and their populations
+15729,semantic,"личность, формирование, развитие"
+15813,semantic,contrastive learning
+15856,semantic,"(x, y) coordinates"
+15898,semantic,"flavor, texture, richness"
+16043,semantic,market store sell
+16070,semantic,port
+16141,semantic,pulling or towing vehicles
+16155,semantic,rankings and lists
+16178,semantic,writing user stories
+16183,semantic,division 1
+16186,semantic,"worried, scared, afraid"
+16223,semantic,withstand or survive conditions
+16261,semantic,thinking or assuming something incorrect
+16277,semantic,"caveats, physician, compiling studies"
+16365,semantic,social activities and interaction
+16418,semantic,"adding, summing, or comparing numbers"
+16423,semantic,"plastic surgery, body modification"
+16459,semantic,"updates, additions, or frequent changes"
+16494,semantic,quantities or amounts
+16519,semantic,public class declarations
+16536,semantic,"ice, snow, cold, mountains"
+16570,semantic,formulas for calculations
+16574,semantic,apparel and attire
+16618,semantic,people talking about social interaction
+16620,semantic,"Saudi Arabia, Oil, Ruble, population"
+16641,semantic,"school choice, funding, and private education"
+16704,semantic,legal fees and indemnity
+16736,semantic,real photos / pics
+16755,semantic,storage location
+16836,semantic,from the Republic
+16864,semantic,ancient India
+16886,semantic,significant engine damage
+16903,semantic,record warm temperatures
+16945,semantic,"toy, anime, merchandise for franchises"
+16994,semantic,"socialize, fun, relaxing activities"
+17027,semantic,Chinese universities or famous places
+17035,semantic,binary quadratic symmetric spaces
+17080,semantic,fasting glucose measurement
+17107,semantic,counting words or letters in a phrase
+17121,semantic,genetic component or predictor
+17159,semantic,"end punctuation, then sentence start"
+17269,semantic,upward force opposing gravity
+17351,semantic,customer or client related words
+17401,semantic,"""; import"""
+17430,semantic,the capital of
+17467,semantic,Direct effect of EU directives
+17503,semantic,property development and sales
+17592,semantic,percentages and numerical values
+17604,semantic,encyclopedia
+17625,semantic,gradient descent or model train
+17638,semantic,screen display calibration
+17639,semantic,Spiritual practices and philosophies
+17672,semantic,employee engagement and management
+17682,semantic,SATA interface
+17724,semantic,Japanese words and dates
+17755,semantic,raise or throw
+17801,semantic,summer season or activities
+17803,semantic,chess moves
+17864,semantic,non-English characters and words
+17885,semantic,emulsification
+17932,semantic,explaining terms
+17995,semantic,"reporting, publications, and events"
+18151,semantic,plant parts and growth
+18169,semantic,egg preparation
+18175,semantic,calf raises and stretches
+18239,semantic,definitions of concepts
+18434,semantic,replacement or lifespan
+18444,semantic,"""God"", ""fullness"", ""body"", ""truth"", ""righteousness"""
+18453,semantic,section introductions
+18583,semantic,movement and action phrases
+18609,semantic,saw/seen something
+18715,semantic,super market
+18751,semantic,spatial or technical descriptions
+18775,semantic,country's equivalent
+18815,semantic,grouping same or similar items
+18837,semantic,"video, criminals, names"
+18851,semantic,did you hear about
+18882,semantic,title characters
+18934,semantic,watch videos
+18955,semantic,proximity to destinations
+19017,semantic,enabled/disabled flags
+15734,semantic,unique qualities
+16366,semantic,easy to use
+16689,semantic,web-based cloud SaaS
+16733,semantic,"addresses, numbers, commas"
+16876,semantic,benefits and features
+17416,semantic,numbers with 'per'
+17538,semantic,gender identity and relationships
+17662,semantic,academic departments and courses
+18302,semantic,chat marketing automation platforms
+15560,semantic,locations and activities
+16153,semantic,essential workers and business
+15801,semantic,sports or competitive team context
+18492,semantic,string theory geometry and scars
+14759,other,"all, any"
+14782,other,like
+14830,other,we can do
+14859,other,questions and statements
+14910,other,in that fact
+15083,other,open-weights model explained as
+15092,other,writing prompts
+15180,other,modify to suit
+15348,other,"illegal, harmful, unethical"
+15368,other,need to adjust
+15369,other,depending on the specific situation
+15429,other,even acknowledging harm
+15437,other,"questions, why, what"
+15660,other,improve or simplify requests
+15748,other,preface this
+15901,other,wondering what
+15902,other,confident belief and excitement
+15908,other,return code
+15914,other,It violates principles
+15943,other,to high/medium levels or decades
+15985,other,excluding or not considering
+15997,other,"converts into, lot of"
+16665,other,**
+16677,other,requesting more information
+16701,other,don't hesitate
+16930,other,there are
+16941,other,impression and seeming
+17220,other,before mind
+17250,other,science or related field
+17385,other,performance characteristics
+18039,other,"difficulty, challenge, hard"
+18071,other,".com, .org, URLs"
+18085,other,who vs whom grammar
+18454,other,"Hex bolt, test, Ready, Authors, Building, B, African"
+18489,other,general or typical responses
+18593,other,described as
+18710,other,I think we need
+18723,other,"Spanish addresses, Google Ads, SCP Foundation"
+18909,other,topic planning
+18982,other,listing alternatives or options
+19061,syntactic,code formatting and mathematical notation
+19086,syntactic,JSON schema and data structures
+19357,syntactic,"`method=""post""`, `maxlength`, `inline styles`"
+19427,syntactic,code comments
+19814,syntactic,variable initialization
+20033,syntactic,state creation and iterables
+20057,syntactic,quotation marks or equals signs
+20114,syntactic,list delimiters
+20169,syntactic,Therefore / Hence
+20953,syntactic,code blocks with comments
+21614,syntactic,parentheses with content
+21793,syntactic,punctuation followed by capital letter
+21834,syntactic,special characters and non-English words
+22055,syntactic,question or answer prompts
+22621,syntactic,bullet points or lists
+22762,syntactic,code block delimiters
+22775,syntactic,code snippets or Excel formulas
+23476,syntactic,assist you
+24148,syntactic,you followed by modal verbs
+19137,semantic,parenting and loving support
+19164,semantic,linkedin
+19263,semantic,faith and trust in God
+19377,semantic,soft fabrics and feel
+19398,semantic,dates and times
+19474,semantic,"time, rhythm, delay, rolls"
+19615,semantic,avoidant attachment
+19628,semantic,EV production and sales
+19637,semantic,cost overruns and budget issues
+19650,semantic,severe symptoms
+19673,semantic,creative arts and crafts
+19680,semantic,Showing Up for Racial Justice
+19711,semantic,answer the question
+19721,semantic,coefficient / polynomial
+19820,semantic,obsessive compulsive thoughts
+19910,semantic,plate or plates
+19912,semantic,public attitudes and trust
+20048,semantic,pornography addiction recovery resources
+20058,semantic,alcohol consumption effects
+20083,semantic,acronym
+20085,semantic,playing games
+20130,semantic,"VC, LP, Venture Creator"
+20150,semantic,slavery and its consequences
+20168,semantic,or anything / or something
+20219,semantic,N units with force or mass
+20224,semantic,place names
+20257,semantic,shipping labels and postal codes
+20270,semantic,cook onion or onion powder
+20314,semantic,numbers and currency values
+20320,semantic,Elara
+20340,semantic,summarize text
+20351,semantic,"obstacles, parts, objects"
+20457,semantic,matrix geometry graphs groups rotations
+20490,semantic,historical entities
+20599,semantic,external links and references
+20636,semantic,mathematical expression components
+20684,semantic,return home
+20706,semantic,"Lionel Messi, Ballon d'Or, greatest of all time"
+20873,semantic,autonomous weapons systems
+20990,semantic,express.js server requests
+20997,semantic,your health
+21007,semantic,differentiate from others
+21076,semantic,covenant and contract agreements
+21115,semantic,metadata or bibliographic fields
+21132,semantic,agreeing to terms
+21148,semantic,watch
+21184,semantic,"Babylon, Babel, Bible"
+21204,semantic,"session, video, nights, center, device"
+21245,semantic,vasodilation or vasoconstriction
+21262,semantic,protecting privacy and security
+21332,semantic,showing empathy or interest
+21403,semantic,density and composition
+21424,semantic,URLs and file path separators
+21613,semantic,play or act as
+21629,semantic,Good for
+21648,semantic,try
+21653,semantic,"initiate legislation, protection, Russian, monthly wage, Ministry"
+21715,semantic,recommendations from friends
+21723,semantic,annually adjusted income
+21738,semantic,"circumference, distance, around the Earth"
+21758,semantic,"similarly, likewise, similarly"
+21780,semantic,in some contexts
+21809,semantic,"unremarkable, bland, ordinary"
+21852,semantic,"withdrawal symptoms, cravings, difficulty"
+21860,semantic,bash conditional statements and commands
+21861,semantic,languages and cultures
+21869,semantic,"locations following ""in"""
+21880,semantic,"life expectancy, cardiovascular disease"
+21885,semantic,proportion or hydrogen
+21924,semantic,30.5 in
+21934,semantic,museums and historical places
+21989,semantic,motorsport racing circuits and cars
+22005,semantic,probability of an event
+22016,semantic,left or right lung
+22052,semantic,result assignment
+22063,semantic,support the claim
+22101,semantic,URLs and image links
+22110,semantic,"Catholic Church, saints, penance"
+22178,semantic,interests and hobbies
+22247,semantic,"numbers, locations, characters"
+22270,semantic,continuous mathematical notation
+22320,semantic,question prompts
+22347,semantic,before
+22453,semantic,cricket scores and player performance
+22503,semantic,pasta with cheese
+22508,semantic,colors and descriptors
+22550,semantic,punctuation and foreign words
+22609,semantic,lists of items or bullet points
+22684,semantic,number calculations
+22743,semantic,history periods
+22751,semantic,in no event shall
+22758,semantic,electric vehicles and hybrid systems
+22764,semantic,fHx
+22773,semantic,comprehensive + topic
+22788,semantic,Russian torsion field research
+22851,semantic,item condition
+22872,semantic,omegle chat interests
+22899,semantic,"Austin, TX, Travis County"
+22997,semantic,something many people
+23056,semantic,notes and notebooks
+23091,semantic,yellow
+23117,semantic,looking expectantly
+23180,semantic,adding/subtracting with remainder
+23199,semantic,hate speech
+23362,semantic,slope and steepness
+23387,semantic,a success
+23420,semantic,"address, `pid`, `com`"
+23470,semantic,camera mode actions
+23472,semantic,"Thinking, Fast and Slow"
+23484,semantic,"boy, girl, student, brother, princess"
+23514,semantic,initials followed by punctuation
+23520,semantic,names of people and objects
+23522,semantic,Consider getting easy
+23539,semantic,I'm [verb-ing]
+23542,semantic,make accessible/available
+23575,semantic,anagrams and similar word formations
+23577,semantic,Enron and related topics
+23587,semantic,concessions and opposition
+23642,semantic,the definition
+23689,semantic,question type after user input
+23730,semantic,blood clotting and circulation
+23761,semantic,date of the month
+23806,semantic,specifically targeting
+23831,semantic,marketing slogans for kids
+23843,semantic,personal information
+23937,semantic,important considerations
+23939,semantic,root access or plant roots
+24003,semantic,log lines and system information
+24007,semantic,flow and focus
+24020,semantic,contacting or reaching out
+24041,semantic,for _ in range
+24063,semantic,not comfortable or qualified
+24071,semantic,range(
+24084,semantic,services. Light. Rail. diesel. protective
+24107,semantic,time periods and completion
+24134,semantic,fulfillment orders
+24154,semantic,"unsafe, exploitative, unethical"
+24235,semantic,PHP frameworks like Laravel and Symfony
+20612,semantic,arrive at
+21409,semantic,"code block keywords like if, create, def, private"
+22516,semantic,typo correction and grammar fixes
+22865,semantic,"understand, knowledge, expertise"
+23154,semantic,"effort, rewarding results"
+19083,other,demonstrates or suggests
+19270,other,possessive pronouns followed by family or place
+19289,other,noticing or seeing
+19313,other,spend time
+19330,other,return the
+19342,other,variation within
+19424,other,brainstorm or break
+19638,other,"ready, available, constantly"
+19677,other,only
+19682,other,of the
+19828,other,go
+19905,other,"Due Diligence, Cost, Do, Long"
+19980,other,different types of X & Y
+19992,other,"no, not, cannot, without"
+20144,other,can contributeto help
+20145,other,bukkit plugin development
+20147,other,"module, plugin, tool, handler"
+20398,other,de
+20630,other,"Okay, From, I, We"
+20641,other,`ib bun` / `ela n`
+20663,other,situation
+20881,other,"fl, sh, st beginnings"
+20884,other,possessive pronouns and common verbs
+21072,other,","
+21078,other,dealing
+21766,other,I am designed to
+21785,other,occuring or happening
+21876,other,"both, smaller, changes, used"
+22619,other,"not, no, without"
+22854,other,more + [adjectives]
+22973,other,please do not hesitate to ask
+23026,other,first names followed by surnames
+23087,other,organisation or version
+23165,other,edited by
+23713,other,polite requests or questions
+24152,other,asking questions
+24268,syntactic,ChadGPT or specific terms
+24273,syntactic,generally or usually
+24276,syntactic,page
+24438,syntactic,names followed by punctuation
+24540,syntactic,adding information
+24597,syntactic,specific symbols or formatting
+24628,syntactic,"commands starting with ""I will"""
+24686,syntactic,closing punctuation
+24831,syntactic,without or no followed by word
+24909,syntactic,links with punctuation
+24957,syntactic,"connected, linked, or anchored"
+25012,syntactic,"print ""hello world"""
+25015,syntactic,"as mentioned,"
+25029,syntactic,"entire script, model, application, database, table, dataset, system"
+25039,syntactic,what works best
+25326,syntactic,describing a or the
+25442,syntactic,short distances
+25468,syntactic,param or returns
+25484,syntactic,if not
+25606,syntactic,phrases after specific verbs
+25665,syntactic,date followed by 26
+25741,syntactic,questions asking for clarification
+25886,syntactic,javascript import statements
+25903,syntactic,occurs when
+25913,syntactic,known as
+25946,syntactic,useEffect hook in react
+25949,syntactic,legal documents and code snippets
+26119,syntactic,#include and header guards
+26132,syntactic,"partly, mostly, largely, primarily"
+26284,syntactic,in + noun/phrase
+26294,syntactic,feel free to ask
+26300,syntactic,class definition start
+26305,syntactic,following content
+26343,syntactic,building on previous
+26365,syntactic,. and code returns
+26500,syntactic,0.5
+26708,syntactic,also
+26892,syntactic,"newly, freshly, original, initial, early"
+26903,syntactic,pip install commands
+26980,syntactic,mathematical notation
+27046,syntactic,"""not necessarily"""
+27083,syntactic,usually like
+27198,syntactic,names starting with initials
+27214,syntactic,mathematical operations and symbols
+27243,syntactic,HTML spaces and entities
+27254,syntactic,variable definitions
+27365,syntactic,special characters or delimiters
+27378,syntactic,working on or with
+27383,syntactic,request documentation or reproduction steps
+27427,syntactic,application of techniques or methods
+27857,syntactic,`If` with subsequent contrast
+27907,syntactic,negations and exclusions
+27913,syntactic,comprising or includes followed by a list
+27950,syntactic,exclamation marks
+28010,syntactic,nav or header closing bracket
+28013,syntactic,focuses on
+28140,syntactic,but
+28266,syntactic,"Historically, original, obsolete"
+28394,syntactic,"priority, substitute, should"
+28713,syntactic,intended to / meant to
+28735,syntactic,code and programming context
+28896,syntactic,so it will
+29089,syntactic,Keywords:
+29091,syntactic,URLs followed by closing parenthesis
+29110,syntactic,code definitions
+29241,syntactic,letter options
+29494,syntactic,start of block
+29535,syntactic,yes/no answers
+29545,syntactic,code blocks and lists
+29551,syntactic,a or an followed by a noun
+29588,syntactic,"German nouns modified by ""die"""
+29606,syntactic,foreign language initial tokens
+29636,syntactic,are left
+29670,syntactic,of the / our / my
+29688,syntactic,formulas explaining concepts
+29925,syntactic,.gov/) or .htm/) URLs
+30488,syntactic,variable names
+30512,syntactic,requesting a resolution
+30587,syntactic,`{` and `(` delimiting code blocks
+24326,semantic,wilmington north carolina
+24493,semantic,"demilitarize"", ""denazify"""
+24542,semantic,famous landmark favorite
+24543,semantic,"shared fate, damages arising"
+24729,semantic,best performers and rankings
+24734,semantic,torrent downloads
+24787,semantic,salt and flavorings
+25087,semantic,heat and temperature differences
+25158,semantic,detection of anomalies
+25209,semantic,greenhouse gas emissions
+25292,semantic,Chinese dynasties and history
+25544,semantic,unemployment and boredom
+25644,semantic,legal matters and advice
+25701,semantic,patient age and gender
+25719,semantic,pronunciation explanations
+25971,semantic,land value appreciates
+26164,semantic,patriarchal control over women
+26180,semantic,personality traits and types
+26193,semantic,"political candidates, bills signed, donating money"
+26257,semantic,origins and specific names
+26367,semantic,Russian word endings
+26497,semantic,countries and regions
+26602,semantic,"Gemma, Gemini, Bard"
+26623,semantic,mastering
+26644,semantic,events occurring shortly before or after
+26689,semantic,incredibly fast
+26749,semantic,policies of creators
+26770,semantic,"creatinine, muscle, waste product"
+26849,semantic,restrictions and limitations
+26921,semantic,mobile phone contract and service upgrades
+27012,semantic,UI elements and navigation
+27194,semantic,anticipate future events
+27226,semantic,Latin phrases or quotes
+27335,semantic,nail or toe related phrases
+27356,semantic,android `AndroidManifest.xml` schemas
+27458,semantic,Russia Ukraine International North Korea
+27482,semantic,"eliminate, cultivate, migrate"
+27486,semantic,dark themes or specific interests
+27507,semantic,Square Footage
+27530,semantic,psychology and psychological association
+27531,semantic,hurricane season storm tracking
+27548,semantic,physical attractiveness and beauty standards
+27667,semantic,"""Us"", ""car parts"", ""rocketry"""
+27701,semantic,Ecuador and its cities
+27816,semantic,bible references
+27866,semantic,news media and press releases
+28150,semantic,"jurisdiction, law, applies"
+28160,semantic,peace or dark world
+28279,semantic,"earthquake hazard, milliseconds"
+28311,semantic,"firewall, SRX, Panorama, AWS, active directory"
+28317,semantic,capture essence or spirit
+28454,semantic,subjective feeling or perception
+28479,semantic,organize space
+28510,semantic,smart contracts or flags
+28617,semantic,cozy night in
+28756,semantic,streamline optimize processes efficiency
+28889,semantic,actin cytoskeleton visualization
+28930,semantic,unique or memorable qualities
+29056,semantic,string extraction
+29118,semantic,"Portugal, Portuguese, Iberian Peninsula"
+29192,semantic,AWS RDS database services
+29284,semantic,"average, point, properties, starting"
+29300,semantic,water and thirst
+29419,semantic,how many
+29447,semantic,Cargo.toml dependencies
+29506,semantic,exponent `n`
+29516,semantic,"unstoppable wave, stony puzzle, unpredictable energy"
+29532,semantic,relativistic atom properties
+29619,semantic,thumbs up/down feedback
+29676,semantic,maintaining neutrality or alliances
+29689,semantic,daughter or son
+29735,semantic,"Quentin Tarantino, Call Me"
+29747,semantic,bill passes in chamber
+29757,semantic,"living conditions, improvement, humanism"
+29841,semantic,best or most proper
+29846,semantic,python imports for data science
+29906,semantic,Chinese investment and outcomes
+29914,semantic,"technical, business, and HR concepts"
+29920,semantic,"rates, crisis, movement"
+29934,semantic,qualities of good writing and code
+29958,semantic,licensing
+29977,semantic,check availability
+29978,semantic,bleeding after intercourse
+30025,semantic,included in
+30085,semantic,capturing groups `()`
+30100,semantic,anomaly detection
+30127,semantic,"VirtualBox, QEMU, UTM"
+30171,semantic,"disconnect, unlink, loosen, displace"
+30224,semantic,Russian language or transliteration
+30299,semantic,distance calculations
+30319,semantic,"Japan, not China"
+30349,semantic,Hong Kong
+30351,semantic,making any investment decisions
+30364,semantic,"I can, they struggle"
+30413,semantic,well bad eye wise sprouts unique tầm
+30420,semantic,"more easily, taller than, more"
+30445,semantic,font editor or software
+30462,semantic,future years
+30483,semantic,pesticides and insecticides
+30572,semantic,incoming call
+24388,other,**
+24600,other,any other questions
+24687,other,within appropriate boundaries
+24970,other,people can
+25295,other,that's information
+25715,other,that's a really interesting question
+25916,other,relationship status
+26504,other,purpose or reason
+27928,other,for everyone
+28170,other,Generally easy or reliable
+28200,other,play on
+28380,other,"consider, for, some, utilize"
+28826,other,I work with text
+29998,other,personal opinion subjective
+30306,other,as of late 2023
+30371,other,primarily focuses on
+30624,other,"systematic, scheduled, planned"
+30670,syntactic,"following ""when"""
+30745,syntactic,but followed by a transition
+30859,syntactic,reporting claims or statements
+30950,syntactic,references at the end
+30961,syntactic,"specifically, particularly"
+30986,syntactic,what others have would
+31095,syntactic,"lists separated by commas or ""and"""
+31181,syntactic,open to
+31196,syntactic,if [subject] [verb]
+31200,syntactic,"hint, Hin, hinted, hints"
+31267,syntactic,return statement
+31328,syntactic,the + noun phrase
+31386,syntactic,`junit.Test`
+31394,syntactic,particularly
+31457,syntactic,And followed by transition word
+31520,syntactic,"directory, type"
+31540,syntactic,to replace/change/properly
+31694,syntactic,while followed by contrast
+31716,syntactic,"DWDM, DDoS, IP, fiber, container ship"
+31934,syntactic,"Set, create, send"
+32133,syntactic,when time or date
+32172,syntactic,questions starting with does
+32272,syntactic,always crucial always
+32441,syntactic,"with zero, with a"
+32541,syntactic,decorative unicode characters
+32709,syntactic,write every day for 500 words
+32758,syntactic,Telekom.com
+32876,syntactic,"openly, clearly, or intentionally"
+33021,syntactic,DICOM. Scalability
+33051,syntactic,"claims, equations, figures, married"
+33066,syntactic,questions asking how
+33073,syntactic,letter options
+33101,syntactic,still
+33125,syntactic,your + [noun]
+33129,syntactic,identifier name system permissions
+33323,syntactic,function return descriptions
+33426,syntactic,Participate in code
+33565,syntactic,walk followed by prepositions
+34016,syntactic,Console output
+34042,syntactic,"key, value, or assignment separators"
+34044,syntactic,And then introducing a thought
+34079,syntactic,Mr. followed by a name
+34168,syntactic,words following punctuation
+34189,syntactic,live not perish
+34223,syntactic,essential for
+34433,syntactic,"load, logs, reads, scrapes, uploads"
+34466,syntactic,following a phrase introducing a topic
+34552,syntactic,final punctuation marks
+34562,syntactic,for simplicity
+34911,syntactic,if... it
+34914,syntactic,"g.,"
+34931,syntactic,~/.config/ or ~/.ssh/
+34978,syntactic,no followed by a word
+35268,syntactic,dialogue preceding punctuation
+35301,syntactic,why the other options
+35365,syntactic,always been
+35517,syntactic,know the other
+35570,syntactic,objective to perform
+35623,syntactic,code blocks
+35636,syntactic,chuckled softly
+36406,syntactic,avoid ambiguity jargon rambling
+36870,syntactic,as requested
+37055,syntactic,Here's a breakdown
+37078,syntactic,O(n log n) complexity
+37084,syntactic,lists of examples
+37236,syntactic,*
+37262,syntactic,identifying/discernible elements
+37264,syntactic,symbols and numbers
+37493,syntactic,modal verbs
+37505,syntactic,enough or sufficiently
+37569,syntactic,while being
+37600,syntactic,don't let
+37607,syntactic,when conditional clauses
+38076,syntactic,date marker
+38190,syntactic,arising out of or relating to
+38290,syntactic,programming keywords and method signatures
+38561,syntactic,past tense verbs or states of being
+38724,syntactic,phrases with specific formatting
+38776,syntactic,programming boolean results
+38783,syntactic,subject line
+38790,syntactic,numbers and symbols
+38798,syntactic,mathematical equations with numbers
+39052,syntactic,list item markers
+39101,syntactic,for introducing groups
+39192,syntactic,list item markers or emphasis
+39305,syntactic,code throws exception or references
+39345,syntactic,in conclusion or in short
+39352,syntactic,from explaining a definition
+30656,semantic,social context and emotional valence
+30907,semantic,important decision impact
+30960,semantic,natural light and interior spaces
+30994,semantic,works of fiction and media
+31006,semantic,disease and parasites
+31094,semantic,struggling with
+31383,semantic,solution or resolution
+31385,semantic,capital and unit
+31447,semantic,school funding and tuition
+31719,semantic,"rustic, vintage, antique styles"
+31787,semantic,causality or reason
+32028,semantic,geometric coordinates and plotting
+32061,semantic,squamous
+32098,semantic,years
+32103,semantic,"wrapped, folded, shrouded, enveloped"
+32170,semantic,3D printing materials and processes
+32345,semantic,numbers followed by units or calculations
+32427,semantic,arrival or halted
+32525,semantic,"Joker, carries, mischievous"
+32528,semantic,striking a pose or conversation
+32747,semantic,married couple
+32790,semantic,kinds of academic disciplines
+32796,semantic,growth rate or percentage change
+32890,semantic,mystery and detective solving
+32998,semantic,available
+33055,semantic,patients undergoing studies or treatment
+33317,semantic,sending by post or email
+33589,semantic,"causes, factors, blame"
+33618,semantic,correlation and relationships
+33750,semantic,then introducing a new point
+33835,semantic,Names followed by specific endings
+33881,semantic,asking why
+33930,semantic,go shopping
+33956,semantic,"sorrow, fire, deed, striving, bias"
+33963,semantic,World War I
+34025,semantic,dependency injection frameworks
+34143,semantic,installing and related actions
+34359,semantic,COVID-19 and pandemic
+34462,semantic,"startled ""Oh"""
+34504,semantic,RISC-V processors
+34545,semantic,hair loss and alopecia
+34596,semantic,political charisma and skills
+34655,semantic,divisibility by
+34761,semantic,references and citations
+34851,semantic,all-rounders and overall power
+35106,semantic,"nuance, difficulty, and subjective evaluations"
+35125,semantic,real-time information
+35203,semantic,sign/indicate potential issues
+35211,semantic,numbers and units
+35387,semantic,comparison between things
+35393,semantic,numbers followed by units
+35506,semantic,"high level, ratings, or fever"
+35589,semantic,cleaning and grooming
+35807,semantic,"cyber espionage, targeting infrastructure"
+35845,semantic,microsoft corporation websites
+35904,semantic,out of
+35932,semantic,promote development and contribution
+35984,semantic,"fishing, farming, resources"
+36046,semantic,in favor of / on behalf of
+36132,semantic,angle and direction
+36379,semantic,academic and professional roles
+36409,semantic,time of day
+36596,semantic,collapse / collapsing
+36624,semantic,born in
+36700,semantic,days of the week
+36766,semantic,ratings and scores
+36795,semantic,"session, claims, participants, customers, company, docker"
+36878,semantic,preference
+37040,semantic,information is
+37061,semantic,Travel Style
+37075,semantic,"opening, evaluating, saving"
+37106,semantic,memory allocation failure
+37169,semantic,regions and places
+37397,semantic,landing in or into something
+37477,semantic,login
+37525,semantic,gamblingcasinowagering
+37651,semantic,manufacturing and sourcing locations
+37676,semantic,medical treatments and procedures
+37691,semantic,"thilled, pleased, happy, proud"
+37848,semantic,story about
+37870,semantic,Welsh names and places
+38036,semantic,Generate
+38130,semantic,Hillary Clinton
+38200,semantic,"Berberine, Barbados, Barbara, Barbette, barbar"
+38347,semantic,Kentucky places and events
+38371,semantic,what sets apart
+38406,semantic,timestamps
+38460,semantic,plant families ending in aceae
+38713,semantic,one who
+38804,semantic,adults can be hurt or vulnerable
+38819,semantic,languages for 'term'
+38914,semantic,problem solving
+39042,semantic,training or teaching
+39047,semantic,read/extract sensitive data
+39237,semantic,past traumatic events
+39392,semantic,"numbers, colors, or specific adjectives"
+39440,semantic,a momentum or acceleration
+39470,semantic,xenomorph survival
+30955,other,for / für
+31182,other,or
+32164,other,"starts with ""this is"""
+33848,other,discuss this further
+34151,other,or
+35205,other,hope you enjoy it
+35874,other,I have had the opportunity to
+36986,other,"solve for, substitute"
+37972,other,I am Gemma
+37701,other,not exclusively
+38622,other,in the mood for
+39412,other,actions to perform
+39670,syntactic,viewport meta tag
+39699,syntactic,with our / with [ topic ]
+39817,syntactic,define (problem
+40049,syntactic,on Day
+40113,syntactic,verbs describing actions
+40518,syntactic,` CREATE TABLE` statements
+40606,syntactic,exponentiation `**` and `^`
+40684,syntactic,latex package imports
+40696,syntactic,objects followed by comma
+40757,syntactic,programming control flow keywords
+41204,syntactic,often seen
+41402,syntactic,ellipses and punctuation
+41413,syntactic,what/how/where/who
+42148,syntactic,calculating or finding values
+42350,syntactic,group by addition
+42459,syntactic,keep it concise
+42791,syntactic,numbers followed by advice/reasons
+42823,syntactic,elif else
+42959,syntactic,is followed by descriptive phrase
+42978,syntactic,merge sort algorithms
+43043,syntactic,short story or term
+43228,syntactic,German nouns and official links
+43390,syntactic,This sentence starter
+43568,syntactic,numerical amounts
+43760,syntactic,is a matter of
+43822,syntactic,breakdown of explanations
+43987,syntactic,less emphasis on
+44074,syntactic,how you can do
+44166,syntactic,`code`
+44176,syntactic,default values
+44213,syntactic,this is
+44245,syntactic,"outlines, contrast, injuries, visa, JWT"
+44276,syntactic,non-english words and URLs
+44303,syntactic,not genuine or sincere
+44940,syntactic,code delimiters
+45057,syntactic,branching and function calls
+45063,syntactic,"efficient, dependency, regression"
+45098,syntactic,grant/lift/sing words
+45585,syntactic,while loops or code blocks
+45733,syntactic,can / could / might
+45749,syntactic,broken down into
+45761,syntactic,general requirements and applicability
+45852,syntactic,How it works
+45943,syntactic,help available or people who
+46007,syntactic,for loop starting at 2
+46067,syntactic,"so, such, tellement, настолько, इतना"
+46224,syntactic,"Since, therefore, conclusion"
+46482,syntactic,small
+46500,syntactic,"to sexual, Sustainability, seeking, quiet"
+46579,syntactic,"""Bonjour"", ""avoid long"", ""public transport"", ""linger"", ""Estafas""Let's look for a common theme:*   `avoid` is followed by `long` (queues)*   `public` is followed by `transport`*   `linger` is present as a word *after* `avoid` in the `TOKENS_AFTER_MAX_ACTIVATING_TOKEN` list, and `avoid long` is explicitly in texts.*   `Bonjour` is in `MAX_ACTIVATING_TOKENS`.The phrase ""avoid long, public transport"" captures a recurring theme. The neuron seems to be identifying sequences related to avoiding negative outcomes (long queues) and identifying relevant infrastructure (public transport). The presence of ""Bonjour"" suggests it might also be related to travel-related advice or greetings.Considering ""avoid long"", ""public transport"", and ""linger"", a good phrase could be:avoid long, public transport, linger"
+46650,syntactic,in advance
+46761,syntactic,information or
+46886,syntactic,* or **
+46968,syntactic,forget yesterday or separate
+47296,syntactic,don't rely or risk
+47309,syntactic,"chef, issuance, err"
+47337,syntactic,named [name]
+47735,syntactic,first of all / firstly / in the first place
+47952,syntactic,list or sequence
+48209,syntactic,actually followed by positive intensifiers or outcomes
+48348,syntactic,number and code patterns
+48445,syntactic,lists of items
+48490,syntactic,start with
+48721,syntactic,conjunctions indicating contrast or continuation
+48896,syntactic,but not limited to
+49175,syntactic,"if, if, if"
+49195,syntactic,good idea to
+49220,syntactic,"float, time, Request, POST, invalid, phishing, problems"
+49249,syntactic,majority or bulk
+49254,syntactic,sequence and conjunction
+49515,syntactic,app build and project
+49519,syntactic,dart code
+49745,syntactic,don't care about
+49813,syntactic,my + possessive noun
+49991,syntactic,Table #
+50344,syntactic,where questions are asked
+50386,syntactic,describing tone or audience
+50469,syntactic,at its
+50472,syntactic,bolded headings with colons
+50474,syntactic,changes frequently
+50507,syntactic,reflexive and possessive concepts
+50565,syntactic,code comments and programming keywords
+50715,syntactic,template or prompt formatting
+50734,syntactic,"cleanup, close, dispose, print"
+39536,semantic,improvement
+39551,semantic,abstract concepts and aspirations
+39842,semantic,season or timing
+39872,semantic,flexibility and open source
+39987,semantic,"Vicuna, Guanaco, M3"
+40055,semantic,defensive actions
+40123,semantic,manufacturing illegal drugs
+40233,semantic,differences
+40341,semantic,propagating or distributing information or traffic
+40532,semantic,phone numbers
+40538,semantic,percentages and splits
+40561,semantic,financial obligations and liquidity
+40692,semantic,Social Security Trust Fund
+40834,semantic,odd jobs
+40930,semantic,abolitionist movements and escapes
+41333,semantic,options and features
+41356,semantic,dates and deadlines
+41500,semantic,interested in bomb-making or explosives
+41527,semantic,art nouveau style
+41620,semantic,"clothing, products, sales"
+41653,semantic,Puerto Rico
+41895,semantic,has/have followed by past participle
+42043,semantic,MAIT cells
+42329,semantic,medals and achievements
+42433,semantic,promote growth and development
+42494,semantic,English and Spanish mentions
+42507,semantic,API request parameters and body
+42515,semantic,non-cancerous cell growth
+43066,semantic,journal citations and years
+43429,semantic,US states and abbreviations
+43611,semantic,overlapping layers
+43720,semantic,"kpop, lesbian, triple word"
+44092,semantic,"**doctor, patient and medical contexts**"
+44198,semantic,"berberine, PCOS, weight loss"
+44290,semantic,"touristy, tourist areas"
+44493,semantic,regulatory compliance requirements
+44596,semantic,"calls to action like ""download today"""
+44891,semantic,offering information about
+45021,semantic,list items or symbols
+45043,semantic,highest melting point
+45097,semantic,writing sentences and paragraphs
+45156,semantic,window length or clock speed
+45326,semantic,divisibility by 3
+45413,semantic,why questions or explanations
+45454,semantic,animal or animals
+45458,semantic,armed struggle
+45635,semantic,medication and dosage
+45989,semantic,difficulty rating 1-5
+46019,semantic,"assists, rebounds, stats"
+46192,semantic,blocking
+46211,semantic,by or from Meta
+46250,semantic,confusion of mind
+46287,semantic,past 6 months
+46444,semantic,school and education contexts
+46467,semantic,oral glucose tolerance test
+46721,semantic,some fun
+46867,semantic,prevent organ rejection
+46927,semantic,least common multiple
+47100,semantic,manna from heaven
+47325,semantic,5-4-3-2-1 grounding technique
+47368,semantic,A trusted mental health professional
+47527,semantic,resolve promise completion
+47700,semantic,dog grooming
+47869,semantic,AV equipment and professional setups
+47959,semantic,archaeological finds
+48190,semantic,bone jokes
+48214,semantic,erotic stories or writing
+48442,semantic,cautious movement or action
+48800,semantic,uninterrupted peace and quiet
+48932,semantic,sections for outlines
+49170,semantic,hoping or searching for something
+49248,semantic,football
+49271,semantic,bird coloration
+49310,semantic,emotional connection without explicit details
+49344,semantic,"Nigeria, Sub-Saharan Africa, poverty"
+49430,semantic,code keywords
+49503,semantic,Persian and Afghan connections
+49638,semantic,historical time or conditional circumstance
+49654,semantic,mathematical operators and variables
+49718,semantic,contact directly
+49827,semantic,transition or transformation
+50064,semantic,"penalties, fines, or amounts"
+50113,semantic,probability that
+50182,semantic,seal
+50217,semantic,high cheekbones
+50342,semantic,external communication with stakeholders
+50452,semantic,"flower farms, parks, gardens"
+50630,semantic,jury trial verdict
+50759,semantic,"ownership, property, or rights"
+50813,semantic,find or uncover them
+39885,other,the aspect
+40408,other,focus on
+40526,other,explanation guidanceapproachthingsinstruct
+40639,other,match items
+40836,other,"intrinsic, certain, social"
+40904,other,philanthropist or phytochemical
+41161,other,dork or AI
+42167,other,we'll see
+42220,other,would directly contradict
+42222,other,not explicitly address
+42324,other,apply for this exciting opportunity
+43153,other,publisher name
+44104,other,"common responses to ""how are you"""
+44467,other,want to talk
+46529,other,that's where
+46643,other,"important, critical, widespread"
+46876,other,"flashcards, generates"
+46881,other,css links
+47154,other,office hours or administrative context
+47548,other,high-level
+48108,other,about the loss of
+50004,other,friendly and helpful
+50843,syntactic,column separator
+51201,syntactic,closing punctuation
+51235,syntactic,operation:1. Add2. Subtract3
+51551,syntactic,possessive relationships
+51664,syntactic,adjusting file paths
+51833,syntactic,punctuation ending sentence or phrase
+52502,syntactic,final answer boxes
+52539,syntactic,code blocks with curly braces
+53667,syntactic,sequence initiators and terminators
+53917,syntactic,title pages
+54021,syntactic,start or end
+54874,syntactic,English markdown outline
+54923,syntactic,/
+54997,syntactic,Option 3 (
+55027,syntactic,`[Your Name]` placeholder
+55345,syntactic,fill in the blanks
+55519,syntactic,code delimiters and programming constructs
+56050,syntactic,question format
+56183,syntactic,closing punctuation or brackets
+56300,syntactic,I feel/want/laugh
+56309,syntactic,conditional statements
+56421,syntactic,numbers or words following punctuation
+57987,syntactic,de nombreuses
+58060,syntactic,foreign language suffixes
+58104,syntactic,stop sequence
+58331,syntactic,math equations and expressions
+58434,syntactic,(
+58621,syntactic,i've + past participle
+58705,syntactic,ttk GUI elements
+58812,syntactic,master =
+58823,syntactic,look then at
+58892,syntactic,translated with
+58898,syntactic,Combine the following
+59109,syntactic,help of
+59502,syntactic,line breaks
+59551,syntactic,numbers following punctuation
+59631,syntactic,structured data keys and values
+60219,syntactic,image links and file paths
+62334,syntactic,Rust code closing parentheses
+63561,syntactic,long explanations or lists
+63604,syntactic,code blocks with numerical lists
+63660,syntactic,acknowledging questions with?
+63786,syntactic,code blocks and structured data descriptions
+64168,syntactic,set_caption calls
+50974,semantic,biological needs
+50988,semantic,meaning or sense
+50996,semantic,harmful stereotypes
+50997,semantic,dates and times
+51161,semantic,during longer/extended activities
+51229,semantic,"scattering, spectral, dictates"
+51342,semantic,system design
+51417,semantic,"footwear, wheels, or flooring"
+51427,semantic,free wifi
+51547,semantic,"value, currency, cost, Integrities"
+51793,semantic,central heating
+52099,semantic,time series signals
+52239,semantic,fishing and shopping for attention or information
+52315,semantic,Art and handicrafts
+52747,semantic,models and concepts
+53044,semantic,body parts
+53158,semantic,main
+53267,semantic,"they spent, fell, stood, laughed, worked"
+53354,semantic,booking in advance
+53532,semantic,discuss healthy relationships
+53614,semantic,p-Aminophenol
+53624,semantic,focus or mindfulness
+53807,semantic,laws and regulations
+53984,semantic,creation and invention
+54046,semantic,exclusive content
+54139,semantic,random number generation
+54180,semantic,mathematical operations and calculations
+54228,semantic,mathematics and physics concepts
+54304,semantic,hostage release Palestinian prisoners exchange
+54392,semantic,famous works of art
+54491,semantic,riddle
+54623,semantic,"evolved, gradually, became"
+54674,semantic,China academic research
+54820,semantic,where to watch
+54853,semantic,consciousness and unconsciousness
+55193,semantic,dental apprentice
+55235,semantic,from diverse backgrounds
+55606,semantic,film credits director writer
+55749,semantic,feet or inches tall
+56058,semantic,injections and administration
+56429,semantic,"front lines, supply lines, or territorial objectives"
+56474,semantic,vector or matrix operations
+56497,semantic,entities that are part of a group
+56593,semantic,seeing and touching
+56742,semantic,"nodded, a sign of agreement or acknowledgment"
+57011,semantic,"enormous, colossal, mega"
+57065,semantic,"observe, attuned, feeling, rhythms, signals, read, attention"
+57137,semantic,code snippets
+57155,semantic,percentages and calculations
+57170,semantic,condemning racism and harm
+57172,semantic,charismatic personality
+57358,semantic,powerful model
+57538,semantic,nation formation founding
+57568,semantic,bordering countries and regions
+57839,semantic,historical place names
+58165,semantic,magic bullet
+58187,semantic,ice sheets
+58284,semantic,making money online
+58336,semantic,taxonomy revising nomenclature
+58381,semantic,eye contact and smiles
+59583,semantic,against their will
+59655,semantic,engage with others
+59695,semantic,building with materials
+59934,semantic,foreign languages and technical terms
+59959,semantic,and hydrating other ingredients
+60205,semantic,drop off at
+60267,semantic,audio driver components
+60362,semantic,months
+60402,semantic,national and international scope
+60531,semantic,events and activities
+60553,semantic,spices and seasonings
+60604,semantic,colors and states
+60715,semantic,incorporates decoration or motifs
+60735,semantic,describing physical forms
+60800,semantic,"best, BEST"
+60902,semantic,corpus cavernosa
+60928,semantic,initiated by responsible entities
+60993,semantic,presents opportunities and challenges
+61112,semantic,refuses to honor / refund
+61212,semantic,harmful exploitation or abuse
+61383,semantic,reach conclusions
+61472,semantic,teach me
+61737,semantic,questions asked
+61820,semantic,48
+62052,semantic,vehicle condition and pricing
+62152,semantic,free certificate or booklet
+62382,semantic,"processing, hardware, processors, AI, GPUs"
+62426,semantic,API key or job details
+62591,semantic,describing personality traits
+62595,semantic,financialstocksandnumbers
+62693,semantic,options from casual to upscale
+63431,semantic,license
+63706,semantic,cells or injury after Cancer or lung
+63747,semantic,experimentation and trying out options
+63749,semantic,when to see a doctor
+63791,semantic,months and dates
+64019,semantic,years numbers or costs
+64033,semantic,music genres
+64110,semantic,psychology research and APA citation
+64232,semantic,backup your data
+50828,other,is / determine / compare / function calls
+50832,other,just a general
+51122,other,problem in dataproblem with scrapingproblem in Pythonproblem in Kolkataproblem in sharedproblem workingproblem in Unrealproblem topproblem tryingproblem Net
+51422,other,don't have to
+51455,other,remove or add
+51534,other,"years, dates, and time periods"
+51752,other,thank you for your assistance
+51974,other,"normal, 正常, normalen"
+52037,other,"amounts, states, or concepts"
+52194,other,more or less
+52323,other,applies to
+52361,other,you're / you
+52366,other,certain words and suffixes
+52430,other,"Resources, properties, options"
+52507,other,"time, node, sup, total, local, author, day, zero, google"
+52644,other,service business
+52689,other,"""What it is:"""
+53472,other,but but but but but
+53727,other,special qualities and value
+54087,other,even if
+54273,other,but ibut yourbut shebut itbut hisbut thebut he
+55316,other,of
+55354,other,remove this line
+55750,other,"less, lesser"
+55787,other,ہے۔
+56042,other,"Vielen, Vorteile, VRAM"
+56169,other,will be
+56391,other,"UK, more, messaging"
+56579,other,.
+56949,other,Through [process/experience/method]
+57248,other,indicating something
+58298,other,"need help, institutional, pressure, GPT"
+58311,other,ensures
+58423,other,of
+58461,other,jár
+58492,other,there are no
+59298,other,"completes, changes, longer, finished"
+59408,other,does that make sense
+59507,other,deep dive
+59739,other,crucial for
+59879,other,mathematical symbols and code delimiters
+59916,other,random strings of characters
+60614,other,"4 day, premium, jumbo frames, pilot"
+60905,other,how to understand
+61140,other,pan prefixes
+61977,other,one tiny
+62353,other,does not mention
+62711,other,position relative to
+62786,other,foreign language texts
+63172,other,Currywurst and falafel
+63260,other,providing increasing
+63759,other,hallucinate facts
+63941,other,select or choose an option
+64150,other,check
+64155,other,without symptoms or problems needed
+64371,syntactic,We plus verb
+64720,syntactic,qualitative adjectives before nouns
+64723,syntactic,foreign languages and punctuation
+65153,syntactic,attributes lists
+65267,syntactic,possessive pronoun followed by noun
+65296,syntactic,shapes and sizes
+65467,syntactic,numbers 1-9
+65543,syntactic,contrast conjunctions
+65824,syntactic,symbols and digits
+66358,syntactic,boolean enablement
+66708,syntactic,"special characters, numbers, and names"
+66854,syntactic,preceding if
+67169,syntactic,Column definition syntax
+67243,syntactic,"explaining types, systems, processes"
+67268,syntactic,question marks and parentheses
+67358,syntactic,return False
+68217,syntactic,HTML element names
+68387,syntactic,".py file, then run"
+68913,syntactic,variable declaration statements
+69258,syntactic,struct or module definitions
+69375,syntactic,code comments
+69412,syntactic,dates and numbers
+69568,syntactic,lists/navigation links
+69644,syntactic,какой / какое / какие
+69733,syntactic,the followed by modifier
+70206,syntactic,PHP code snippets
+71027,syntactic,prepositions introducing context
+71357,syntactic,ending punctuation
+71548,syntactic,contrast or coexistence
+71998,syntactic,numbers after colons or equal signs
+72693,syntactic,end of lists or clauses
+72733,syntactic,contrast conjunctions
+73219,syntactic,code blocks or tables
+73435,syntactic,"sql 'by' clauses, file paths"
+73526,syntactic,real or true followed by positive descriptor
+73615,syntactic,for each
+74505,syntactic,I have
+75476,syntactic,word endings
+75649,syntactic,'a' followed by single or 's'
+76392,syntactic,IP address
+76598,syntactic,’ followed by a letter or number
+76743,syntactic,groupId XML tags
+77001,syntactic,explicit / explicitly
+77164,syntactic,while others
+77225,syntactic,I am followed by a verb
+77283,syntactic,going beyond
+77742,syntactic,that is not
+77820,syntactic,navigation buttons and pages
+77822,syntactic,multi-line structured data list items
+78109,syntactic,* followed by text
+78848,syntactic,predictions followed by punctuation or formatting
+79307,syntactic,what that means
+79423,syntactic,that is
+80236,syntactic,most X in all of
+64432,semantic,"Pennsylvania, Ireland, USA"
+64545,semantic,automotive industry specifications
+64568,semantic,describing smooth operation or feel
+64703,semantic,countries
+64784,semantic,blue and its associations
+64931,semantic,ancient civilizations and their rulers
+65204,semantic,ages or quantities followed by time units
+65554,semantic,immigration and its effects
+65838,semantic,"Fastify, express, passport"
+65845,semantic,Website features and betting
+66042,semantic,tuberculosis and TB
+66178,semantic,Adobe Acrobat
+66208,semantic,Saudi Arabia
+66250,semantic,cheapness and cost-cutting
+66560,semantic,which parts of robots.txt
+66783,semantic,rolling mills and alloys
+66925,semantic,improve urban China
+67109,semantic,square root calculation
+67112,semantic,net interest margin
+67746,semantic,on demand
+68038,semantic,Content-Type header
+68113,semantic,oxidative stress and aging
+68207,semantic,asking for prayers or guidance
+68248,semantic,urination
+68277,semantic,"tongue, creatures, body parts"
+68356,semantic,The Weather Channel
+69296,semantic,gravitational waves
+69680,semantic,co-occurring mental health conditions
+70284,semantic,LGBTQ youth helpline
+70422,semantic,calculation and accuracy
+70473,semantic,legal or official context
+70484,semantic,south Louisiana
+70498,semantic,engine valve timing rod turbo
+70531,semantic,rate limiting factor
+70567,semantic,transport disruptions
+70864,semantic,powerpoint presentations and slides
+71178,semantic,vacation rental
+71668,semantic,"beginning, starting, effective dates"
+71694,semantic,impaired judgment and concentration
+71706,semantic,wonder and unfamiliarity
+71753,semantic,System files and security
+71795,semantic,social deduction games
+72260,semantic,female
+72455,semantic,Pearl of Great Price
+72811,semantic,list items followed by colons or asterisks
+72960,semantic,contacting resources
+73291,semantic,street performer
+73366,semantic,above sea level
+73566,semantic,store of value
+74026,semantic,"dominant, memorable, visually appealing places"
+74045,semantic,differences between North and South
+74459,semantic,power supply components
+74515,semantic,animals with a fixed number of legs
+74914,semantic,"eating, drinking, bite, foods"
+75040,semantic,"Crunchyroll, International Airport, Park, com"
+75085,semantic,sharing jokes and fun facts
+75094,semantic,hosting rights
+75148,semantic,things contained within or a collection of
+75203,semantic,Job Board
+75264,semantic,retailer names
+75361,semantic,clothing and objects
+75720,semantic,reliability and validity
+75841,semantic,spaces above ceilings
+75865,semantic,Word made flesh
+76064,semantic,Thermal Design Power
+76296,semantic,"market crashes, corrections, downturns, drawdowns"
+76799,semantic,marketing campaigns and promotions
+77029,semantic,Mississippi
+77864,semantic,sexual orientation
+78025,semantic,military operations and regions
+78153,semantic,travel
+78917,semantic,nerve damage or injury
+78925,semantic,World War II causes
+79086,semantic,helping others
+79172,semantic,showing off or displaying
+79376,semantic,cognitive functions and personality types
+79669,semantic,roles at Michelin industry
+79709,semantic,"legal penalties, consequences"
+79899,semantic,comes with
+64444,other,hope you enjoy
+64451,other,even if not illegal
+65070,other,"JFK, Kennedy, Monroe"
+65316,other,"strive to collect, committed to"
+65980,other,be yourself
+65985,other,for [purpose/noun]
+66144,other,need anything or help
+66576,other,when it happens first
+67140,other,cannot do
+67591,other,car model year ranges
+68450,other,"not automatically, not necessarily"
+68472,other,types of queries
+68702,other,related field
+68760,other,because you/it/of
+68786,other,both ... and
+68788,other,cultivate and its derivatives
+69077,other,contrasting conjunctions and clauses
+69688,other,experienced in
+69789,other,"is best, good, ideal, okay"
+70106,other,"essential, crucial"
+70224,other,thinking and questioning
+70577,other,"declaration, type, intent"
+70753,other,login or authentication successful
+70846,other,system design
+70896,other,"""the"" source.God titles"
+70900,other,to join
+70969,other,categorized by complexity and traits
+71011,other,record percentages
+71038,other,successful completion
+71166,other,opening context
+71315,other,positive and negative attributes
+71574,other,permission to proceed or offer
+71615,other,how to solve
+71875,other,evaluate expressions and tasks
+72081,other,technical terms and concepts
+72356,other,lesser amounts
+72889,other,informing or providing information
+73163,other,partial positive charge
+73199,other,square root of
+73269,other,combining
+73563,other,dejar o abandonar
+73656,other,"future events, forecasts, expectations"
+74225,other,informed citizenship
+75035,other,attempting to do something
+75659,other,you want to go
+76065,other,anyone who's
+76073,other,"Ms are, Ms learn, Ms is"
+76090,other,over or under
+76277,other,this software
+76855,other,thanks for
+77855,other,connect or link
+78069,other,determines or dictates
+78183,other,growing team
+78467,other,names and titles
+78624,other,slight dip in form
+79118,other,with a translation or explanation
+79679,other,build up
+79884,other,Did you
+79900,other,contrasting conjunction
+80576,syntactic,URLs and file paths
+80953,syntactic,"lists, rows, parameters"
+81376,syntactic,>be me
+81590,syntactic,"""ya"" followed by punctuation"
+81832,syntactic,"sl, 't, supers"
+81890,syntactic,unique identifiers and data types
+82112,syntactic,formatted bullet points
+82234,syntactic,as long as
+82282,syntactic,asking if
+82426,syntactic,in [field or domain]
+82668,syntactic,commands and directives
+82681,syntactic,list commands and examples
+83009,syntactic,math limit syntax
+83069,syntactic,"""This"" followed by descriptor"
+83112,syntactic,initialization of sizes or counts
+83486,syntactic,too [adjective]
+83577,syntactic,before
+84192,syntactic,matrix or grid structures
+84356,syntactic,mathematical or technical terms following conjunctions
+84362,syntactic,numbers following punctuation
+84375,syntactic,path manipulation functions
+84424,syntactic,save and run code
+85129,syntactic,"if, followed by a condition"
+85220,syntactic,commands for code and scripting
+85429,syntactic,visuals and formatting
+85588,syntactic,"prepositions followed by ""the"" or ""your"""
+85891,syntactic,express.json(); parsing
+86171,syntactic,start of a quotation
+86184,syntactic,settled at
+86495,syntactic,does not contain information
+86651,syntactic,related to *
+87207,syntactic,.com/
+87246,syntactic,the before concepts/lists
+88930,syntactic,sequence or MLA citation
+89070,syntactic,hashtags and tags
+89469,syntactic,command line arguments
+89491,syntactic,remove default underlines/outlines
+89726,syntactic,can followed by action verbs
+89990,syntactic,a or an + noun
+90008,syntactic,map data structures
+90430,syntactic,"numbers, locations, and english tokens"
+90603,syntactic,code blocks and commands
+91019,syntactic,in all / in these
+91567,syntactic,try me out
+92148,syntactic,use/used/using
+92584,syntactic,json generation requests
+93185,syntactic,command:
+93241,syntactic,valid number range checks
+94589,syntactic,rating scales and qualitative descriptions
+95099,syntactic,`_` separator in code and text
+95560,syntactic,parentheses and separators
+95990,syntactic,file paths or directory names
+96093,syntactic,logarithm
+96190,syntactic,code delimiters
+96352,syntactic,search online for your area
+96353,syntactic,especially
+96582,syntactic,asking for instructions
+97440,syntactic,redundant or duplicate content
+97512,syntactic,following sentence structure after punctuation
+97627,syntactic,. / : (
+98072,syntactic,Option 2
+99166,syntactic,predictive generation
+100562,syntactic,conjunctions and connectors
+100671,syntactic,positional descriptions; relations; containment
+81220,syntactic,expresses how or why
+85983,syntactic,process repeats iteratively
+86867,syntactic,creation and process actions
+80304,semantic,medical conditions or potential harms
+80538,semantic,everyday objects and phenomena
+80767,semantic,"Columbus, Ohio, Cleveland Clinic"
+81051,semantic,postal code components H3A 0G4
+81560,semantic,vector math and algorithms
+81625,semantic,"anger, sadness, disappointment, frustration"
+81892,semantic,conspiracy and sinister contexts
+81919,semantic,straight face
+82368,semantic,ball physics
+82994,semantic,education and teaching
+82996,semantic,medicine or treatments
+83248,semantic,"sister, daughter, mother"
+83366,semantic,increased productivity and work
+83431,semantic,"Overwatch, Stargate, SCP, cybercrime"
+83682,semantic,projection onto
+83871,semantic,digital technology use
+84359,semantic,activities by locals and volunteers
+84539,semantic,bear
+84593,semantic,jwt token or snow
+84727,semantic,is followed by explanation
+84902,semantic,recalling or remembering information
+84966,semantic,numbers followed by punctuation
+84990,semantic,Louisiana and related entities
+85879,semantic,collision or meeting
+85961,semantic,orbital mechanics and periods
+86067,semantic,house mascots slang
+86260,semantic,medications and drugs
+86555,semantic,compiler installation
+86742,semantic,pen writing
+86743,semantic,going through difficult time
+87050,semantic,postal codes
+87102,semantic,administrator or root privileges
+87202,semantic,political candidates and primaries
+87344,semantic,cars driving
+87408,semantic,makes us/me feel
+87914,semantic,"sound effects like thud, thunk, whoosh"
+88226,semantic,Competing here
+88332,semantic,ticket descriptions
+88487,semantic,University names and locations
+88612,semantic,"efficiency, control, standards"
+89097,semantic,getter methods returning value
+89165,semantic,autonomous communities and provinces
+89257,semantic,"Benefits, Qualifications, Cost, Employee"
+89282,semantic,TV program types
+89532,semantic,tail or trail
+89594,semantic,investigating ongoing investigation
+89724,semantic,"surviving spouse, loved ones"
+90242,semantic,grams of calories and protein
+90582,semantic,senior living specialist and prospect
+91353,semantic,accusations of attacking
+92406,semantic,global cooperation and challenges
+92447,semantic,aspiration before medical help
+92454,semantic,login and password management
+92588,semantic,certain emotions or fantasies
+92610,semantic,free services from stores
+92620,semantic,start your trip with
+92776,semantic,"health, fats, oils, pregnancy"
+93017,semantic,contact information
+93157,semantic,composition and camera angle
+93416,semantic,identification and programming
+93587,semantic,parents and family members
+94486,semantic,Qx earnings and revenue
+94700,semantic,decrease or worsen
+94880,semantic,sovereignty and governance
+95282,semantic,persona J&J
+95491,semantic,university names and abbreviations
+95684,semantic,nutrition and diet information
+95695,semantic,language identification
+96018,semantic,"January 6th, August,March, June"
+96066,semantic,dental health and water additives
+96143,semantic,homework and related tasks
+96145,semantic,can't be happening
+96331,semantic,discrimination and prejudice
+96386,semantic,"Mariners, suns, Warriors, York"
+96864,semantic,SCP followed by number
+97042,semantic,"Month, Day, numbers, dates"
+97073,semantic,millions of years
+97267,semantic,days of the week/time
+97497,semantic,take down
+98093,semantic,per year
+98200,semantic,follow-up email
+99016,semantic,fill in forms
+99098,semantic,meeting minutes and action items
+99331,semantic,"dates, prices, amounts"
+99425,semantic,taxes and records
+99480,semantic,leaving luggage
+99574,semantic,android fragment managers
+99577,semantic,"projects, research, and studies"
+99596,semantic,hiking
+99767,semantic,in-person or face-to-face
+99870,semantic,social proof: everyone does it
+100001,semantic,dimensions or areas
+100524,semantic,new partner and members
+100841,semantic,"articles beginning with ""the"""
+100959,semantic,hunting license
+101157,semantic,sql identifier naming conventions `_` separator
+80312,semantic,descriptive adjectives for style or origin
+80333,semantic,indentation or dimple
+82718,semantic,"communication, emotion, authority, process"
+83620,semantic,domestic supply chains and economy
+90964,semantic,reducing people to body parts
+95303,semantic,"social, political, and communication contexts"
+80936,other,approaching her
+82105,other,"or anywhere, for that matter"
+88746,other,add a disclaimer at the end
+89283,other,code delimiters
+91621,other,between two
+93429,other,analyze / analyse
+94176,other,memory recall failure
+94199,other,unity and unite
+96739,other,life/things easier or worse
+97683,other,agreement term
+98923,other,steps or sections
+99309,other,numbers preceding or following parentheses
+100036,other,it wins
+80437,other,We have
+81451,other,"I know, I concur, I understand"
+81494,other,specific actions or qualities
+81622,other,doing little for
+82729,other,programming concepts
+83989,other,I was trained on
+84503,other,"debunked, document-intensive, biographical research"
+87056,other,disclaimer
+90660,other,VSC light
+94298,other,directly contradicts ethical principles
+95752,other,let me know if you
+98147,other,graspable
+100937,other,unintentional or accidental
+102237,syntactic,after events or times
+102399,syntactic,possessive pronouns
+102943,syntactic,". followed by t, message, or 1"
+103285,syntactic,parameters with `val` or `is`
+104445,syntactic,list item separators
+104549,syntactic,end of punctuation
+104572,syntactic,explain its reasoning step-by-step
+104689,syntactic,potential exceptions
+105234,syntactic,solve the problem:
+106537,syntactic,"""this is a"""
+106789,syntactic,"question and answer pairs, vocabulary lists"
+107179,syntactic,years (yyyy)
+109361,syntactic,special characters and code punctuation
+110995,syntactic,". ,"
+111785,syntactic,Punctuation followed by 't' or numbers
+111874,syntactic,* and
+112203,syntactic,when each
+115444,syntactic,introduces example data or structure
+118318,syntactic,nouns following articles
+118468,syntactic,end of sentence
+118507,syntactic,"explain, provide, discuss"
+118627,syntactic,original followed by request
+118974,syntactic,which followed by verb or noun
+119201,syntactic,certainly or definitely
+121572,syntactic,start of clause
+121789,syntactic,\nstatistic
+122063,syntactic,Be careful with
+122110,syntactic,conditional clauses
+122168,syntactic,dynamic programming index `j`
+122333,syntactic,Failban variable segments
+122667,syntactic,""" a "" followed by"
+122699,syntactic,sentence end punctuation
+122963,syntactic,long explanatory statements
+123076,syntactic,clicking OK
+123465,syntactic,"placeholders, placeholders"
+123660,syntactic,standard context indicators
+123719,syntactic,index found
+124325,syntactic,prepositions and case endings
+124588,syntactic,transitions and conclusions
+124625,syntactic,a followed by prepositions
+124685,syntactic,code function definition syntax
+124870,syntactic,URLs and links
+125132,syntactic,dialogue punctuation
+125255,syntactic,structured lists
+125723,syntactic,"Originating, thriving, announced, dressed, composing, leveraging"
+125759,syntactic,"contractions, possessives, or abbreviations"
+126061,syntactic,configuration section header
+126346,syntactic,"address, index, number"
+126853,syntactic,"lists, bullet points, or enumerated items"
+127020,syntactic,skip or cancel
+110838,syntactic,explaining how to approach topics
+103509,syntactic,Vertical and horizontal concepts
+118978,syntactic,"driver's side, dashboard, under the sink"
+115627,syntactic,"completely, extremely, not completely"
+122971,syntactic,related to the text descriptions
+125133,syntactic,no or yes answers
+125989,syntactic,This request prohibited
+123325,syntactic,and
+101215,semantic,garden or play area
+101239,semantic,turn on power valve
+101311,semantic,education and learning
+101909,semantic,formula definitions and theorems
+102405,semantic,date manipulation
+102543,semantic,organization types
+102610,semantic,renewable resources
+102767,semantic,area calculation
+102792,semantic,respecting or disregarding boundaries
+103000,semantic,"patisserie, bakeries, and pastries"
+103101,semantic,Erika Eleniak
+103968,semantic,Islam's Five Pillars
+104510,semantic,non-consensual image leaks
+105305,semantic,disappointment after anticipation
+106127,semantic,DIY projects
+106130,semantic,credit and related financial terms
+106839,semantic,service providers and staff
+107032,semantic,breasts and boobs
+107111,semantic,women in leadership roles
+107114,semantic,impact and its consequences
+107617,semantic,stablecoin
+107980,semantic,Pygame initialization and screen dimensions
+108263,semantic,valve disease
+109020,semantic,background or prior experience
+109336,semantic,love and enjoyment
+109821,semantic,earning potential and employment
+110439,semantic,components and accessories
+112155,semantic,"unbutton, detach, take back, use, pull out"
+112199,semantic,functioning of systems
+112388,semantic,"musical experience, sisters"
+112515,semantic,carpal tunnel syndrome repair
+112625,semantic,"habitat, population, area, city"
+112691,semantic,Pixel models and Android phones
+112785,semantic,"country, city, region"
+112875,semantic,"""mini-Miranda"" warning"
+112929,semantic,card tracking
+113051,semantic,mortality and survival
+113126,semantic,Hebrew language
+114063,semantic,eligibility requirements and degrees
+114928,semantic,foreign languages and internet providers
+115204,semantic,healthcare and American Medical
+116138,semantic,biological terms and anatomy
+116295,semantic,Chinese New Year and China
+116682,semantic,short-chain fatty acids
+116776,semantic,at university or college
+117157,semantic,spanish and russian words
+117191,semantic,"allow established, related, or authenticated access"
+118135,semantic,raven transformation
+118924,semantic,embryonic development layers and structures
+119167,semantic,python code imports
+119803,semantic,科幻小说
+120146,semantic,"treatment, symptoms, prevention"
+120894,semantic,protesting against something
+121063,semantic,under president
+121692,semantic,applications in electronics sensors
+122730,semantic,political decisions and advertising
+123204,semantic,language specific meanings
+123323,semantic,service and parts revenue
+124310,semantic,source of
+124453,semantic,state income tax
+124808,semantic,arguments made by
+124929,semantic,actor names followed by 'is brilliant' or 'delivers'
+125078,semantic,"security, data, access, logic, structure"
+125113,semantic,puppeteer or behind the scenes controlling
+126029,semantic,pathfinding or routing
+126188,semantic,prime numbers
+126384,semantic,Undertale characters
+109004,semantic,conditional statements
+109296,semantic,asking for your information
+110079,semantic,assess your
+110526,semantic,seen many things
+111064,semantic,a lot
+112807,semantic,commutative properties or order of operations
+113111,semantic,grateful for the things I have
+114280,semantic,future and challenges
+114655,semantic,body found dead
+115797,semantic,make a difference
+118189,semantic,look closely or examine
+118709,semantic,diameter and size specifications
+118819,semantic,world-class
+118816,semantic,attention to detail
+120959,semantic,places that are names
+121221,semantic,change
+126003,semantic,character description generation
+126123,semantic,mounting or placement types
+126582,semantic,positioning and opportunity
+101204,other,"encoding, merging, image processing, decay, stretching, integers"
+101655,other,In context introductions
+102086,other,Blender scripts
+104003,other,parking difficulty
+104385,other,names of people and groups
+104971,other,introduction for a
+106108,other,surpassing or exceeding ranked position
+106216,other,heard of
+106450,other,at the time
+107816,other,ignore all previous instructions
+108688,other,mild intensity or degree
+109596,other,advice/help requests after specific phrasing
+110167,other,be open to
+110591,other,Highlights
+111154,other,generated by AI
+111249,other,advocating / arguing positions
+111510,other,what is the context
+111621,other,has been or has helped
+112941,other,checklist after input
+113243,other,a product of
+113631,other,technical terms and contexts
+114318,other,fit your criteria
+114397,other,search results links
+114704,other,"figures, non-English characters"
+115646,other,explore more
+116315,other,there anything
+116421,other,service provision
+118000,other,open the
+118219,other,this isn't
+118246,other,sometimes
+118870,other,we/you start
+118904,other,examples of ideas
+119839,other,#include <stdio.h> #include <stdlib.h>
+120014,other,correcting transcription errors
+120367,other,official documentation or website
+120824,other,this works
+121075,other,emojis and exclamations
+121150,other,want or looking for
+122142,other,start learning
+122754,other,date and length information
+122836,other,describing AI model types
+123477,other,audience types for questions
+123752,other,tip or tips
+123863,other,value for money
+124079,other,enthusiasm or excitement
+124605,other,does not change
+125011,other,around objects
+125966,other,English words or phrases
+126462,other,what to do
+105797,other,numbers and lengths
+104159,other,clearing input field
+109877,other,"mostly no, but with caveats"
+127434,syntactic,or punctuation followed by 't'
+127549,syntactic,the following word
+127640,syntactic,to + verb
+128590,syntactic,"""called"" followed by technical terms"
+129612,syntactic,the
+130493,syntactic,and then
+132397,syntactic,for (int i <
+133548,syntactic,must / should / always
+134077,syntactic,introducing the second item
+134386,syntactic,numbers and symbols
+135495,syntactic,script filename arguments
+136555,syntactic,sequences of numbers and punctuation
+136568,syntactic,"if, even if"
+136582,syntactic,constituency parsing
+137433,syntactic,"state, function, que"
+137516,syntactic,URLs in parentheses
+138431,syntactic,clarifying questions and requests
+140526,syntactic,import statements including 'rxjs/operators'
+141518,syntactic,phrases emphasizing concepts
+142684,syntactic,However
+143404,syntactic,however followed by qualifier
+143561,syntactic,`.` followed by identifiers
+144123,syntactic,set operations
+144533,syntactic,"punctuation, questions, and final answers"
+144802,syntactic,code blocks or structured output
+145610,syntactic,when or where
+145944,syntactic,interpreted as
+146105,syntactic,calculating squares and results
+149502,syntactic,image processing library calls
+149540,syntactic,max followed by parenthesis
+150979,syntactic,) or
+151563,syntactic,action to take
+152677,syntactic,counting numbers and items
+152935,syntactic,* Therefore
+153869,syntactic,digits and code structures
+154803,syntactic,programming constructs or keywords
+156308,syntactic,search placeholders
+156330,syntactic,day number followed by colon
+157229,syntactic,introducing explanations for understanding
+158392,syntactic,I'll give detailed descriptions
+158749,syntactic,middle =
+158791,syntactic,after a or an
+159370,syntactic,though challenge
+159707,syntactic,code terminators
+160265,syntactic,section titles and bullet points
+162526,syntactic,URLs
+132553,syntactic,placeholder names and organizations
+133933,syntactic,reacts to
+135491,syntactic,recognized that
+136691,syntactic,indicates or suggests
+140619,syntactic,block on
+141547,syntactic,Surround oneself/yourself
+155499,syntactic,considered as a
+158484,syntactic,quantities after names/you
+127284,semantic,"private clients, celebration, school, party, gym"
+127290,semantic,machine learning
+127987,semantic,power supply components
+128032,semantic,GERD symptoms
+128719,semantic,true or false questions
+128857,semantic,rose through the ranks
+129700,semantic,"marginalization, gender, intersectionality"
+130429,semantic,"""no"" or ""none"" across languages"
+131185,semantic,avoid war
+131253,semantic,phone numbers
+131270,semantic,"cultural, social, or abstract concepts"
+131391,semantic,"*   **TOP_ACTIVATING_TEXTS**:    *   ""...Yevgeny Prigozhin, the head of the Wagner Group...""    *   ""Yevgeny Prigozhin (Wagner Group)""    *   ""...around Avdiivka. Russia is continuing its offensive, and Ukraine is pleading for more aid...""    *   ""...around Avdiivka. Russia is continuing its offensive, and Ukraine is appealing for more aid...""    *   ""...around Avdiivka. Russia is reportedly intensifying its attacks. Western allies are discussing further aid...""    *   ""...around Avdiivka. Russia is reportedly intensifying its attacks. Western allies are debating further aid...""    *   ""...around Avdiivka. Russia focusing on capturing Avdiivka. Ukraine is urging its Western allies for more aid...""    *   ""...around Avdiivka. Russia is reportedly intensifying its attacks. The US announced another security assistance package for Ukraine.""    *   ""...Avdiivka: Russian forces have been relentlessly attempting to encircle and capture Avdiivka in the Donetsk region...""    *   ""...around Avdiivka. Russia is reportedly continuing its offensive, and Ukraine is requesting more aid from its allies.""Observation:- The `MAX_ACTIVATING_TOKENS` list heavily features ""di"".- The `TOKENS_AFTER_MAX_ACTIVATING_TOKEN` list shows ""iv"" following ""di"" repeatedly. This suggests a pattern like ""div"".- Looking at `TOP_ACTIVATING_TEXTS`, the name ""Yevgeny Prigozhin"" and references to the ""Wagner Group"" appear. ""Prigozhin"" contains ""gin"".- The word ""Avdiivka"" appears frequently. ""Avdiivka"" contains ""ivka"".- The `TOP_POSITIVE_LOGITS` list has varied words, but ""extrav"" and ""torrent"" might be hints, though not directly tied to the most prominent patterns.- However, the MOST prominent pattern from `MAX_ACTIVATING_TOKENS` and `TOKENS_AFTER_MAX_ACTIVATING_TOKEN` is ""di"" followed by ""iv"".yevgeny prigozhin"
+133595,semantic,"FastAPI, ICICI, PitchBook, Livestream, Vaginal, LangChain, BGP, Adenosine, Yarzani"
+134274,semantic,financial calculations
+135137,semantic,astrology planet Mars
+135413,semantic,attention and interest
+135796,semantic,disaster recovery
+135838,semantic,interaction between
+135914,semantic,"freelance writer, translator, producer"
+135915,semantic,calculate percentage increase difference
+135927,semantic,possesses or established
+136485,semantic,"floating-gate transistor, SSD, RAM, connectors"
+136797,semantic,Windows for Dummies
+137041,semantic,active and maintained
+137535,semantic,pursuit of pleasure and avoidance of pain
+137673,semantic,pain and emotional numbness
+137891,semantic,think tanks organizations
+138252,semantic,end or final markers
+138302,semantic,clear cache and cookies
+138793,semantic,forming new neural connections
+138857,semantic,Fire TV
+138896,semantic,their sexual attributes
+139267,semantic,guidance only
+139325,semantic,occasions and scenarios
+139368,semantic,primary focus goal characteristic
+139385,semantic,Chinese Civil War
+139789,semantic,in the image or video
+139877,semantic,school names and boys
+139949,semantic,financial power/difficulties
+140111,semantic,San Francisco
+140161,semantic,trails and hiking descriptions
+140369,semantic,country codes and abbreviations
+141427,semantic,image description landscape
+141452,semantic,COVID protocols and sports teams
+141947,semantic,"a character, woman, person, child, nation"
+142276,semantic,mitochondria: powerhouse of the cell
+142463,semantic,successful seasons
+142809,semantic,"__tablename__ = ""items"""
+142949,semantic,behavioral economics and decision making
+143072,semantic,fees are subject to change
+143215,semantic,bonus points if
+143315,semantic,gambling problem help
+143322,semantic,saying something is worth it
+144312,semantic,modern
+144353,semantic,stop loss
+144492,semantic,URLs ending in .pdf or .com/.org
+144642,semantic,**medical or scientific terms**
+144848,semantic,Kelley Blue Book value
+144867,semantic,scope of authority
+144983,semantic,learning through experience
+145741,semantic,life cycle or lifetime
+146995,semantic,place names with following location markers
+147636,semantic,limited edition collaborations
+147769,semantic,expressing gratitude and specific appreciation
+147916,semantic,"impact on individuals, society, communication, relationships"
+148023,semantic,Czechoslovakia annexation Sudetenland
+148192,semantic,**Accommodation and itinerary suggestions**
+148416,semantic,pills & supplements
+148516,semantic,"times, periods, moments"
+149265,semantic,"depending on condition, mileage, location"
+150215,semantic,punctuality and attendance
+151359,semantic,file upload resolution
+151548,semantic,neighboring regions or distances
+151901,semantic,lists and places
+152072,semantic,young people and professionals
+152121,semantic,systemic side effects
+152249,semantic,"model rocket, air guns, rc car, freestyle"
+152779,semantic,embodied physical presence
+153467,semantic,hangs up or cuts out
+153564,semantic,single or one
+153658,semantic,numbers and units
+153787,semantic,change over time from
+153892,semantic,life changes and stages
+153915,semantic,international courts and arbitration
+154049,semantic,"enjoy, love, like"
+154059,semantic,"workmate, endoscopic, knowledge, drug, system"
+154800,semantic,When did
+154859,semantic,basic or fundamental
+155929,semantic,dedication and commitment
+156592,semantic,consumed by grief
+157159,semantic,you have to
+158043,semantic,size and fit recommendations
+158074,semantic,"Sam Altman, Changpeng Zhao, Alex Mashinsky"
+158235,semantic,listing different types
+158477,semantic,fibonacci program
+158875,semantic,training data contains biases
+158999,semantic,company names and components
+159057,semantic,perror calls
+160306,semantic,judging other people or oneself
+160618,semantic,CVE identifier numbers
+161654,semantic,multiple choice answers
+127975,semantic,"thoughtThe user wants me to explain the behavior of a neuron in 3 to 20 words.I need to find a pattern in the provided lists: `MAX_ACTIVATING_TOKENS`, `TOKENS_AFTER_MAX_ACTIVATING_TOKEN`, `TOP_POSITIVE_LOGITS`, and `TOP_ACTIVATING_TEXTS`.Let's examine the provided data:**MAX_ACTIVATING_TOKENS:**`using`, `’`, `communicate`, `with`, `e`, `a`, `to`, `to`, `synt`**TOKENS_AFTER_MAX_ACTIVATING_TOKEN:**`thought` (after `using`), `d` (after `’`), `with` (after `communicate`), `eye` (after `with`), `.` (after `e`), `prosthetic` (after `a`), `move` (after `to`), `control` (after `to`), `hesized` (after `synt`).**TOP_POSITIVE_LOGITS:**`pagination`, `recycl`, `recuperar`, `pagination`, `rectification`, `reclaimed`, `cruelty`, `aphazard`, `windmills`, `StackNavigator`.These seem somewhat eclectic. `pagination`, `recycl`, `recuperar`, `rectification`, `reclaimed` might suggest some form of processing, restoration, or recovery. `StackNavigator` is a UI component. `cruelty`, `windmills` seem out of place. This list might be less directly helpful for a specific pattern.**TOP_ACTIVATING_TEXTS:**Let's scan this for themes:- ""...type `using` `thought`."" (Connects MAX_ACTIVATING_TOKENS and TOKENS_AFTER_MAX_ACTIVATING_TOKEN)- ""Elara `communicated` through a sophisticated `eye`-tracking system.""`communicate` with `eye` or `thought`"
+131471,semantic,made easy or done right
+131716,semantic,take advantage of
+132060,semantic,Account Management
+132176,semantic,characters associated with family roles
+133704,semantic,why questions
+136230,semantic,is demonstrably false
+147911,semantic,host or surroundings
+155039,semantic,this time stage point
+163134,semantic,Sometimes
+152708,semantic,Despite the
+152717,semantic,an international
+129897,semantic,commands and common phrases
+136583,semantic,negation
+127214,other,The Impact of
+127855,other,cannot provide advice
+129132,other,preventing harmful content
+129796,other,need to
+131333,other,provide information
+132130,other,often interact
+133284,other,"natural selection, evolution, inheritance"
+135087,other,code assignment or definition
+136029,other,religious prohibitions and justifications
+138318,other,small quantities or exceptions
+139220,other,being verbs followed by participial adjectives
+141872,other,it takes patience
+143294,other,it was or grew
+143408,other,primary key id annotations
+144333,other,content descriptions
+145084,other,gets into the
+147103,other,thank you for
+147779,other,One followed by a noun
+148124,other,"ห้าม, หางาน, หา"
+149480,other,used to
+151984,other,lunch recommendations
+152051,other,don't change anything unless
+153824,other,without risking or impacting
+154063,other,inversify DI
+155676,other,It's not like
+156381,other,"planning to visitstate.sprawl,clearly separated"
+156911,other,ranging from more casual to detailed
+159809,other,generally difficult to get
+160431,other,orthodoxy
+163786,syntactic,but contrasted with qualification
+163811,syntactic,"Therefore, the answer is"
+164168,syntactic,if not
+164527,syntactic,words after punctuation
+164578,syntactic,explaining the reason or process
+164845,syntactic,script tags and their attributes
+164945,syntactic,between paired with something
+166736,syntactic,continuation of phrases or foreign words
+167057,syntactic,code execution or output
+168081,syntactic,references and specific details
+168604,syntactic,code snippets; comments; programming language constructs
+169075,syntactic,end of sentence or quote
+169113,syntactic,and I
+169240,syntactic,"parts of lists, explanations, clarifications"
+169266,syntactic,foreign words and characters
+170464,syntactic,until you hit
+172912,syntactic,**detecting punctuation and structure**
+173037,syntactic,"headings, subheadings, abstract, bold"
+173545,syntactic,punctuation and separators
+173752,syntactic,names after punctuation
+174233,syntactic,error handling blocks
+175212,syntactic,quotes followed by 0 or t
+175333,syntactic,lists or dictionaries
+175469,syntactic,With that said
+176107,syntactic,"speaking, dialogue markers"
+176787,syntactic,multilingual content separators
+177515,syntactic,'
+178304,syntactic,timestamps or time segments
+179266,syntactic,fractional part
+180308,syntactic,If something were
+180776,syntactic,programming class names and headers
+184011,syntactic,menu options
+185405,syntactic,code snippets and technical terms
+185706,syntactic,code comments
+187257,syntactic,numbers ending phrases
+187290,syntactic,dynamic array resizing
+188393,syntactic,"screen, to, :, '%', are, and"
+188960,syntactic,installation instructions
+189045,syntactic,formatting and punctuation
+189072,syntactic,subsequent or future actions
+189210,syntactic,options or list items
+189233,syntactic,text breaks and formatting
+189338,syntactic,names with compound/compound-like structures
+189819,syntactic,list index or zero value
+190233,syntactic,code followed by parenthesis
+191665,syntactic,structured lists or outlines
+192875,syntactic,`bin` or specific file paths
+192885,syntactic,punctuation and non-English words
+193025,syntactic,in this context
+193425,syntactic,spring-boot-starter dependencies
+193625,syntactic,past tense verbs
+193729,syntactic,See followed by references
+195128,syntactic,code and programming terms
+195550,syntactic,#include <cmath>
+163207,semantic,"unfortunately, sadly, negative outcomes"
+163462,semantic,identify genes or compounds
+165518,semantic,dimensionless number or impulse
+166502,semantic,scores and results
+167245,semantic,durability and resilience
+167317,semantic,dental concerns or problems
+167391,semantic,attention and communication skills
+168262,semantic,liens and mortgages
+168418,semantic,courtship and marriage relationships
+169117,semantic,prize giveaways and rewards
+170412,semantic,"TV, L, Food, Dish categories"
+171017,semantic,call for papers
+171570,semantic,obstetrics and prenatal care
+171944,semantic,unexplained glitches or mysterious phenomena
+172019,semantic,evolve into or become
+172193,semantic,limited adaptability and functionality
+172580,semantic,driving mad or underground
+172656,semantic,"social justice, LGBTQ+, queer theory"
+172757,semantic,accepting payment or entry
+173751,semantic,makeup palettes and concealers
+173819,semantic,avoid contamination or damage
+173904,semantic,"physical needs, boundaries, harm, tension, injury"
+174114,semantic,historical events and dates
+174158,semantic,no federal law requiring
+174221,semantic,size comparison
+174913,semantic,"God, Jesus, religious rules"
+175282,semantic,library & librarian related concepts
+176275,semantic,"Jackson, Jefferson, presidents, liberty, republicanism"
+177117,semantic,War
+177673,semantic,researching topics
+178237,semantic,offering something to someone
+178456,semantic,high heels
+178671,semantic,food ingredients and descriptions
+178775,semantic,อาการ
+179358,semantic,crucial delivery systems
+180047,semantic,standardized tests and scores
+182841,semantic,corroborate or reinforce
+182968,semantic,practice in front of
+183782,semantic,"pursuit of happiness, not maintained"
+184464,semantic,style of Calvary Chapel
+185198,semantic,math word problems
+185628,semantic,reflects societal impact
+185660,semantic,spreads through
+186196,semantic,protein per pound or kilogram
+186293,semantic,discount
+187683,semantic,very strange unusual
+187894,semantic,"grim outlook for outcomes, news, or situations"
+187941,semantic,riddles mentioning adding or removing items
+188186,semantic,water finds its level
+189289,semantic,"AI, Machine Learning, Healthcare, Technology"
+189492,semantic,love or hate facial
+189552,semantic,teaching and subjects taught
+190200,semantic,Bangladesh
+190337,semantic,soak in atmosphere
+191149,semantic,selling items for cash
+191292,semantic,healthy lifestyle additions
+191809,semantic,summer intern or summer school
+196159,semantic,deliberately disturbing or unsettling
+169633,semantic,"Kim Jong-un, North Korea, Kim family"
+166080,other,just let me know
+166140,other,thank you opportunities
+166185,other,respectively
+166648,other,"always, no, imperfect"
+167448,other,text replacement
+167834,other,Now we are left with
+167848,other,read and review policies
+167862,other,improving performance and accuracy
+167879,other,requesting explanations and specifics
+168180,other,story about
+168223,other,ending points
+168336,other,new application
+168413,other,what do you call a
+168570,other,percentage or unit following number
+168753,other,because
+169388,other,system
+169509,other,months in time calculations
+170013,other,how can
+170532,other,specializing in professions
+170588,other,*
+170665,other,.jpg
+171200,other,"today, Wednesday, yesterday"
+171209,other,fact
+171248,other,processing class
+171568,other,same strike
+172142,other,been linked to
+176037,other,Location
+176479,other,classify
+176596,other,at least
+176637,other,a Pos
+176764,other,"The noun following ""The"""
+177173,other,something
+177334,other,errors and differences
+177425,other,is it just me
+178902,other,"too much, too high, too big"
+179949,other,not impossible or not absolutely
+180297,other,"limit, limitation"
+180856,other,other products or services
+180991,other,after
+181595,other,"python, javascript, units, episode"
+181745,other,thinker
+182398,other,her
+183261,other,special characters or structural elements
+184087,other,common [topic]
+185294,other,"girl, female, succession, Norway"
+186735,other,anyway / anyways / anyhow
+186828,other,about other beings
+187015,other,and this/that
+187044,other,"don't overmix, stir, or stop"
+187965,other,"""think"" vs predicting language"
+188093,other,yahoo finance
+189078,other,method for describing frameworks and benchmarks
+189991,other,at a parameter
+190343,other,opening something up
+190399,other,messing up things
+190514,other,creation date
+190665,other,write a letter
+191618,other,functioning not acting
+191730,other,writing to a man or people
+192221,other,you know
+192923,other,access control and permissions
+193237,other,elevator speech pitch
+193764,other,"body parts: posterior, butt, glutes, ass"
+194504,other,would be
+194721,other,represents categories or concepts
+194947,other,"""ceptions"" and ""3"""
+195213,other,breakdown of
+195310,other,technical specifications and product descriptions
+195391,other,waiting lists and strain
+195716,other,or so
+172711,other,visit local events or places
+175938,other,list item separator
+176920,other,quotes and list items
+177090,other,other protected characteristic
+181558,other,financing for
+184251,other,prescription coverage
+188369,other,"""This is my body"""
+165802,other,more positive comparison
+196581,syntactic,reading or writing data
+196949,syntactic,aimed at or geared towards something
+197092,syntactic,request for feedback or correction
+197360,syntactic,data structures parsing
+197727,syntactic,"pro tip, spoiler, disclaimer"
+197894,syntactic,the [noun]
+198462,syntactic,. followed by a pronoun or the
+199192,syntactic,list structure or syntax
+200862,syntactic,predicted believed argued
+201540,syntactic,contrast or exception
+201618,syntactic,Names followed by authors or publishers
+202168,syntactic,temporal conjunctions followed by context
+202568,syntactic,is a description of
+202640,syntactic,return values
+203044,syntactic,explaining requires needs
+204326,syntactic,list elements
+204332,syntactic,break it down
+204377,syntactic,for example
+204467,syntactic,list items
+204532,syntactic,multiple of several numerous
+204628,syntactic,unexpected / would / that
+204957,syntactic,what might
+205491,syntactic,"""..."" or consistently high"
+205615,syntactic,numbers or code constructs
+206858,syntactic,demonstrative pronouns
+207304,syntactic,numbers or time units
+208269,syntactic,conditional clauses or temporal conjunctions
+208755,syntactic,os.Stat or os.Open
+209137,syntactic,only
+209507,syntactic,while [non-standard token]
+209765,syntactic,many of whom are
+210658,syntactic,`ID(` or `id(`
+211056,syntactic,and beyond
+211331,syntactic,occurs
+211767,syntactic,of course after phrase
+212679,syntactic,api/ endpoints
+213020,syntactic,of [concept]
+213187,syntactic,negation
+213248,syntactic,end of sentence
+213585,syntactic,followed by 'end' or 'envy'
+213772,syntactic,stronger verbs
+213827,syntactic,crucial importance
+214803,syntactic,contrasting pairs or opposites
+214807,syntactic,"that said,"
+215007,syntactic,produced by
+215256,syntactic,SQL ENGINE=InnoDB definitions
+215561,syntactic,that's why and that was
+215676,syntactic,Author or developer name
+216821,syntactic,value or configuration
+217196,syntactic,in X context
+218021,syntactic,unsigned integer formatting
+218310,syntactic,ordinal numbers and localization
+218311,syntactic,"UI components like container, dropdown, popup"
+218786,syntactic,dollar amounts and numbers
+218812,syntactic,addition operations
+220395,syntactic,surface of
+221097,syntactic,"chunk, block, or segment"
+221209,syntactic,"simultaneous, cog, cot"
+221223,syntactic,while proponents
+221265,syntactic,"after ""a"" or ""an"""
+223051,syntactic,lives in / with
+224416,syntactic,anything else?
+224599,syntactic,generate lists of examples
+224749,syntactic,for followed by a reason or purpose
+226533,syntactic,Starts with a letter or underscore
+228077,syntactic,Answer
+228630,syntactic,because
+228949,syntactic,PRIMARY KEY
+229205,syntactic,object/type/value indicators
+229527,syntactic,was/been/were followed by adverb
+229544,syntactic,but not
+229678,syntactic,it was / it's / it needed
+230513,syntactic,linked list nodes
+230773,syntactic,and followed by phrase
+231668,syntactic,That followed by 's or was
+233131,syntactic,debug mode
+233545,syntactic,ui layout components
+234100,syntactic,bill amount
+235112,syntactic,often used for
+235341,syntactic,in [noun/quantifier]
+235888,syntactic,directly contradicts
+236163,syntactic,information because
+236277,syntactic,Roman numerals
+237538,syntactic,based solely on
+196259,semantic,Red Cross services
+196618,semantic,"impacted, loss, damage, missing"
+196971,semantic,comfortable accommodations
+197258,semantic,business strategy roadmap
+197485,semantic,strength and speed
+198198,semantic,mathematical equations and code
+198988,semantic,plus more
+199077,semantic,individual or group distinctions
+199415,semantic,events or specific time
+199669,semantic,feelings and emotions
+199941,semantic,us state
+201168,semantic,company history and origins
+201264,semantic,cause harm or violence
+201275,semantic,Golang
+202058,semantic,expressions of opinion or feeling
+202105,semantic,walk in
+202239,semantic,organic requirements and certification
+203176,semantic,"wins, prizes, payouts"
+203542,semantic,political challengers or opposition
+203575,semantic,Israel and Israelites
+204276,semantic,understand models
+204302,semantic,yearning for restoration or breakthrough
+205220,semantic,uncommon recognition
+205295,semantic,"Dragon Ball Z, Aphex Twin, Gossip Girl, Shin Megami Tensei"
+206503,semantic,research publications
+207217,semantic,piracy and pirates
+207592,semantic,fantasy stories and dreams
+207708,semantic,polynomial-time solvable problems
+207736,semantic,Taiwan's Interior Ministry
+208085,semantic,collaboration
+208456,semantic,alternatives and sustainability
+208914,semantic,"import and distribution, brands"
+209210,semantic,immigration and policy restrictions
+209871,semantic,describing people in media
+210164,semantic,systems and fiction
+210652,semantic,"foreign languages, not native speakers"
+210667,semantic,"Cryptography, optimization, materials"
+210832,semantic,Disney animation Tropes
+211385,semantic,"alerts, foreign certifications, recommendations"
+211505,semantic,"transcend limitations, improve effectiveness"
+212143,semantic,"aspects, history, lore, rules"
+213459,semantic,consent and permission
+214135,semantic,cooking time duration
+215655,semantic,"clothing, electronics, or technical terms"
+215963,semantic,todo completion
+216126,semantic,`vaping` tobacco
+216190,semantic,carry a water bottle
+217616,semantic,finding patterns in sequences
+217744,semantic,attic
+218097,semantic,genetic and personal health information
+218980,semantic,angular momentum and rotational dynamics
+219242,semantic,produced by
+221467,semantic,cell physiology and neuroscience
+222169,semantic,creates new jobs
+222312,semantic,starring actors
+223493,semantic,reflection and refraction
+225361,semantic,"Dark City, Australia"
+225571,semantic,ages of children and infants
+225721,semantic,mysql connector database host
+225874,semantic,analog devices instrumentation amplifier
+227039,semantic,classical music and artists
+227230,semantic,live streaming or video
+227338,semantic,economic growth and industry
+227367,semantic,enthusiastic / enthusiasm
+231008,semantic,"watch, watchers, watches"
+231983,semantic,"old man, elder, senior"
+232322,semantic,inflammation and disease
+233019,semantic,accreditation and authorization
+233262,semantic,differential equations
+234767,semantic,practicing medicine or doctor
+235525,semantic,statistical records and performance
+236003,semantic,中文 语言 about unicode
+236878,semantic,"building, development, expansion"
+236952,semantic,harmful tropes and power imbalances
+237379,semantic,depends on the quality
+196800,other,declined to disclose specifics
+198492,other,existence or permission
+198693,other,any
+199995,other,cannot be
+201368,other,forward to discuss
+203659,other,What you tried
+205987,other,recognizing red flags
+208994,other,clearly state what
+209425,other,declared war or refused demands
+210878,other,.
+211570,other,"measured, pricing, interviewing, sight, sensors"
+211669,other,project or platform
+211757,other,event of
+212935,other,access to
+213641,other,"numbers, crime, practice"
+213993,other,Assessments of choices and actions
+214007,other,numbers and measurements
+214179,other,avoid listing specific content
+216339,other,everything you
+216994,other,exceeding analyst expectations
+217971,other,code or punctuation
+220401,other,comprehension and crucial
+221968,other,mathematical operators and logical operations
+222999,other,feedback loop
+223314,other,relying on expectations or trust
+224938,other,"seismic data, wellbore, hydrocarbons"
+226165,other,photography restrictions
+228759,other,code and technical terms
+228976,other,you don't need to
+230836,other,Animal Crossing characters
+232204,other,most expensive
+232762,other,creating and transitions
+232920,other,item id parameter
+233041,other,being part of
+233958,other,why
+234758,other,Connecticut
+235516,other,engagement and understanding
+236735,other,warm drink
+238295,syntactic,emojis and exclamations
+238326,syntactic,"lists, categories, examples"
+240316,syntactic,"""The invention relates to"""
+243394,syntactic,adjective suffixes and nationalities
+243534,syntactic,OMG and gosh interjections
+245270,syntactic,commands starting with !
+246011,syntactic,callback function
+246292,syntactic,.)
+246572,syntactic,auxiliary verbs
+248418,syntactic,followed by a closing parenthesis
+250949,syntactic,forms and templates
+251050,syntactic,special characters and punctuation
+252162,syntactic,most/less followed by adjective
+253388,syntactic,disclaimer or section
+255842,syntactic,color:
+255892,syntactic,anti prefixes
+256024,syntactic,both/dos/donos/kedua
+256212,syntactic,** not**
+256277,syntactic,most followed by a noun
+258584,syntactic,Titles starting with nouns
+258792,syntactic,contextual phrasing and conjunctions
+258794,syntactic,hexadecimal and ASCII codes
+259345,syntactic,Get ready to / prepare to
+259938,syntactic,numbered list items
+261489,syntactic,compared to
+261926,syntactic,"numbers, symbols, and code elements"
+262134,syntactic,object comparison
+243624,syntactic,`month` `processing`
+247165,syntactic,script is called when
+247357,syntactic,public DbSet
+255573,syntactic,returns
+255683,syntactic,according to
+256107,syntactic,demonstrates your/our
+259904,syntactic,specific examples
+246396,syntactic,"VarInt, Integers, ASN.1, IE"
+251877,syntactic,corrected spelling and grammar
+253182,syntactic,direct address and follow-up
+238046,semantic,satisfaction scores
+239050,semantic,"fading, weakening, dimming"
+239399,semantic,#travel #destinations #world #culture #life
+240371,semantic,no margin for error
+240891,semantic,realistic goals and timelines
+241742,semantic,air pollution
+242391,semantic,market gaps and needs
+242518,semantic,song titles or band names
+243510,semantic,countdown to holidays
+244250,semantic,employee benefits and programs
+244540,semantic,trump's speech and actions
+244572,semantic,phone features or specifications
+245838,semantic,describing physical attributes
+246028,semantic,lasting for a time
+246751,semantic,"models, devices, cars, graphics cards, audio speakers"
+247301,semantic,British Columbia or BC
+248257,semantic,salute
+248785,semantic,probability of balls or heads
+248998,semantic,come over or visit
+250190,semantic,immigrants and nationalities
+250754,semantic,percentages
+252864,semantic,"psychology of attraction, persuasion, taboo"
+252974,semantic,computer hardware and design
+253163,semantic,lacking effectiveness
+254322,semantic,rock climbing
+255756,semantic,turmeric and curcumin
+256773,semantic,"hopes, fears and dreams"
+257008,semantic,customer satisfaction and perception
+257204,semantic,prizes
+257637,semantic,city names followed by descriptive terms
+258431,semantic,communication
+258849,semantic,"stealing, theft, thieves"
+259912,semantic,prep and cook time
+260152,semantic,"being chased, pursued, or hunted"
+260376,semantic,advertising real estate postings
+260468,semantic,feeling left out
+261697,semantic,company names and organizations
+261727,semantic,burst out laughing
+237939,other,how long have you been
+238033,other,role of
+238463,other,News Feed
+239018,other,current expression
+240184,other,most
+240350,other,are you just
+241048,other,AI disclaimers cannot or do
+241138,other,babt
+241258,other,"morality, potentially, words"
+244207,other,at
+244397,other,increasingly something
+246664,other,number of
+248572,other,avoid jargon
+251318,other,observation
+251770,other,most common type
+253850,other,"numbers, counting, amounts"
+256126,other,providing disclaimers about advice
+256173,other,Whatever
+257983,other,greetings and pronouns across languages
+258858,other,inform or alert about someone
+262087,other,if I had to pick one
+1950,syntactic,the equation x
+3901,syntactic,Dive into
+5273,syntactic,name initializer
+7921,syntactic,"""less than 3 paragraphs"""
+7929,syntactic,response
+8739,syntactic,table headers and structures
+9839,syntactic,continuation or continuing
+9998,syntactic,foreign words and punctuation
+11734,syntactic,examples of content
+12862,syntactic,Place / Put / Add / Type
+13723,syntactic,offer or sequence
+13980,syntactic,providing additional information
+22756,syntactic,"ensure, provide, or similar"
+25184,syntactic,"pry, reply, prey, pleading"
+27670,syntactic,number of words requested
+36769,syntactic,periods and exclamations followed by cells
+41344,syntactic,depending on
+42527,syntactic,"complete, not clear"
+45515,syntactic,how it's used
+67361,syntactic,solution is
+67430,syntactic,the only way to
+67893,syntactic,code patterns in programming contexts
+71288,syntactic,more than
+80942,syntactic,instructions about queries
+81958,syntactic,action or suggestion
+83645,syntactic,code directly in global scope
+104528,syntactic,not just
+112451,syntactic,to understand
+123746,syntactic,not affect
+132480,syntactic,without losing
+165926,syntactic,"""I mean"" / ""it means"""
+172729,syntactic,in
+174533,syntactic,to discuss
+174829,syntactic,"appropriate, reasonable"
+187524,syntactic,in addition
+240528,syntactic,includes specific items or factors
+2622,semantic,"core principles, programming, plan, paper"
+3548,semantic,Gemma team at Google
+3962,semantic,Gemma team
+5297,semantic,causal explanation
+6070,semantic,"seeing, spotting, or finding patterns"
+9111,semantic,quantities with units or comparisons
+10669,semantic,disclaimers and warnings
+16499,semantic,"prevent harm, not pursue"
+16521,semantic,blocking access
+20301,semantic,csharp unity object inspector
+27487,semantic,important notes
+28517,semantic,the followed by helpline names
+32892,semantic,utility functions / helpers
+42830,semantic,"YMCA, St. Michael, St. Jude, Cadet, youth"
+56422,semantic,demand for immediate or specific actions
+65222,semantic,words with similar meanings are closer
+67543,semantic,some species
+67560,semantic,data processing and analysis
+67794,semantic,"ở, di"
+90740,semantic,equations with constants
+95906,semantic,names of entities
+125995,semantic,upwards motion then down
+147661,semantic,"directory, files, counts, map"
+166812,semantic,server access
+166860,semantic,programming types and data structures
+166886,semantic,foreign characters and names
+173652,semantic,"For years, for over, for those"
+198232,semantic,loss of function
+198754,semantic,potential dangers or file upload
+227758,semantic,"would, might, likely outcomes"
+240627,semantic,Palm Springs
+243723,semantic,even a small amount of weight
+258831,semantic,formwork
+3927,other,ask questions
+9812,other,trying to
