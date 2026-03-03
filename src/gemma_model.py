@@ -428,7 +428,7 @@ class GemmaModel:
             "steered_ids": steered_ids,
         }
 
-    def generate_ablated_transcode(
+    def generate_ablated_transcoder(
         self,
         prompt: Union[str, List[Dict]],
         transcoder,
