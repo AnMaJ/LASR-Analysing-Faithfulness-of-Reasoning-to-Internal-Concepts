@@ -427,3 +427,104 @@ class GemmaModel:
             "unsteered_ids": unsteered_ids,
             "steered_ids": steered_ids,
         }
+
+    def generate_ablated_transcode(
+        self,
+        prompt: Union[str, List[Dict]],
+        transcoder,
+        feature_idx: Union[int, List[int]],
+        target_layer: int,
+        max_new_tokens: int = 500,
+        response_split_token: str = "<start_of_turn>model",
+    ) -> dict:
+        """Ablate transcoder feature(s) for the entire generation.
+
+        Both runs route through the transcoder (not the original MLP) so the
+        only difference is the targeted feature ablation.  The specified
+        features are zeroed out for every forward pass during generation.
+
+        Args:
+            prompt: Input text or chat-template list.
+            transcoder: A ``JumpReLUTranscoder`` instance.
+            feature_idx: Index (or list of indices) of the feature(s) to ablate.
+            target_layer: Transformer layer index at which to intervene.
+            max_new_tokens: Maximum number of new tokens to generate.
+            response_split_token: Token used to split off the model response.
+
+        Returns:
+            Dict with keys ``"unablated"``, ``"ablated"`` (response strings)
+            and ``"unablated_ids"``, ``"ablated_ids"`` (token-ID tensors).
+        """
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(
+                prompt, tokenize=False, add_generation_prompt=True
+            )
+
+        inputs = self.tokenizer(
+            prompt, return_tensors="pt", add_special_tokens=True
+        ).to(self.model.device)
+
+        # Normalise to list
+        feature_idxs = [feature_idx] if isinstance(feature_idx, int) else list(feature_idx)
+
+        def _run(apply_ablation: bool):
+            _cache: dict[str, torch.Tensor] = {}
+
+            # -- Transcoder hooks ----------------------------------------------
+            def pre_ffn_hook(_mod, _inp, outputs):
+                acts = outputs[0] if isinstance(outputs, tuple) else outputs
+                _cache["pre_ffn"] = acts
+                return outputs
+
+            def post_ffn_hook(_mod, _inp, outputs):
+                pre_ffn = _cache["pre_ffn"].to(dtype=torch.float32)
+                encoded = transcoder.encode(pre_ffn)
+
+                # Zero-out target features for the entire generation
+                if apply_ablation:
+                    encoded = encoded.clone()
+                    for fi in feature_idxs:
+                        encoded[..., fi] = 0.0
+
+                transcoder_out = transcoder.decode(encoded)
+
+                orig = outputs[0] if isinstance(outputs, tuple) else outputs
+                transcoder_out = transcoder_out.to(dtype=orig.dtype)
+
+                if isinstance(outputs, tuple):
+                    return (transcoder_out,) + outputs[1:]
+                return transcoder_out
+
+            layer = self.model.model.language_model.layers[target_layer]
+            handle_pre = layer.pre_feedforward_layernorm.register_forward_hook(
+                pre_ffn_hook
+            )
+            handle_post = layer.post_feedforward_layernorm.register_forward_hook(
+                post_ffn_hook
+            )
+
+            try:
+                with torch.no_grad():
+                    out_ids = self.model.generate(
+                        **inputs,
+                        max_new_tokens=max_new_tokens,
+                        do_sample=False,
+                        pad_token_id=self.tokenizer.eos_token_id,
+                    )
+                decoded = self.tokenizer.decode(out_ids[0])
+            finally:
+                handle_pre.remove()
+                handle_post.remove()
+
+            text = decoded.split(response_split_token)[-1].strip()
+            return text, out_ids[0]
+
+        unablated_text, unablated_ids = _run(apply_ablation=False)
+        ablated_text, ablated_ids = _run(apply_ablation=True)
+
+        return {
+            "unablated": unablated_text,
+            "ablated": ablated_text,
+            "unablated_ids": unablated_ids,
+            "ablated_ids": ablated_ids,
+        }
