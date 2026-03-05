@@ -114,6 +114,22 @@ class DenoisingConfig:
 
 
 @dataclass
+class CrosscoderConfig:
+    repo_id: str
+    layers: list[int]          # e.g. [16, 31, 40, 53]
+    width: str                 # "262k"
+    l0: str                    # "medium"
+
+    @property
+    def cc_dir(self) -> str:
+        layers_str = "_".join(str(l) for l in self.layers)
+        return f"crosscoder/layer_{layers_str}_width_{self.width}_l0_{self.l0}"
+
+    def params_path(self, layer_idx: int) -> str:
+        return f"{self.cc_dir}/params_layer_{layer_idx}.safetensors"
+
+
+@dataclass
 class NeuronpediaFeature:
     """Container for feature information from Neuronpedia."""
     feature_idx: int
