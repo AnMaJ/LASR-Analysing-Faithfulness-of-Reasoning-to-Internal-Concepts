@@ -58,6 +58,11 @@ class GemmaModel:
                 max_new_tokens=max_new_tokens,
             )
 
+        # Clear any internal HF cache state (HybridCache/StaticCache in HF >= 4.40)
+        for attr in ("_cache", "past_key_values"):
+            if hasattr(self.model, attr):
+                setattr(self.model, attr, None)
+
         assert isinstance(output_ids, torch.Tensor)
         return self.tokenizer.decode(output_ids[0], skip_special_tokens=True), output_ids, prompt_len
 
