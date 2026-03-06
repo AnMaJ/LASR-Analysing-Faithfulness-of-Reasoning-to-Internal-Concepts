@@ -247,6 +247,98 @@ class Denoiser:
 
         return ppmi_scores
 
+    # ── Corpus-level helpers ──────────────────────────────────────────────
+
+    @staticmethod
+    def compute_corpus_idf(
+        encodings: list[torch.Tensor],
+        threshold: float,
+    ) -> tuple[torch.Tensor, int]:
+        """Compute IDF vector from a corpus of (possibly sparse) SAE activations.
+
+        Streams over encodings one at a time to avoid materializing the full
+        dense corpus in memory.
+
+        Args:
+            encodings: List of tensors, each ``(n_tokens_i, n_features)``.
+                       May be sparse (COO) or dense.
+            threshold: Activation threshold for document-frequency counting.
+
+        Returns:
+            ``(idf, total_tokens)`` where *idf* has shape ``(n_features,)``
+            and *total_tokens* is the sum of all token counts.
+        """
+        df: torch.Tensor | None = None
+        total_tokens = 0
+        for enc in tqdm(encodings, desc="Computing corpus IDF"):
+            dense = enc.to_dense() if enc.is_sparse else enc
+            if df is None:
+                df = torch.zeros(dense.shape[1], dtype=torch.float32)
+            df += (dense > threshold).sum(dim=0).float().cpu()
+            total_tokens += dense.shape[0]
+        idf = torch.log(torch.tensor(total_tokens, dtype=torch.float32) / (1 + df))
+        return idf, total_tokens
+
+    @staticmethod
+    def apply_tfidf(
+        activations: torch.Tensor,
+        idf: torch.Tensor,
+    ) -> torch.Tensor:
+        """Apply a pre-computed IDF vector to a single sample's activations.
+
+        Args:
+            activations: 2-D tensor ``(n_tokens, n_features)``, dense.
+            idf: 1-D tensor ``(n_features,)``.
+
+        Returns:
+            Tensor of same shape as *activations* with TF-IDF weighting.
+        """
+        return activations * idf.unsqueeze(0).to(activations.device)
+
+    @staticmethod
+    def make_special_token_mask(tokens: list[str]) -> torch.Tensor:
+        """Return a boolean mask (True = special token) based on <...> pattern.
+
+        Args:
+            tokens: List of token strings.
+
+        Returns:
+            Boolean tensor of shape ``(len(tokens),)``; True where token matches
+            the ``<...>`` pattern (e.g. ``<bos>``, ``<eos>``, ``<pad>``).
+        """
+        import re
+        pattern = re.compile(r'^<[^>]+>$')
+        return torch.tensor([bool(pattern.match(t)) for t in tokens], dtype=torch.bool)
+
+    @staticmethod
+    def compute_frequency_filter(
+        encodings: list[torch.Tensor],
+        threshold: float = 0.0,
+        special_token_masks: list[torch.Tensor] | None = None,
+    ) -> torch.Tensor:
+        """Compute corpus-wide firing frequency for all SAE features.
+
+        Args:
+            encodings: List of (n_tokens_i, n_features) sparse or dense tensors.
+            threshold: Activation threshold for counting a feature as firing (default=0).
+            special_token_masks: Optional per-sample boolean masks (True = exclude token).
+
+        Returns:
+            freq: 1-D tensor of shape (n_features,) with raw firing counts per feature.
+        """
+        freq: torch.Tensor | None = None
+        for i, enc in enumerate(tqdm(encodings, desc="Computing frequency filter")):
+            dense = enc.to_dense() if enc.is_sparse else enc
+            if freq is None:
+                freq = torch.zeros(dense.shape[1], dtype=torch.float32)
+            acts = dense.float().cpu()
+            if special_token_masks is not None and i < len(special_token_masks):
+                mask = special_token_masks[i]
+                acts = acts[~mask]
+            freq += (acts > threshold).float().sum(dim=0)
+        # Return full frequency tensor for all features
+        return freq  # shape: (n_features,)
+
     # ── Helpers ────────────────────────────────────────────────────────────
 
     @staticmethod

@@ -60,6 +60,7 @@ class DatasetConfig:
 class ModelConfig:
     model_name: str
     device: str = field(default_factory=_default_device)
+    torch_dtype: torch.dtype | None = None
 
 
 @dataclass
