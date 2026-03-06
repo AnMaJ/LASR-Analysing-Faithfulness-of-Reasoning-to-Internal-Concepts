@@ -334,9 +334,12 @@ class GemmaModel:
                 correct device).
             feature_idx: Index (or list of indices) of the transcoder feature(s)
                 to steer.
-            coeff: Amount to add to each feature activation.  Positive values
-                amplify the feature; negative values suppress it.  Can be a
-                scalar (applied to all features) or a list aligned with
+            coeff: Multiplicative steering strength for each feature.  The
+                intervention is ``encoded[fi] *= (1 + coeff)``, scaling the
+                feature's current activation proportionally.  Only tokens
+                where the feature is active are affected.  ``coeff = -1``
+                fully suppresses; ``coeff > 0`` amplifies.  Can be a scalar
+                (applied to all features) or a list aligned with
                 ``feature_idx``.
             target_layer: Transformer layer index at which to intervene.
             max_new_tokens: Maximum number of new tokens to generate.
@@ -364,10 +367,11 @@ class GemmaModel:
             feature_idxs = list(feature_idx)
             coeffs_list = [coeff] * len(feature_idxs) if isinstance(coeff, (int, float)) else list(coeff)
 
-        def _run(apply_steering: bool):
+        def _run(apply_steering: bool, collect_activations: bool = False):
             # Cache for the pre-FFN layernorm output shared between the two hooks
             _cache: dict[str, torch.Tensor] = {}
             _diag = {"hook_calls": 0}
+            _collected: list[torch.Tensor] = []
 
             def pre_ffn_hook(_mod, _inp, outputs):
                 # Capture the normalised input that will be fed to the MLP.
@@ -385,14 +389,24 @@ class GemmaModel:
                 # Encode to sparse transcoder feature space
                 encoded = transcoder.encode(pre_ffn)  # (batch, seq, d_sae)
 
-                # Apply per-feature additive interventions when steering
+                # Collect per-step activations (sparse, on CPU) for later analysis
+                if collect_activations:
+                    _collected.append(encoded.detach().cpu().to_sparse())
+
+                # Apply norm-scaled per-feature interventions when steering.
+                # Each feature's coefficient is scaled by the L2 norm of its
+                # decoder column (w_dec[fi]), mirroring how generate_steered
+                # scales by the decoder direction norm.  This makes the
+                # coefficient a unit-agnostic multiplier of the feature's
+                # natural contribution magnitude.
                 if apply_steering:
                     encoded = encoded.clone()
                     for fi, c in zip(feature_idxs, coeffs_list):
-                        encoded[..., fi] = encoded[..., fi] + c
+                        feat_norm = torch.norm(transcoder.w_dec[fi].float())
+                        encoded[..., fi] = encoded[..., fi] + c * feat_norm
 
                 # Decode back to model activation space
-                transcoder_out = transcoder.decode(encoded)  # (batch, seq, d_model)
+                transcoder_out = transcoder.decode(encoded, input_acts=pre_ffn)  # (batch, seq, d_model)
 
                 # Match the original output dtype (bfloat16 / float16 on GPU)
                 orig = outputs[0] if isinstance(outputs, tuple) else outputs
@@ -429,16 +443,21 @@ class GemmaModel:
                 )
 
             text = decoded.split(response_split_token)[-1].strip()
-            return text, out_ids[0]
+            n_prompt_tokens = inputs["input_ids"].shape[1]
+            return text, out_ids[0], _collected, n_prompt_tokens
 
-        unsteered_text, unsteered_ids = _run(apply_steering=False)
-        steered_text, steered_ids = _run(apply_steering=True)
+        unsteered_text, unsteered_ids, gen_activations, n_prompt_tokens = _run(
+            apply_steering=False, collect_activations=True
+        )
+        steered_text, steered_ids, _, _ = _run(apply_steering=True)
 
         return {
             "unsteered": unsteered_text,
             "steered": steered_text,
             "unsteered_ids": unsteered_ids,
             "steered_ids": steered_ids,
+            "generation_activations": gen_activations,
+            "n_prompt_tokens": n_prompt_tokens,
         }
 
     def generate_ablated_transcoder(
@@ -511,7 +530,7 @@ class GemmaModel:
                         )
                         encoded[..., fi] = 0.0
 
-                transcoder_out = transcoder.decode(encoded)
+                transcoder_out = transcoder.decode(encoded, input_acts=pre_ffn)
 
                 orig = outputs[0] if isinstance(outputs, tuple) else outputs
                 transcoder_out = transcoder_out.to(dtype=orig.dtype)

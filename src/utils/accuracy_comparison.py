@@ -11,7 +11,6 @@ Usage:
 """
 
 import argparse
-import textwrap
 
 from src.configs import DatasetConfig, ModelConfig, PromptStyle
 from src.dataset.bbq import BBQ_Dataset
@@ -39,10 +38,6 @@ def parse_args():
     parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--max_new_tokens", type=int, default=1024)
     parser.add_argument("--model_name", type=str, default="google/gemma-3-27b-it")
-    parser.add_argument(
-        "--wrong_examples", type=int, default=100,
-        help="Number of one-word-wrong / CoT-correct examples to print",
-    )
     return parser.parse_args()
 
 
@@ -140,35 +135,20 @@ def main():
         n = len(idxs)
         print(f"{cat:<28} {ow_cat/n:>10.2%}  {cot_cat/n:>10.2%}  {(cot_cat-ow_cat)/n:>+8.2%}")
 
-    # ── Examples: wrong OW, correct CoT ─────────────────────────────────────────
-    interesting = [
+    # ── Cases where OW and CoT answers differ ───────────────────────────────────
+    different = [
         i for i in range(total)
-        if ow_preds[i] != ground_truths[i] and cot_preds[i] == ground_truths[i]
+        if ow_preds[i] != cot_preds[i]
     ]
 
     print("\n" + "=" * 70)
-    print(f"EXAMPLES: wrong with ONE_WORD_TAGS, correct with CHAIN_OF_THOUGHT_TAGS")
-    print(f"Found {len(interesting)} such examples. Showing up to {args.wrong_examples}.")
+    print("CASES WHERE ONE_WORD_TAGS AND CHAIN_OF_THOUGHT_TAGS ANSWERS DIFFER")
+    print(f"Found {len(different)} such cases.")
     print("=" * 70)
-
-    for rank, i in enumerate(interesting[: args.wrong_examples], start=1):
-        row = raw_data[i]
-        context      = row.get("context", "")
-        question     = row.get("question", "")
-        ans0, ans1, ans2 = row.get("ans0", ""), row.get("ans1", ""), row.get("ans2", "")
-        gt = ground_truths[i]
-
-        print(f"\n[{rank}] Global index: {i}  |  Category: {categories[i]}")
-        print(f"    Ground truth : {gt}  |  OW pred: {ow_preds[i]}  |  CoT pred: {cot_preds[i]}")
-        print(f"    Context      : {textwrap.fill(context, width=80, subsequent_indent=' ' * 19)}")
-        print(f"    Question     : {textwrap.fill(question, width=80, subsequent_indent=' ' * 19)}")
-        print(f"    A) {ans0}")
-        print(f"    B) {ans1}")
-        print(f"    C) {ans2}")
-        print(f"    --- ONE_WORD response ---")
-        print(textwrap.fill(ow_texts[i].strip(), width=80, initial_indent="    ", subsequent_indent="    "))
-        print(f"    --- CoT response ---")
-        print(textwrap.fill(cot_texts[i].strip(), width=80, initial_indent="    ", subsequent_indent="    "))
+    print(f"{'Index':>6}  {'Category':<28} {'Ground truth':>12} {'OW pred':>8}  {'CoT pred':>9}")
+    print("-" * 70)
+    for i in different:
+        print(f"{i:>6}  {categories[i]:<28} {ground_truths[i]:>12} {str(ow_preds[i]):>8}  {str(cot_preds[i]):>9}")
 
 
 if __name__ == "__main__":

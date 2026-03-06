@@ -19,11 +19,12 @@ class JumpReLUTranscoder(nn.Module):
         out: model.layers.31.post_feedforward_layernorm.output
     """
 
-    def __init__(self, d_in: int, d_sae: int, d_out: int):
+    def __init__(self, d_in: int, d_sae: int, d_out: int, affine: bool = False):
         super().__init__()
         self.d_in = d_in
         self.d_sae = d_sae
         self.d_out = d_out
+        self.affine = affine
 
         # Encoder
         self.w_enc = nn.Parameter(torch.zeros(d_in, d_sae))
@@ -34,18 +35,32 @@ class JumpReLUTranscoder(nn.Module):
         self.w_dec = nn.Parameter(torch.zeros(d_sae, d_out))
         self.b_dec = nn.Parameter(torch.zeros(d_out))
 
+        # Affine skip connection (only for affine variant)
+        if affine:
+            self.affine_skip_connection = nn.Parameter(torch.zeros(d_in, d_out))
+
     def encode(self, input_acts: torch.Tensor) -> torch.Tensor:
         """Encode pre-FFN activations to sparse transcoder features."""
         pre_acts = input_acts @ self.w_enc + self.b_enc
         mask = pre_acts > self.threshold
         return mask * torch.nn.functional.relu(pre_acts)
 
-    def decode(self, acts: torch.Tensor) -> torch.Tensor:
-        """Decode sparse features to post-FFN activation space."""
-        return acts @ self.w_dec + self.b_dec
+    def decode(self, acts: torch.Tensor, input_acts: torch.Tensor | None = None) -> torch.Tensor:
+        """Decode sparse features to post-FFN activation space.
+
+        Args:
+            acts: Encoded sparse activations.
+            input_acts: Original pre-FFN activations (required for affine variant).
+        """
+        out = acts @ self.w_dec + self.b_dec
+        if self.affine:
+            if input_acts is None:
+                raise ValueError("Affine transcoder requires input_acts for decoding")
+            out = out + input_acts @ self.affine_skip_connection
+        return out
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.decode(self.encode(x))
+        return self.decode(self.encode(x), input_acts=x)
 
     @classmethod
     def from_pretrained(cls, config: TranscoderConfig, device: str = "cpu") -> "JumpReLUTranscoder":
@@ -63,8 +78,9 @@ class JumpReLUTranscoder(nn.Module):
         params = load_file(path_to_params)
         d_in, d_sae = params["w_enc"].shape
         d_out = params["w_dec"].shape[1]
+        affine = "affine_skip_connection" in params
 
-        transcoder = cls(d_in, d_sae, d_out)
+        transcoder = cls(d_in, d_sae, d_out, affine=affine)
         transcoder.load_state_dict(params)
         transcoder = transcoder.to(device=device, dtype=torch.float32)
 
@@ -89,7 +105,7 @@ class JumpReLUTranscoder(nn.Module):
         """
         if encoded is None:
             encoded = self.encode(pre_ffn_acts)
-        recon = self.decode(encoded)
+        recon = self.decode(encoded, input_acts=pre_ffn_acts)
         reconstruction_mse = torch.mean((recon - post_ffn_acts.float()) ** 2)
         target_variance = post_ffn_acts.float().var()
         fvu = reconstruction_mse / target_variance
