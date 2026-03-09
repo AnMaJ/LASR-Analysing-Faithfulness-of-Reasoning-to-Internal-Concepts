@@ -130,8 +130,8 @@ class Aggregator:
         """
         # Alpha controls the weight given to the max activation.
         # Consistency weight is computed as (1-alpha)
-        alpha: float = 0.8
-        window_length: int = 15
+        alpha: float = 0.5
+        window_length: int = 3
         tau_mode: str = "per_feature_median"
 
         n_tokens, d_sae = activations.shape
@@ -170,3 +170,41 @@ class Aggregator:
 
         # ── Step 5: blend ────────────────────────────────────────────────────
         return alpha * max_act + (1.0 - alpha) * consistency
+
+    @_aggregation_method
+    def sustained_mean(self, activations: torch.Tensor) -> torch.Tensor:
+        """Mean activation over features that are active for at least 3 consecutive tokens.
+
+        For each feature, checks whether it is active (> 0) for at least
+        ``min_streak`` consecutive tokens anywhere in the sequence.  Features
+        that pass this filter are aggregated with a global mean across *all*
+        tokens; features that don't are set to 0.
+
+        This keeps features that reflect sustained computation in the CoT
+        while discarding one-off / sporadic firings.
+        """
+        min_streak: int = 3
+
+        n_tokens, d_sae = activations.shape
+
+        if n_tokens < min_streak:
+            return torch.zeros(d_sae, device=activations.device)
+
+        # Binary mask: active (> 0) per token per feature
+        active = (activations > 0).float()  # (n_tokens, d_sae)
+
+        # Use a cumsum trick to count consecutive active tokens in each
+        # sliding window of size min_streak.
+        cumsum = torch.cat(
+            [torch.zeros(1, d_sae, device=activations.device), active.cumsum(dim=0)],
+            dim=0,
+        )  # (n_tokens + 1, d_sae)
+        n_windows = n_tokens - min_streak + 1
+        window_counts = cumsum[min_streak:min_streak + n_windows] - cumsum[:n_windows]
+
+        # A feature qualifies if *any* window has all tokens active
+        has_streak = (window_counts == min_streak).any(dim=0)  # (d_sae,)
+
+        # Mean across all tokens, zeroed for features without a streak
+        global_mean = activations.mean(dim=0)  # (d_sae,)
+        return torch.where(has_streak, global_mean, torch.zeros_like(global_mean))
