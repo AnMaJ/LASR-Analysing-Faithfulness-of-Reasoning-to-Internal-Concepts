@@ -311,47 +311,31 @@ class GemmaModel:
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
-        use_cache: bool = True,
-        verbose: bool = False,
+        steer_all_tokens: bool = False,
     ) -> dict:
         """Generate steered and unsteered responses using transcoder feature intervention.
 
-        Unlike SAE steering (which adds a vector to the residual stream), transcoder
-        steering works by substituting the entire MLP block with a modified transcoder
-        forward pass:
+        Replaces the MLP at *target_layer* with the transcoder for both runs.
+        Steering adds norm-scaled decoder directions to the transcoder output.
 
-            1. Hook ``pre_feedforward_layernorm`` to capture the MLP input ``x``.
-            2. Encode: ``f = transcoder.encode(x)``  →  sparse feature activations.
-            3. Steer:  ``f[..., feature_idx] += coeff``  (amplify / suppress features).
-            4. Decode: ``y' = transcoder.decode(f)``  →  modified MLP output.
-            5. Hook ``post_feedforward_layernorm`` to replace its output with ``y'``,
-               so the residual addition uses the transcoder output instead of the real MLP.
-
-        The **unsteered** run also routes through the transcoder (no feature
-        modification) so that the only difference between the two runs is the
-        feature intervention, not transcoder reconstruction error.
+        The hook is on ``post_feedforward_layernorm`` because the transcoder
+        is trained to map ``pre_feedforward_layernorm.output`` →
+        ``post_feedforward_layernorm.output``.
 
         Args:
             prompt: Input text or chat-template list.
-            transcoder: A ``JumpReLUTranscoder`` instance (must already be on the
-                correct device).
-            feature_idx: Index (or list of indices) of the transcoder feature(s)
-                to steer.
-            coeff: Multiplicative steering strength for each feature.  The
-                intervention is ``encoded[fi] *= (1 + coeff)``, scaling the
-                feature's current activation proportionally.  Only tokens
-                where the feature is active are affected.  ``coeff = -1``
-                fully suppresses; ``coeff > 0`` amplifies.  Can be a scalar
-                (applied to all features) or a list aligned with
-                ``feature_idx``.
-            target_layer: Transformer layer index at which to intervene.
-            max_new_tokens: Maximum number of new tokens to generate.
-            response_split_token: Token used to split off the model response
-                from the full decoded string.
+            transcoder: A ``JumpReLUTranscoder`` instance.
+            feature_idx: Feature index or list of indices to steer.
+            coeff: Steering multiplier (or list).  ``coeff = -1`` suppresses,
+                ``coeff = 1`` doubles, etc.
+            target_layer: Transformer layer index.
+            max_new_tokens: Max tokens to generate.
+            response_split_token: Token to split off the model response.
 
         Returns:
-            Dict with keys ``"steered"``, ``"unsteered"`` (response strings)
-            and ``"steered_ids"``, ``"unsteered_ids"`` (token-ID tensors).
+            Dict with ``"steered"``, ``"unsteered"`` (strings),
+            ``"steered_ids"``, ``"unsteered_ids"`` (tensors),
+            ``"generation_activations"`` and ``"n_prompt_tokens"``.
         """
         if isinstance(prompt, list):
             prompt = self.tokenizer.apply_chat_template(
@@ -362,7 +346,6 @@ class GemmaModel:
             prompt, return_tensors="pt", add_special_tokens=True
         ).to(self.model.device)
 
-        # Normalise scalar / single-index inputs to lists
         if isinstance(feature_idx, int):
             feature_idxs = [feature_idx]
             coeffs_list = [coeff] if isinstance(coeff, (int, float)) else list(coeff)
@@ -371,49 +354,47 @@ class GemmaModel:
             coeffs_list = [coeff] * len(feature_idxs) if isinstance(coeff, (int, float)) else list(coeff)
 
         def _run(apply_steering: bool, collect_activations: bool = False):
-            # Cache for the pre-FFN layernorm output shared between the two hooks
             _cache: dict[str, torch.Tensor] = {}
-            _diag = {"hook_calls": 0}
             _collected: list[torch.Tensor] = []
 
+            # Precompute the combined steering vector once (avoid recomputing in every hook call)
+            if apply_steering:
+                device = transcoder.w_dec.device
+                combined_vec = torch.zeros(transcoder.w_dec.shape[1], dtype=torch.float32, device=device)
+                for fi, c in zip(feature_idxs, coeffs_list):
+                    combined_vec = combined_vec + c * transcoder.w_dec[fi]
+
             def pre_ffn_hook(_mod, _inp, outputs):
-                # Capture the normalised input that will be fed to the MLP.
-                # LayerNorm returns a plain tensor (not a tuple).
                 acts = outputs[0] if isinstance(outputs, tuple) else outputs
-                _cache["pre_ffn"] = acts  # shape: (batch, seq, d_model)
+                _cache["pre_ffn"] = acts
                 return outputs
 
             def post_ffn_hook(_mod, _inp, outputs):
-                _diag["hook_calls"] += 1
-                # Replace the real MLP output with the transcoder reconstruction
-                # (optionally with modified feature activations).
                 pre_ffn = _cache["pre_ffn"].to(dtype=torch.float32)
+                encoded = transcoder.encode(pre_ffn)
 
-                # Encode to sparse transcoder feature space
-                encoded = transcoder.encode(pre_ffn)  # (batch, seq, d_sae)
-
-                # Collect per-step activations (sparse, on CPU) for later analysis
                 if collect_activations:
                     _collected.append(encoded.detach().cpu().to_sparse())
 
-                # Apply norm-scaled per-feature interventions when steering.
-                # Each feature's coefficient is scaled by the L2 norm of its
-                # decoder column (w_dec[fi]), mirroring how generate_steered
-                # scales by the decoder direction norm.  This makes the
-                # coefficient a unit-agnostic multiplier of the feature's
-                # natural contribution magnitude.
-                if apply_steering:
-                    encoded = encoded.clone()
-                    for fi, c in zip(feature_idxs, coeffs_list):
-                        feat_norm = torch.norm(transcoder.w_dec[fi].float())
-                        encoded[..., fi] = encoded[..., fi] + c * feat_norm
-
-                # Decode back to model activation space
-                transcoder_out = transcoder.decode(encoded, input_acts=pre_ffn)  # (batch, seq, d_model)
-
-                # Match the original output dtype (bfloat16 / float16 on GPU)
+                transcoder_out = transcoder.decode(encoded, input_acts=pre_ffn)
                 orig = outputs[0] if isinstance(outputs, tuple) else outputs
                 transcoder_out = transcoder_out.to(dtype=orig.dtype)
+
+                if apply_steering:
+                    steering = combined_vec.to(dtype=transcoder_out.dtype)
+                    if transcoder_out.shape[1] == 1:
+                        # Decode step: steer the single token
+                        avg_norm = torch.norm(transcoder_out, dim=-1, keepdim=True)
+                        transcoder_out = transcoder_out + avg_norm * steering
+                    elif steer_all_tokens:
+                        # Prefill: steer every token
+                        avg_norm = torch.norm(transcoder_out, dim=-1, keepdim=True)
+                        transcoder_out = transcoder_out + avg_norm * steering
+                    else:
+                        # Prefill: steer only the last token
+                        avg_norm = torch.norm(transcoder_out[:, -1:], dim=-1, keepdim=True)
+                        transcoder_out = transcoder_out.clone()
+                        transcoder_out[:, -1:] = transcoder_out[:, -1:] + avg_norm * steering
 
                 if isinstance(outputs, tuple):
                     return (transcoder_out,) + outputs[1:]
@@ -429,21 +410,12 @@ class GemmaModel:
                         **inputs,
                         max_new_tokens=max_new_tokens,
                         do_sample=False,
-                        use_cache=use_cache,
                         pad_token_id=self.tokenizer.eos_token_id,
                     )
                 decoded = self.tokenizer.decode(out_ids[0])
             finally:
                 handle_pre.remove()
                 handle_post.remove()
-
-            if verbose:
-                label = "STEERED" if apply_steering else "UNSTEERED"
-                n_generated = out_ids.shape[1] - inputs["input_ids"].shape[1]
-                print(
-                    f"  [{label}] hook fired {_diag['hook_calls']}x "
-                    f"(expected ~{1 + n_generated} = 1 prefill + {n_generated} gen steps)"
-                )
 
             text = decoded.split(response_split_token)[-1].strip()
             n_prompt_tokens = inputs["input_ids"].shape[1]
@@ -461,131 +433,4 @@ class GemmaModel:
             "steered_ids": steered_ids,
             "generation_activations": gen_activations,
             "n_prompt_tokens": n_prompt_tokens,
-        }
-
-    def generate_ablated_transcoder(
-        self,
-        prompt: Union[str, List[Dict]],
-        transcoder,
-        feature_idx: Union[int, List[int]],
-        target_layer: int,
-        max_new_tokens: int = 500,
-        response_split_token: str = "<start_of_turn>model",
-        use_cache: bool = True,
-        verbose: bool = False,
-    ) -> dict:
-        """Ablate transcoder feature(s) for the entire generation.
-
-        Both runs route through the transcoder (not the original MLP) so the
-        only difference is the targeted feature ablation.  The specified
-        features are zeroed out for every forward pass during generation.
-
-        Args:
-            prompt: Input text or chat-template list.
-            transcoder: A ``JumpReLUTranscoder`` instance.
-            feature_idx: Index (or list of indices) of the feature(s) to ablate.
-            target_layer: Transformer layer index at which to intervene.
-            max_new_tokens: Maximum number of new tokens to generate.
-            response_split_token: Token used to split off the model response.
-            use_cache: Whether to use KV caching.  Set to ``False`` to force
-                full recomputation every generation step (slower but ensures
-                hooks fire on all tokens every step).
-            verbose: If ``True``, print diagnostic information about hook
-                firing and ablation magnitudes.
-
-        Returns:
-            Dict with keys ``"unablated"``, ``"ablated"`` (response strings)
-            and ``"unablated_ids"``, ``"ablated_ids"`` (token-ID tensors).
-        """
-        if isinstance(prompt, list):
-            prompt = self.tokenizer.apply_chat_template(
-                prompt, tokenize=False, add_generation_prompt=True
-            )
-
-        inputs = self.tokenizer(
-            prompt, return_tensors="pt", add_special_tokens=True
-        ).to(self.model.device)
-
-        # Normalise to list
-        feature_idxs = [feature_idx] if isinstance(feature_idx, int) else list(feature_idx)
-
-        def _run(apply_ablation: bool):
-            _cache: dict[str, torch.Tensor] = {}
-            _diag = {"hook_calls": 0, "total_ablated_energy": 0.0}
-
-            # -- Transcoder hooks ----------------------------------------------
-            def pre_ffn_hook(_mod, _inp, outputs):
-                acts = outputs[0] if isinstance(outputs, tuple) else outputs
-                _cache["pre_ffn"] = acts
-                return outputs
-
-            def post_ffn_hook(_mod, _inp, outputs):
-                _diag["hook_calls"] += 1
-                pre_ffn = _cache["pre_ffn"].to(dtype=torch.float32)
-                encoded = transcoder.encode(pre_ffn)
-
-                # Zero-out target features for the entire generation
-                if apply_ablation:
-                    encoded = encoded.clone()
-                    for fi in feature_idxs:
-                        _diag["total_ablated_energy"] += float(
-                            encoded[..., fi].abs().sum()
-                        )
-                        encoded[..., fi] = 0.0
-
-                transcoder_out = transcoder.decode(encoded, input_acts=pre_ffn)
-
-                orig = outputs[0] if isinstance(outputs, tuple) else outputs
-                transcoder_out = transcoder_out.to(dtype=orig.dtype)
-
-                if isinstance(outputs, tuple):
-                    return (transcoder_out,) + outputs[1:]
-                return transcoder_out
-
-            layer = self.model.model.language_model.layers[target_layer]
-            handle_pre = layer.pre_feedforward_layernorm.register_forward_hook(
-                pre_ffn_hook
-            )
-            handle_post = layer.post_feedforward_layernorm.register_forward_hook(
-                post_ffn_hook
-            )
-
-            try:
-                with torch.no_grad():
-                    out_ids = self.model.generate(
-                        **inputs,
-                        max_new_tokens=max_new_tokens,
-                        do_sample=False,
-                        use_cache=use_cache,
-                        pad_token_id=self.tokenizer.eos_token_id,
-                    )
-                decoded = self.tokenizer.decode(out_ids[0])
-            finally:
-                handle_pre.remove()
-                handle_post.remove()
-
-            if verbose:
-                label = "ABLATED" if apply_ablation else "UNABLATED"
-                n_generated = out_ids.shape[1] - inputs["input_ids"].shape[1]
-                print(
-                    f"  [{label}] hook fired {_diag['hook_calls']}x "
-                    f"(expected ~{1 + n_generated} = 1 prefill + {n_generated} gen steps)"
-                )
-                if apply_ablation:
-                    print(
-                        f"  [{label}] total ablated activation energy: "
-                        f"{_diag['total_ablated_energy']:.4f}"
-                    )
-
-            text = decoded.split(response_split_token)[-1].strip()
-            return text, out_ids[0]
-
-        unablated_text, unablated_ids = _run(apply_ablation=False)
-        ablated_text, ablated_ids = _run(apply_ablation=True)
-
-        return {
-            "unablated": unablated_text,
-            "ablated": ablated_text,
-            "unablated_ids": unablated_ids,
-            "ablated_ids": ablated_ids,
         }
