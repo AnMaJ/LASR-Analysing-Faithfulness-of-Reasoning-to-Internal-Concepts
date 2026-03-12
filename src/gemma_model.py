@@ -312,6 +312,7 @@ class GemmaModel:
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
         steer_all_tokens: bool = False,
+        steer_prefill_only: bool = False,
     ) -> dict:
         """Generate steered and unsteered responses using transcoder feature intervention.
 
@@ -331,6 +332,8 @@ class GemmaModel:
             target_layer: Transformer layer index.
             max_new_tokens: Max tokens to generate.
             response_split_token: Token to split off the model response.
+            steer_prefill_only: If True, only apply steering during prefill
+                (seq_len > 1) and skip during autoregressive decode steps.
 
         Returns:
             Dict with ``"steered"``, ``"unsteered"`` (strings),
@@ -380,7 +383,7 @@ class GemmaModel:
                 orig = outputs[0] if isinstance(outputs, tuple) else outputs
                 transcoder_out = transcoder_out.to(dtype=orig.dtype)
 
-                if apply_steering:
+                if apply_steering and not (steer_prefill_only and transcoder_out.shape[1] == 1):
                     steering = combined_vec.to(dtype=transcoder_out.dtype)
                     if transcoder_out.shape[1] == 1:
                         # Decode step: steer the single token
