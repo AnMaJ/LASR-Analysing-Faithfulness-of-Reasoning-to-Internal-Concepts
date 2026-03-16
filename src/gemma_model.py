@@ -284,6 +284,7 @@ class GemmaModel:
                         max_new_tokens=max_new_tokens,
                         do_sample=False,
                         pad_token_id=self.tokenizer.eos_token_id,
+                        use_cache=use_cache,
                     )
                 decoded = self.tokenizer.decode(out_ids[0])
             finally:
@@ -313,6 +314,7 @@ class GemmaModel:
         response_split_token: str = "<start_of_turn>model",
         steer_all_tokens: bool = False,
         steer_prefill_only: bool = False,
+        use_cache: bool = True,
     ) -> dict:
         """Generate steered and unsteered responses using transcoder feature intervention.
 
@@ -414,6 +416,7 @@ class GemmaModel:
                         max_new_tokens=max_new_tokens,
                         do_sample=False,
                         pad_token_id=self.tokenizer.eos_token_id,
+                        use_cache=use_cache,
                     )
                 decoded = self.tokenizer.decode(out_ids[0])
             finally:
