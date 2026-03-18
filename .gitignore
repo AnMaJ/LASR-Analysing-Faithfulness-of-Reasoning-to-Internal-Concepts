@@ -6,3 +6,5 @@ env/
 .env
 *.png
 data/esnli-cc-activations/
+.claude/
+CLAUDE.md
