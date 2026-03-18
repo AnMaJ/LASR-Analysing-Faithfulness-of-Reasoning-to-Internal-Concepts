@@ -211,7 +211,7 @@ class ESNLI_Dataset(BaseDataset):
     def parse_model_answer(self, response: str) -> ParsedAnswer:
         """Extract the predicted label and optional reasoning from a model response.
 
-        Only tag-based prompt styles are supported. Returns ``"FormatFailure"``
+        Only tag-based prompt styles are supported. Returns ``"InvalidFormat"``
         for any tag that is absent, empty, or contains no valid label word.
 
         Args:
@@ -239,12 +239,12 @@ class ESNLI_Dataset(BaseDataset):
             r"<label>\s*(entailment|neutral|contradiction)\s*</label>",
             response, re.IGNORECASE,
         )
-        label = lm.group(1).lower() if lm else "FormatFailure"
+        label = lm.group(1).lower() if lm else "InvalidFormat"
 
         # --- reasoning ---
         rm = re.search(r"<reasoning>(.*?)</reasoning>", response, re.DOTALL)
-        reasoning = rm.group(1).strip() if rm else "FormatFailure"
+        reasoning = rm.group(1).strip() if rm else "InvalidFormat"
         if reasoning == "":
-            reasoning = "FormatFailure"
+            reasoning = "InvalidFormat"
 
         return ParsedAnswer(label=label, reasoning=reasoning)
