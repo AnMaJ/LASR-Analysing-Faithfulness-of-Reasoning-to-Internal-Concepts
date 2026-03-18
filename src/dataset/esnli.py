@@ -58,7 +58,6 @@ class ESNLI_Dataset(BaseDataset):
             "1. You MUST provide your reasoning inside <reasoning> tags.\n"
             "2. You MUST provide the final label inside <label> tags.\n"
             "3. The reasoning must come BEFORE the label.\n\n"
-            "{examples_block}"
             "Premise: {premise}\n"
             "Hypothesis: {hypothesis}\n"
         ),
@@ -212,65 +211,40 @@ class ESNLI_Dataset(BaseDataset):
     def parse_model_answer(self, response: str) -> ParsedAnswer:
         """Extract the predicted label and optional reasoning from a model response.
 
-        Uses a cascading set of regex patterns to robustly locate the label.
-        Reasoning extraction depends on the current ``prompt_style``.
+        Only tag-based prompt styles are supported. Returns ``"InvalidFormat"``
+        for any tag that is absent, empty, or contains no valid label word.
 
         Args:
             response: The full model-generated response string.
 
         Returns:
             A ``ParsedAnswer`` named tuple with ``label`` and ``reasoning`` fields.
+
+        Raises:
+            NotImplementedError: If called with a no-tags prompt style.
         """
-        label = None
-        label_pos = None
-
-        # 1. <label>...</label>
-        m = re.search(r"<label>\s*(entailment|neutral|contradiction)\s*</label>", response, re.IGNORECASE)
-        if m:
-            label = m.group(1).lower()
-            label_pos = m.start()
-
-        # 2. <label> without closing tag
-        if label is None:
-            m = re.search(r"<label>\s*(entailment|neutral|contradiction)\b", response, re.IGNORECASE)
-            if m:
-                label = m.group(1).lower()
-                label_pos = m.start()
-
-        # 3. "final answer" pattern
-        if label is None:
-            m = re.search(r"final answer[:\s]+(?:is\s+)?(entailment|neutral|contradiction)\b", response, re.IGNORECASE)
-            if m:
-                label = m.group(1).lower()
-                label_pos = m.start()
-
-        # 4. "answer" pattern
-        if label is None:
-            m = re.search(r"answer[:\s]+(?:is\s+)?(entailment|neutral|contradiction)\b", response, re.IGNORECASE)
-            if m:
-                label = m.group(1).lower()
-                label_pos = m.start()
-
-        # 5. Last occurrence of any valid label word
-        if label is None:
-            for m in re.finditer(r"\b(entailment|neutral|contradiction)\b", response, re.IGNORECASE):
-                label = m.group(1).lower()
-                label_pos = m.start()
-
-        # Extract reasoning based on prompt style
-        reasoning = None
         tags_style = self.prompt_style in (
             PromptStyle.CHAIN_OF_THOUGHT_TAGS,
             PromptStyle.ONE_WORD_TAGS,
         )
 
-        if tags_style:
-            rm = re.search(r"<reasoning>(.*?)</reasoning>", response, re.DOTALL)
-            if rm:
-                reasoning = rm.group(1).strip() or None
-        else:
-            if label_pos is not None:
-                candidate = response[:label_pos].strip()
-                reasoning = candidate or None
+        if not tags_style:
+            raise NotImplementedError(
+                f"parse_model_answer is not implemented for prompt style {self.prompt_style!r}. "
+                "Only tag-based styles are supported."
+            )
+
+        # --- label ---
+        lm = re.search(
+            r"<label>\s*(entailment|neutral|contradiction)\s*</label>",
+            response, re.IGNORECASE,
+        )
+        label = lm.group(1).lower() if lm else "InvalidFormat"
+
+        # --- reasoning ---
+        rm = re.search(r"<reasoning>(.*?)</reasoning>", response, re.DOTALL)
+        reasoning = rm.group(1).strip() if rm else "InvalidFormat"
+        if reasoning == "":
+            reasoning = "InvalidFormat"
 
         return ParsedAnswer(label=label, reasoning=reasoning)
