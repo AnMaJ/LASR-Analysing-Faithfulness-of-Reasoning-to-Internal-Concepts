@@ -5,3 +5,4 @@ __pycache__/
 env/
 .env
 *.png
+data/esnli-cc-activations/
