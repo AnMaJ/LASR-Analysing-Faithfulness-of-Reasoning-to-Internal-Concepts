@@ -84,7 +84,7 @@ def parse_args():
     parser.add_argument("--model_name", type=str, default="google/gemma-3-27b-it")
     parser.add_argument("--repo_id", type=str, default="google/gemma-scope-2-27b-it")
     parser.add_argument("--sae_layer", type=int, default=31)
-    parser.add_argument("--sae_width", type=str, default="65k")
+    parser.add_argument("--sae_width", type=str, default="262k")
     parser.add_argument("--sae_l0", type=str, default="medium")
     parser.add_argument("--torch_dtype", type=str, default="bfloat16",
                         choices=list(TORCH_DTYPE_MAP.keys()),
@@ -207,14 +207,11 @@ def main():
         all_prompts, max_new_tokens=args.max_new_tokens, batch_size=args.batch_size
     )
 
-    # --- Extract residual activations (generation tokens only) ---
     residuals = []
     for generation_id, prompt_len in tqdm(zip(generation_ids, prompt_lens), total=len(generation_ids), desc="Extracting residuals"):
         residual_acts = model.gather_residual_activations(sae_config.layer, generation_id)
         residuals.append(residual_acts[prompt_len:].cpu())
-
-    # --- Move all CUDA tensors to CPU and free Gemma model to reclaim VRAM ---
-    generation_ids = [ids.cpu() for ids in generation_ids]
+        del residual_acts
 
     gen_token_ids = [ids[prompt_len:] for ids, prompt_len in zip(generation_ids, prompt_lens)]
 
@@ -238,8 +235,8 @@ def main():
     for residual in tqdm(residuals, desc="SAE encoding"):
         gen_residual = residual.to(device).float()
         encoded = sae.encode(gen_residual)
-        sae_encodings.append(encoded.cpu().to_sparse())
-        stats = sae.get_reconstruction_stats(gen_residual)
+        sae_activations.append(encoded.detach().cpu().to_sparse())
+        stats = sae.get_reconstruction_stats(gen_residual, encoded)
         recon_stats.append(stats)
         del gen_residual, encoded
         torch.cuda.empty_cache()
@@ -276,8 +273,10 @@ def main():
         "recon_stats": recon_stats,
         "sequence": sequences,
         "prompt_lens": prompt_char_lens,
+        "generations_isd": generation_ids,
+        "dataset_info": {"categories": all_categories,
+        "ground_truths": all_ground_truths},
         "generation_token_ids": gen_token_ids,
-        "dataset_info": dataset_info,
         "sae_config": {
             "repo_id": sae_config.repo_id,
             "sae_type": sae_config.sae_type,
