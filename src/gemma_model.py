@@ -209,6 +209,8 @@ class GemmaModel:
         target_layer: int,
         max_new_tokens: int = 500,
         response_split_token: str = "<start_of_turn>model",
+        steer_all_tokens: bool = False,
+        steer_prefill_only: bool = False,
     ) -> dict:
         """Generate steered and unsteered responses for a given prompt.
 
@@ -226,10 +228,15 @@ class GemmaModel:
             max_new_tokens: Maximum number of tokens to generate.
             response_split_token: Token string used to split off the model's
                 response from the full decoded output.
+            steer_all_tokens: If True, steer every token during prefill
+                (not just the last one).
+            steer_prefill_only: If True, only apply steering during prefill
+                (seq_len > 1) and skip during autoregressive decode steps.
 
         Returns:
-            A dict with keys ``"steered"``, ``"unsteered"`` (response strings)
-            and ``"steered_ids"``, ``"unsteered_ids"`` (token-ID tensors).
+            Dict with ``"steered"``, ``"unsteered"`` (strings),
+            ``"steered_ids"``, ``"unsteered_ids"`` (tensors),
+            ``"generation_activations"`` and ``"n_prompt_tokens"``.
         """
         if isinstance(prompt, list):
             prompt = self.tokenizer.apply_chat_template(
@@ -248,35 +255,48 @@ class GemmaModel:
             feature_idxs = list(feature_idx)
             coeffs_list = [coeff] * len(feature_idxs) if isinstance(coeff, (int, float)) else list(coeff)
 
-        def _run(apply_steering: bool):
-            def steering_hook(mod, hook_inputs, outputs):
-                if not apply_steering:
-                    return outputs
-                output = outputs[0] if isinstance(outputs, tuple) else outputs
-                # output shape: (batch, seq, d_model) — preserve 3D, do NOT squeeze
+        def _run(apply_steering: bool, collect_activations: bool = False):
+            _collected: list[torch.Tensor] = []
 
-                dtype = output.dtype
-
-                # Combined steering vector: sum of coeff_i * w_dec[feature_i]
-                combined_vec = torch.zeros(output.shape[-1], dtype=dtype, device=output.device)
+            # Precompute the combined steering vector once
+            if apply_steering:
+                device = sae.w_dec.device
+                combined_vec = torch.zeros(sae.w_dec.shape[1], dtype=torch.float32, device=device)
                 for fi, c in zip(feature_idxs, coeffs_list):
-                    combined_vec = combined_vec + c * sae.w_dec[fi].to(dtype=dtype, device=output.device)
+                    combined_vec = combined_vec + c * sae.w_dec[fi]
 
-                if output.shape[1] == 1:  # cached decode step (seq=1)
-                    avg_norm = torch.norm(output, dim=-1, keepdim=True)
-                    output = output + avg_norm * combined_vec
-                else:  # prefill
-                    avg_norm = torch.norm(output[:, -1:], dim=-1, keepdim=True)
-                    output = output.clone()
-                    output[:, -1:] = output[:, -1:] + avg_norm * combined_vec
+            def layer_hook(_mod, _inp, outputs):
+                # Hook on the full layer output (resid_post), which is the space
+                # the SAE was trained on.  This fires after the residual
+                # connection: hidden_states = residual + post_ffn_layernorm(mlp(...))
+                orig = outputs[0] if isinstance(outputs, tuple) else outputs
 
-                if isinstance(outputs, tuple):
-                    return (output,) + outputs[1:]
-                return output
+                if collect_activations:
+                    encoded = sae.encode(orig.to(dtype=torch.float32))
+                    _collected.append(encoded.detach().cpu().to_sparse())
 
-            handle = self.model.model.language_model.layers[target_layer].register_forward_hook(
-                steering_hook
-            )
+                if apply_steering and not (steer_prefill_only and orig.shape[1] == 1):
+                    steering = combined_vec.to(dtype=orig.dtype)
+                    if orig.shape[1] == 1:
+                        avg_norm = torch.norm(orig, dim=-1, keepdim=True)
+                        result = orig + avg_norm * steering
+                    elif steer_all_tokens:
+                        avg_norm = torch.norm(orig, dim=-1, keepdim=True)
+                        result = orig + avg_norm * steering
+                    else:
+                        avg_norm = torch.norm(orig[:, -1:], dim=-1, keepdim=True)
+                        result = orig.clone()
+                        result[:, -1:] = result[:, -1:] + avg_norm * steering
+
+                    if isinstance(outputs, tuple):
+                        return (result,) + outputs[1:]
+                    return result
+
+                return outputs
+
+            layer = self.model.model.language_model.layers[target_layer]
+            handle = layer.register_forward_hook(layer_hook)
+
             try:
                 with torch.no_grad():
                     out_ids = self.model.generate(
@@ -290,16 +310,21 @@ class GemmaModel:
                 handle.remove()
 
             text = decoded.split(response_split_token)[-1].strip()
-            return text, out_ids[0]
+            n_prompt_tokens = inputs["input_ids"].shape[1]
+            return text, out_ids[0], _collected, n_prompt_tokens
 
-        unsteered_text, unsteered_ids = _run(apply_steering=False)
-        steered_text, steered_ids = _run(apply_steering=True)
+        unsteered_text, unsteered_ids, gen_activations, n_prompt_tokens = _run(
+            apply_steering=False, collect_activations=True
+        )
+        steered_text, steered_ids, _, _ = _run(apply_steering=True)
 
         return {
             "unsteered": unsteered_text,
             "steered": steered_text,
             "unsteered_ids": unsteered_ids,
             "steered_ids": steered_ids,
+            "generation_activations": gen_activations,
+            "n_prompt_tokens": n_prompt_tokens,
         }
 
     def generate_steered_transcoder(
