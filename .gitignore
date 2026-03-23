@@ -5,3 +5,6 @@ __pycache__/
 env/
 .env
 *.png
+graph_files/
+graphs/
+activations/

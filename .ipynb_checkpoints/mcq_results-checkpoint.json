@@ -1,0 +1,18 @@
+[
+  {
+    "example_idx": 0,
+    "question": "What is the capital city of France?\nA) Paris\nB) Delhi\nC) Texas\nD) Baku",
+    "gold_answer": "",
+    "generated_text": "A\n\n**Explanation:**\n\n1. **Identify the correct answer:** The question asks for the capital city of France.\n2. **Examine the options:**\n   *   A) Paris - This is the capital city of France.\n",
+    "n_tokens": 50,
+    "n_attributed": 1,
+    "token_results": [
+      {
+        "token_pos": 0,
+        "token_text": "A",
+        "graph_path": "graphs/mcq/gemma_gsm8k_ex0000_tok0000.pt",
+        "status": "success"
+      }
+    ]
+  }
+]
