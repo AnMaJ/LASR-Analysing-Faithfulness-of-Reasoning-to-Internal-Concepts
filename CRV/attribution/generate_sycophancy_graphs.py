@@ -38,7 +38,12 @@ from gemma_custom_prompt_first_token_attribution import (
     GEMMA_MODEL_ID,
     MWHANNA_HF_REF,
 )
-from sycophancy_dataset import QUESTIONS
+def _load_questions(dataset_name: str):
+    if dataset_name == "sycophancy_math":
+        from sycophancy_math_dataset import QUESTIONS
+    else:
+        from sycophancy_dataset import QUESTIONS
+    return QUESTIONS
 
 
 # ---------------------------------------------------------------------------
@@ -144,6 +149,7 @@ def generate_graphs(args: argparse.Namespace) -> None:
     n_faithful = 0
     n_skipped = 0
 
+    QUESTIONS = _load_questions(args.dataset)
     for i, q in enumerate(QUESTIONS):
         correct_answer = q["correct_answer"]
         hinted_answer = q["hinted_answer"]
@@ -281,6 +287,13 @@ def parse_args() -> argparse.Namespace:
         help="Directory for .pt graph files and metadata.json.",
     )
     p.add_argument(
+        "--dataset",
+        type=str,
+        default="sycophancy_math",
+        choices=["sycophancy", "sycophancy_math"],
+        help="Which question dataset to use.",
+    )
+    p.add_argument(
         "--dtype",
         type=str,
         default="float32",
@@ -308,7 +321,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--batch_size",
         type=int,
-        default=256,
+        default=512,
         help="Batch size for the attribution pass.",
     )
     p.add_argument(

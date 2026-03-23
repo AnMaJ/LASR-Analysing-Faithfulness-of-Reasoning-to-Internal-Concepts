@@ -31,27 +31,35 @@ the SingleLayerTranscoder at that layer.  The hook:
 
 Usage
 -----
-# Ablate the top-5 enriched features (loaded from analysis output):
+# Negative steering / ablation (scale=0): fix sycophantic answers
 python ablate_sycophantic_features.py \\
     --graph_dir ./graphs/sycophancy \\
-    --top_n 5
+    --top_n 5 --scale 0.0
 
-# Sweep over different top-N values (1, 3, 5, 10):
-python ablate_sycophancy_features.py \\
-    --graph_dir ./graphs/sycophancy \\
-    --sweep
-
-# Provide features manually (layer,feature_id pairs):
+# Positive steering / amplification (scale=5): induce sycophancy on clean questions
 python ablate_sycophantic_features.py \\
     --graph_dir ./graphs/sycophancy \\
-    --features 21,92372 17,24112 20,167488 \\
-    --dataset sycophancy
+    --top_n 5 --scale 5.0
 
-# Use the math-only dataset instead:
+# Full scale sweep [1.0, 0.5, 0.25, 0.0, 2.0, 5.0, 10.0] for top-5 features:
+python ablate_sycophantic_features.py \\
+    --graph_dir ./graphs/sycophancy \\
+    --top_n 5 --scale_sweep --save_results
+
+# Sweep feature counts AND scales:
+python ablate_sycophantic_features.py \\
+    --graph_dir ./graphs/sycophancy \\
+    --sweep --scale_sweep
+
+# Provide features manually:
+python ablate_sycophantic_features.py \\
+    --graph_dir ./graphs/sycophancy \\
+    --features 21,92372 17,24112 20,167488 --scale 0.0
+
+# Math dataset:
 python ablate_sycophantic_features.py \\
     --graph_dir ./graphs/sycophancy_math \\
-    --top_n 5 \\
-    --dataset sycophancy_math
+    --top_n 5 --scale_sweep --dataset sycophancy_math
 """
 
 from __future__ import annotations
@@ -156,12 +164,18 @@ def _load_W_dec_rows(
 # Hook factory
 # ---------------------------------------------------------------------------
 
-def _make_ablation_hook(module, feature_ids: torch.Tensor):
-    """Return a forward_hook that zeros out *feature_ids* in *module*'s output.
+def _make_steering_hook(module, feature_ids: torch.Tensor, scale: float):
+    """Return a forward_hook that steers *feature_ids* in *module*'s output.
 
-    Subtraction formula:
+    Generalised steering formula:
         contribution = relu((x - b_dec) @ W_enc[:,f] + b_enc[f]) @ W_dec[f,:]
-        output_ablated = output - contribution
+        output_steered = output + (scale - 1) * contribution
+
+    Special cases:
+        scale = 0.0  → full ablation   (zero the feature)
+        scale = 1.0  → identity        (no change)
+        scale > 1.0  → amplification   (positive steering)
+        scale < 0.0  → sign inversion  (flip the feature's contribution)
 
     The hook is a no-op if W_dec cannot be loaded (fails gracefully).
     """
@@ -170,24 +184,22 @@ def _make_ablation_hook(module, feature_ids: torch.Tensor):
         x = input_tuple[0]  # [batch, seq, d_model]
         device, dtype = x.device, x.dtype
 
-        # Move encoder weights to the right device
-        b_dec = mod.b_dec.to(device=device, dtype=dtype)           # [d_model]
-        W_enc_sel = mod.W_enc[:, feature_ids].to(device=device, dtype=dtype)  # [d_model, n_f]
-        b_enc_sel = mod.b_enc[feature_ids].to(device=device, dtype=dtype)     # [n_f]
+        b_dec    = mod.b_dec.to(device=device, dtype=dtype)                        # [d_model]
+        W_enc_sel = mod.W_enc[:, feature_ids].to(device=device, dtype=dtype)       # [d_model, n_f]
+        b_enc_sel = mod.b_enc[feature_ids].to(device=device, dtype=dtype)          # [n_f]
 
-        # Compute feature activations for the ablated set
-        # pre_act: [batch, seq, n_f]
+        # Feature activations for the steered set: [batch, seq, n_f]
         pre_act = (x - b_dec.unsqueeze(0).unsqueeze(0)) @ W_enc_sel + b_enc_sel
-        acts = torch.relu(pre_act)  # [batch, seq, n_f]
+        acts = torch.relu(pre_act)
 
-        # Load W_dec rows
         W_dec_sel = _load_W_dec_rows(mod, feature_ids, device, dtype)  # [n_f, d_model]
         if W_dec_sel is None:
-            return output  # Cannot ablate — pass through unchanged
+            return output  # W_dec unavailable — pass through unchanged
 
-        # Contribution: [batch, seq, n_f] @ [n_f, d_model] = [batch, seq, d_model]
+        # contribution: [batch, seq, d_model]
         contribution = acts @ W_dec_sel
-        return output - contribution
+        # (scale - 1) == -1 for full ablation, +1 for doubling, etc.
+        return output + (scale - 1.0) * contribution
 
     return hook
 
@@ -197,22 +209,22 @@ def _make_ablation_hook(module, feature_ids: torch.Tensor):
 # ---------------------------------------------------------------------------
 
 @contextmanager
-def ablation_hooks(model, ablation_targets: List[Tuple[int, int]]):
-    """Install ablation forward hooks for the duration of the with-block.
+def steering_hooks(model, targets: List[Tuple[int, int]], scale: float):
+    """Install steering forward hooks for the duration of the with-block.
 
     Args:
-        model:            ReplacementModel with integrated transcoders.
-        ablation_targets: List of (layer_idx, feature_id) pairs to ablate.
+        model:   ReplacementModel with integrated transcoders.
+        targets: List of (layer_idx, feature_id) pairs to steer.
+        scale:   Steering multiplier (0 = ablate, >1 = amplify, <0 = invert).
     """
-    if not ablation_targets:
+    if not targets or scale == 1.0:
         yield
         return
 
     layer_map = _find_transcoders(model)
 
-    # Group feature_ids by layer
     layer_to_feats: Dict[int, List[int]] = defaultdict(list)
-    for layer, feat_id in ablation_targets:
+    for layer, feat_id in targets:
         layer_to_feats[layer].append(feat_id)
 
     handles = []
@@ -225,7 +237,7 @@ def ablation_hooks(model, ablation_targets: List[Tuple[int, int]]):
             )
             continue
         fids_tensor = torch.tensor(feat_ids, dtype=torch.long)
-        hook_fn = _make_ablation_hook(module, fids_tensor)
+        hook_fn = _make_steering_hook(module, fids_tensor, scale)
         handle = module.register_forward_hook(hook_fn)
         handles.append(handle)
 
@@ -237,6 +249,13 @@ def ablation_hooks(model, ablation_targets: List[Tuple[int, int]]):
     finally:
         for h in handles:
             h.remove()
+
+
+# Keep the old name as an alias for backwards compatibility
+@contextmanager
+def ablation_hooks(model, ablation_targets: List[Tuple[int, int]]):
+    with steering_hooks(model, ablation_targets, scale=0.0):
+        yield
 
 
 # ---------------------------------------------------------------------------
@@ -289,170 +308,220 @@ def _load_questions(dataset_name: str):
 # Main experiment
 # ---------------------------------------------------------------------------
 
-def run_ablation_experiment(
+def run_steering_experiment(
     model,
     tokenizer,
     metadata: List[dict],
     questions,
-    ablation_targets: List[Tuple[int, int]],
-    top_n_label: str = "",
+    targets: List[Tuple[int, int]],
+    scale: float,
+    label: str = "",
 ) -> dict:
-    """Run baseline → ablation comparison for every sycophantic entry.
+    """Run a single steering pass (one scale value) over all questions.
+
+    scale < 1  → negative / ablation steering:
+                 test sycophantic hint questions  (does answer flip to correct?)
+                 + faithful questions             (collateral damage?)
+    scale > 1  → positive / amplification steering:
+                 test clean questions             (does answer flip to hinted wrong?)
+                 + sycophantic hint questions     (does it make things worse?)
+    scale = 1  → baseline (no steering), run all questions once.
 
     Args:
-        model:             ReplacementModel.
-        tokenizer:         Matching tokenizer.
-        metadata:          List of dicts from metadata.json.
-        questions:         The QUESTIONS list from the dataset module.
-        ablation_targets:  (layer, feature_id) pairs to ablate.
-        top_n_label:       String label used in output (e.g. "top5").
+        model:     ReplacementModel.
+        tokenizer: Matching tokenizer.
+        metadata:  List of dicts from metadata.json.
+        questions: QUESTIONS list from dataset module.
+        targets:   (layer, feature_id) pairs to steer.
+        scale:     Steering multiplier (0 = ablate, 1 = baseline, >1 = amplify).
+        label:     Human-readable label for the run.
 
     Returns:
-        Dict with keys: results (list of per-question dicts), summary (dict).
+        Dict with keys: results, summary.
     """
     from gemma_custom_prompt_first_token_attribution import build_chat_prompt
 
     device = next(model.parameters()).device
+    is_ablation = scale < 1.0
+    is_amplify  = scale > 1.0
 
-    # Build a fast lookup: slug -> metadata entry
-    slug_to_meta = {e["slug"]: e for e in metadata}
+    syco_entries  = [e for e in metadata if e.get("is_sycophantic", 0)]
+    clean_entries = [e for e in metadata if e.get("variant") == "clean"]
+    faith_entries = [e for e in metadata if not e.get("is_sycophantic", 0)]
 
-    # Identify sycophantic + their matching clean entries
-    syco_entries = [e for e in metadata if e.get("is_sycophantic", 0)]
-    faithful_entries = [e for e in metadata if not e.get("is_sycophantic", 0)]
-
+    direction = "ablation" if is_ablation else ("amplify" if is_amplify else "baseline")
     print(f"\n{'='*70}")
-    print(f"Ablation experiment  [{top_n_label or 'custom'}]")
-    print(f"  Targets     : {len(ablation_targets)} feature(s)")
-    if ablation_targets:
-        for layer, fid in ablation_targets[:10]:
-            print(f"    L{layer}/F{fid}")
-        if len(ablation_targets) > 10:
-            print(f"    … (+{len(ablation_targets)-10} more)")
-    print(f"  Sycophantic : {len(syco_entries)}")
-    print(f"  Faithful    : {len(faithful_entries)}")
+    print(f"Steering experiment  [{label}]  scale={scale:.2f}  ({direction})")
+    print(f"  Targets       : {len(targets)} feature(s)")
+    for ly, fi in targets[:8]:
+        print(f"    L{ly}/F{fi}")
+    if len(targets) > 8:
+        print(f"    … (+{len(targets)-8} more)")
+    print(f"  Sycophantic   : {len(syco_entries)}")
+    print(f"  Clean         : {len(clean_entries)}")
     print(f"{'='*70}")
 
     results = []
 
     # ------------------------------------------------------------------ #
-    # A.  Sycophantic entries: does ablation fix them?                    #
+    # A. Negative steering / ablation: fix sycophantic hint questions     #
     # ------------------------------------------------------------------ #
-    print("\n--- Sycophantic questions ---")
-    for entry in syco_entries:
-        q_idx = entry["question_idx"]
-        domain = entry["domain"]
-        correct = entry["correct_answer"]
-        hinted = entry["hinted_answer"]
-        variant = entry["variant"]  # always 'hint' for sycophantic entries
-        slug = entry["slug"]
+    if is_ablation or scale == 1.0:
+        print(f"\n--- Sycophantic (hint) questions  [scale={scale:.2f}] ---")
+        for entry in syco_entries:
+            q_idx   = entry["question_idx"]
+            domain  = entry["domain"]
+            correct = entry["correct_answer"]
+            hinted  = entry["hinted_answer"]
+            variant = entry["variant"]
+            slug    = entry["slug"]
 
-        q = questions[q_idx]
-        raw_text = q[f"question_{variant}"]
-        formatted = build_chat_prompt(tokenizer, raw_text, system_instruction="")
+            raw  = questions[q_idx][f"question_{variant}"]
+            fmt  = build_chat_prompt(tokenizer, raw, system_instruction="")
 
-        # --- Baseline (no ablation) ---
-        baseline_answer = _generate_answer(model, tokenizer, formatted, device)
+            baseline = _generate_answer(model, tokenizer, fmt, device)
+            with steering_hooks(model, targets, scale):
+                steered = _generate_answer(model, tokenizer, fmt, device)
 
-        # --- Ablated ---
-        with ablation_hooks(model, ablation_targets):
-            ablated_answer = _generate_answer(model, tokenizer, formatted, device)
+            fixed    = steered == correct and baseline != correct
+            worsened = steered != correct and baseline == correct
+            marker   = "✓ FIXED" if fixed else ("✗ WORSE" if worsened else "  same ")
+            print(
+                f"  {slug:<22}  [{domain:<20}]  "
+                f"base={baseline}  steered={steered}  "
+                f"correct={correct}  hinted={hinted}  {marker}"
+            )
+            results.append({
+                "slug": slug, "domain": domain, "variant": variant,
+                "scale": scale, "label": label,
+                "correct_answer": correct, "hinted_answer": hinted,
+                "question_type": "sycophantic_hint",
+                "baseline_answer": baseline, "steered_answer": steered,
+                "was_fixed": fixed, "was_worsened": worsened,
+                "induced_sycophancy": False,
+            })
 
-        was_fixed = (ablated_answer == correct and baseline_answer != correct)
-        was_broken = (ablated_answer != correct and baseline_answer == correct)
+        print(f"\n--- Faithful questions (collateral damage)  [scale={scale:.2f}] ---")
+        for entry in faith_entries:
+            q_idx   = entry["question_idx"]
+            domain  = entry["domain"]
+            correct = entry["correct_answer"]
+            variant = entry["variant"]
+            slug    = entry["slug"]
 
-        marker = "✓ FIXED" if was_fixed else ("✗ BROKE" if was_broken else "  same ")
-        print(
-            f"  {slug:<22}  [{domain:<22}]  "
-            f"baseline={baseline_answer}  ablated={ablated_answer}  "
-            f"correct={correct}  hinted={hinted}  {marker}"
-        )
+            raw  = questions[q_idx][f"question_{variant}"]
+            fmt  = build_chat_prompt(tokenizer, raw, system_instruction="")
 
-        results.append({
-            "slug": slug,
-            "domain": domain,
-            "variant": variant,
-            "correct_answer": correct,
-            "hinted_answer": hinted,
-            "was_sycophantic": True,
-            "baseline_answer": baseline_answer,
-            "ablated_answer": ablated_answer,
-            "was_fixed": was_fixed,
-            "was_broken_by_ablation": was_broken,
-        })
+            baseline = _generate_answer(model, tokenizer, fmt, device)
+            with steering_hooks(model, targets, scale):
+                steered = _generate_answer(model, tokenizer, fmt, device)
 
-    # ------------------------------------------------------------------ #
-    # B.  Clean/faithful hint entries: collateral damage check            #
-    # ------------------------------------------------------------------ #
-    print("\n--- Faithful questions (collateral damage check) ---")
-    for entry in faithful_entries:
-        q_idx = entry["question_idx"]
-        domain = entry["domain"]
-        correct = entry["correct_answer"]
-        variant = entry["variant"]
-        slug = entry["slug"]
-
-        q = questions[q_idx]
-        raw_text = q[f"question_{variant}"]
-        formatted = build_chat_prompt(tokenizer, raw_text, system_instruction="")
-
-        baseline_answer = _generate_answer(model, tokenizer, formatted, device)
-        with ablation_hooks(model, ablation_targets):
-            ablated_answer = _generate_answer(model, tokenizer, formatted, device)
-
-        changed = baseline_answer != ablated_answer
-        was_broken = changed and (ablated_answer != correct)
-        marker = "  same " if not changed else ("✗ BROKE" if was_broken else "  chg  ")
-        print(
-            f"  {slug:<22}  [{domain:<22}]  "
-            f"baseline={baseline_answer}  ablated={ablated_answer}  "
-            f"correct={correct}  {marker}"
-        )
-
-        results.append({
-            "slug": slug,
-            "domain": domain,
-            "variant": variant,
-            "correct_answer": correct,
-            "hinted_answer": entry.get("hinted_answer", ""),
-            "was_sycophantic": False,
-            "baseline_answer": baseline_answer,
-            "ablated_answer": ablated_answer,
-            "was_fixed": False,
-            "was_broken_by_ablation": was_broken,
-        })
+            changed = baseline != steered
+            broken  = changed and steered != correct
+            marker  = "  same " if not changed else ("✗ BROKE" if broken else "  chg  ")
+            print(
+                f"  {slug:<22}  [{domain:<20}]  "
+                f"base={baseline}  steered={steered}  correct={correct}  {marker}"
+            )
+            results.append({
+                "slug": slug, "domain": domain, "variant": variant,
+                "scale": scale, "label": label,
+                "correct_answer": correct,
+                "hinted_answer": entry.get("hinted_answer", ""),
+                "question_type": "faithful",
+                "baseline_answer": baseline, "steered_answer": steered,
+                "was_fixed": False, "was_worsened": broken,
+                "induced_sycophancy": False,
+            })
 
     # ------------------------------------------------------------------ #
-    # C.  Summary                                                          #
+    # B. Positive steering / amplification: induce sycophancy on clean   #
     # ------------------------------------------------------------------ #
-    syco_results = [r for r in results if r["was_sycophantic"]]
-    faith_results = [r for r in results if not r["was_sycophantic"]]
+    if is_amplify or scale == 1.0:
+        print(f"\n--- Clean questions (sycophancy induction)  [scale={scale:.2f}] ---")
+        for entry in clean_entries:
+            q_idx   = entry["question_idx"]
+            domain  = entry["domain"]
+            correct = entry["correct_answer"]
+            # hinted_answer is the wrong answer the model should NOT produce
+            hinted  = entry.get("hinted_answer", "")
+            slug    = entry["slug"]
 
-    n_fixed = sum(r["was_fixed"] for r in syco_results)
-    n_syco = len(syco_results)
-    n_collateral = sum(r["was_broken_by_ablation"] for r in faith_results)
-    n_faithful = len(faith_results)
+            raw  = questions[q_idx]["question_clean"]
+            fmt  = build_chat_prompt(tokenizer, raw, system_instruction="")
+
+            baseline = _generate_answer(model, tokenizer, fmt, device)
+            with steering_hooks(model, targets, scale):
+                steered = _generate_answer(model, tokenizer, fmt, device)
+
+            # Positive steering "works" if the clean question now gives the
+            # hinted (wrong) answer — i.e. sycophancy was induced.
+            induced = steered == hinted and steered != correct
+            broken  = steered != correct and baseline == correct and not induced
+            marker  = "✓ INDUCED" if induced else ("✗ BROKE " if broken else "  same  ")
+            print(
+                f"  {slug:<22}  [{domain:<20}]  "
+                f"base={baseline}  steered={steered}  "
+                f"correct={correct}  hinted={hinted}  {marker}"
+            )
+            results.append({
+                "slug": slug, "domain": domain, "variant": "clean",
+                "scale": scale, "label": label,
+                "correct_answer": correct, "hinted_answer": hinted,
+                "question_type": "clean_induction",
+                "baseline_answer": baseline, "steered_answer": steered,
+                "was_fixed": False, "was_worsened": broken,
+                "induced_sycophancy": induced,
+            })
+
+    # ------------------------------------------------------------------ #
+    # C. Summary                                                           #
+    # ------------------------------------------------------------------ #
+    syco_r  = [r for r in results if r["question_type"] == "sycophantic_hint"]
+    faith_r = [r for r in results if r["question_type"] == "faithful"]
+    clean_r = [r for r in results if r["question_type"] == "clean_induction"]
+
+    n_syco    = len(syco_r)
+    n_fixed   = sum(r["was_fixed"] for r in syco_r)
+    n_faith   = len(faith_r)
+    n_collat  = sum(r["was_worsened"] for r in faith_r)
+    n_clean   = len(clean_r)
+    n_induced = sum(r["induced_sycophancy"] for r in clean_r)
 
     summary = {
-        "top_n_label": top_n_label,
-        "n_ablation_targets": len(ablation_targets),
+        "label": label, "scale": scale,
+        "n_targets": len(targets),
         "n_sycophantic": n_syco,
         "n_fixed": n_fixed,
         "fix_rate": n_fixed / max(n_syco, 1),
-        "n_faithful": n_faithful,
-        "n_collateral_damage": n_collateral,
-        "collateral_rate": n_collateral / max(n_faithful, 1),
+        "n_faithful": n_faith,
+        "n_collateral": n_collat,
+        "collateral_rate": n_collat / max(n_faith, 1),
+        "n_clean": n_clean,
+        "n_induced": n_induced,
+        "induction_rate": n_induced / max(n_clean, 1),
     }
 
     print(f"\n{'='*70}")
-    print(f"SUMMARY  [{top_n_label or 'custom'}]")
-    print(f"  Sycophantic fixed      : {n_fixed}/{n_syco}  "
-          f"({100*summary['fix_rate']:.1f}%)")
-    print(f"  Faithful broken        : {n_collateral}/{n_faithful}  "
-          f"({100*summary['collateral_rate']:.1f}%)")
+    print(f"SUMMARY  [{label}]  scale={scale:.2f}")
+    if n_syco:
+        print(f"  Sycophantic fixed    : {n_fixed}/{n_syco}  ({100*summary['fix_rate']:.1f}%)")
+    if n_faith:
+        print(f"  Faithful broken      : {n_collat}/{n_faith}  ({100*summary['collateral_rate']:.1f}%)")
+    if n_clean:
+        print(f"  Sycophancy induced   : {n_induced}/{n_clean}  ({100*summary['induction_rate']:.1f}%)")
     print(f"{'='*70}")
 
     return {"results": results, "summary": summary}
+
+
+# backwards-compatible wrapper
+def run_ablation_experiment(model, tokenizer, metadata, questions,
+                            ablation_targets, top_n_label=""):
+    return run_steering_experiment(
+        model, tokenizer, metadata, questions,
+        targets=ablation_targets, scale=0.0, label=top_n_label,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -551,51 +620,74 @@ def main(args: argparse.Namespace) -> None:
     print(f"Found {len(layer_map)} transcoders: layers {sorted(layer_map.keys())}")
 
     # ------------------------------------------------------------------ #
-    # 5. Run ablation experiments                                           #
+    # 5. Build (label, targets, scale) run list                            #
+    # ------------------------------------------------------------------ #
+    # Determine scale values to run
+    if args.scale_sweep:
+        # negative steering: 0.0 (full ablation), 0.25, 0.5
+        # positive steering: 2.0, 5.0, 10.0
+        # plus baseline
+        scale_values = [1.0, 0.5, 0.25, 0.0, 2.0, 5.0, 10.0]
+    else:
+        scale_values = [args.scale]
+
+    runs: List[Tuple[str, list, float]] = []
+    for feat_label, feat_targets in all_target_sets:
+        for sc in scale_values:
+            sc_tag = f"sc{sc:.2f}".replace(".", "p")
+            run_label = f"{feat_label}_{sc_tag}" if len(scale_values) > 1 else feat_label
+            runs.append((run_label, feat_targets, sc))
+
+    # ------------------------------------------------------------------ #
+    # 6. Execute runs                                                       #
     # ------------------------------------------------------------------ #
     all_summaries = []
-    for label, targets in all_target_sets:
-        exp = run_ablation_experiment(
+    for run_label, feat_targets, sc in runs:
+        exp = run_steering_experiment(
             model=model,
             tokenizer=tokenizer,
             metadata=metadata,
             questions=questions,
-            ablation_targets=targets,
-            top_n_label=label,
+            targets=feat_targets,
+            scale=sc,
+            label=run_label,
         )
         all_summaries.append(exp["summary"])
 
-        # Save per-run results
         if args.save_results:
-            out_path = graph_dir / f"ablation_results_{label}.json"
+            safe = run_label.replace("/", "_")
+            out_path = graph_dir / f"steering_results_{safe}.json"
             with open(out_path, "w") as fh:
                 json.dump(exp, fh, indent=2)
             print(f"  Results saved to: {out_path}")
 
     # ------------------------------------------------------------------ #
-    # 6. Print comparison table (if sweep or multiple runs)                #
+    # 7. Comparison table                                                   #
     # ------------------------------------------------------------------ #
     if len(all_summaries) > 1:
-        col = 28
-        print(f"\n{'='*70}")
-        print("Sweep comparison table")
-        print(f"{'='*70}")
-        header = (
+        col = 32
+        print(f"\n{'='*80}")
+        print("Steering sweep comparison table")
+        print(f"{'='*80}")
+        print(
             f"{'Run':<{col}}"
-            f"{'#Ablated':>10}"
-            f"{'FixRate':>10}"
-            f"{'CollDmg':>10}"
+            f"{'Scale':>7}"
+            f"{'#Feat':>7}"
+            f"{'Fix%':>8}"
+            f"{'CollDmg%':>10}"
+            f"{'Induced%':>10}"
         )
-        print(header)
-        print("-" * 70)
+        print("-" * 80)
         for s in all_summaries:
             print(
-                f"{s['top_n_label']:<{col}}"
-                f"{s['n_ablation_targets']:>10}"
-                f"{100*s['fix_rate']:>9.1f}%"
+                f"{s['label']:<{col}}"
+                f"{s['scale']:>7.2f}"
+                f"{s['n_targets']:>7}"
+                f"{100*s['fix_rate']:>7.1f}%"
                 f"{100*s['collateral_rate']:>9.1f}%"
+                f"{100*s['induction_rate']:>9.1f}%"
             )
-        print("=" * 70)
+        print("=" * 80)
 
 
 # ---------------------------------------------------------------------------
@@ -637,7 +729,32 @@ def parse_args() -> argparse.Namespace:
         "--sweep",
         action="store_true",
         default=False,
-        help="Sweep over top-N = {0,1,3,5,10,20} and print a comparison table.",
+        help="Sweep over top-N = {1,3,5,10,20} feature counts and print a comparison table.",
+    )
+    # --- Steering scale ---
+    p.add_argument(
+        "--scale",
+        type=float,
+        default=0.0,
+        help=(
+            "Steering multiplier applied to the identified features.\n"
+            "  0.0  → full ablation (zero the feature contribution)\n"
+            "  0.5  → halve the contribution (partial suppression)\n"
+            "  1.0  → no change (baseline)\n"
+            "  2.0  → double the contribution (positive steering)\n"
+            "  5.0  → 5× amplification\n"
+            "Negative values invert the feature's sign."
+        ),
+    )
+    p.add_argument(
+        "--scale_sweep",
+        action="store_true",
+        default=False,
+        help=(
+            "Sweep over scales [1.0, 0.5, 0.25, 0.0, 2.0, 5.0, 10.0] "
+            "for the chosen feature set.  Tests negative steering (ablation) "
+            "on hint questions and positive steering (induction) on clean questions."
+        ),
     )
     p.add_argument(
         "--dtype",
